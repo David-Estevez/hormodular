@@ -1,0 +1,36 @@
+Components
+----------
+1. 2 XBee S1
+2. 1 XBee Explorer Regulated <https://www.sparkfun.com/products/9132> 
+3. 1 XBee Explorer USB <https://www.sparkfun.com/products/8687>
+
+
+
+How to configure an XBee connected to PC via an XBee Explorer USB
+------------------------------------------------------------------
+> sudo python xbeeterm.py 115200
+xbee% serial /dev/ttyUSB0
+Opening serial port: /dev/ttyUSB0
+xbee% +++
+OK
+xbee% AT
+OK
+xbee% ATID
+1111
+xbee% ATMY
+11
+xbee% ATDL
+10
+xbee% ATBD
+7
+xbee% ATBD 5
+OK
+xbee% ATWR
+OK
+xbee% exit
+
+
+
+More on,
+1. http://forums.trossenrobotics.com/tutorials/how-to-diy-128/xbee-basics-3259/
+2. http://jeffskinnerbox.wordpress.com/2013/01/30/configuration-utilities-for-xbee-radios/
