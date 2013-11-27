@@ -9,9 +9,11 @@ int main(void)
     static const uint8_t N_PARAM = 3;
     static const std::string FILEPATH = "./test_gaittable_file.txt";
 
+    std::cout << "Testing Gait Table" << std::endl;
+
     //-- Testing gait table (empty)
     //-------------------------------------------------------------------
-    std::cout << "Testing Gait Table (Empty)" << std::endl;
+    std::cout << "\tTesting Gait Table (Empty)" << std::endl;
     //-- Create table:
     std::cout << "\tCreating empty table..." << std::endl;
     GaitTable emptyGaitTable( N_MODULES, N_PARAM);

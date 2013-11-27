@@ -6,6 +6,16 @@ macro( build_controller_test name dependency)
 	target_link_libraries(${name} Controller ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} ${Boost_THREAD_LIBRARY} )
 endmacro( build_controller_test )
 
+macro( configure_controller_test name )
+	set_target_properties(${name} PROPERTIES COMPILE_FLAGS "${OPENRAVE_CXXFLAGS}")
+	set_target_properties(${name} PROPERTIES LINK_FLAGS "${OPENRAVE_LINK_FLAGS}")
+	target_link_libraries(${name} Controller ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} ${Boost_THREAD_LIBRARY} )
+endmacro( configure_controller_test )
+
 # Testing things #########################################################################################
 message( "Building Tests...")
-build_controller_test( testGaitTable GaitTable)
+add_executable( testGaitTable testGaitTable.cpp ../GaitTable.cpp)
+add_executable( testSinusoidalOscillator testSinusoidalOscillator.cpp ../Oscillator.cpp ../SinusoidalOscillator.cpp )
+
+
+
