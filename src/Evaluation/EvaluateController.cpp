@@ -28,8 +28,8 @@
 
 #define BAUD_RATE 115200
 
-//#define ROBOT_PRIMARY_OPENRAVE
-#define ROBOT_PRIMARY_Y1
+#define ROBOT_PRIMARY_OPENRAVE
+//#define ROBOT_PRIMARY_Y1
 
 //#define ROBOT_SECONDARY
 
@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
   Robot *robot_primary = NULL;
   Robot *robot_secondary = NULL;
 
-  //SimulationOpenRave simuOR_robot;
-  Y1ModularRobot y1_robot;
+  SimulationOpenRave simuOR_robot;
+  //Y1ModularRobot y1_robot;
 
 #ifdef ROBOT_PRIMARY_OPENRAVE
   robot_primary = &simuOR_robot;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
   mlp.set_independent_parameters_number(0);
 
   //Controller controller(&mlp, &simuOR_robot);
-  Controller controller(&mlp, robot_primary);
+  Controller controller( robot_primary);
 
   // Elite population gene
   Flood::Matrix<double> population;

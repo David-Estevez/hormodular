@@ -70,7 +70,7 @@ public:
   virtual void set_sinusoidal_controller_parameters(const vector<double>&, const vector<double>&, const vector<double>&, const double) = 0;
   virtual void stop_sinusoidal_controller(void) = 0;
   virtual void set_moduleServo_position(unsigned int, double) = 0;
-  virtual void set_all_moduleServo_position(const vector<double>&) = 0;
+  //virtual void set_all_moduleServo_position(const vector<double>&) = 0;
   virtual double get_moduleServo_position(unsigned int) = 0;
   //virtual void get_all_moduleServo_position(vector<ServoFeedback*>&) = 0;
   virtual unsigned long get_elapsed_evaluation_time(void) = 0;

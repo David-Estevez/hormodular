@@ -49,101 +49,13 @@ GraphFile FileHandler OscillationAnalyzer_OutputSignal VisualTracker SerialCommu
 
 # add_library(camera_utils VisualTracker/camera_utils/camera_utils.cpp)
 
-add_executable(Evolve
-  Evolution/EvolveController.cpp
-  Flood/Perceptron/Perceptron.cpp
-  Flood/MultilayerPerceptron/MultilayerPerceptron.cpp
-  Flood/ObjectiveFunctional/ObjectiveFunctional.cpp
-  Flood/TrainingAlgorithm/TrainingAlgorithm.cpp
-  Flood/TrainingAlgorithm/EvolutionaryAlgorithm.cpp
-  Evolution/Evolution.cpp
-  Robot/Robot.cpp
-  SimulationOpenRave/SimulationOpenRave.cpp
-  Y1ModularRobot/Y1ModularRobot.cpp
-  Controller/Controller.cpp
- # ServoFeedback/ServoFeedback.cpp
-  FileHandler/FileHandler.cpp
-  GraphFile/GraphFile.cpp
- # OscillationAnalyzer_OutputSignal/OscillationAnalyzer_OutputSignal.cpp
-  VisualTracker/VisualTracker.cpp
-  VisualTracker/disjoint_sets2.cpp
-  VisualTracker/comp_labeller_interface.cpp
-  SerialCommunication/SerialCommunication.c
-)
-
-### executable
-set_target_properties(Evolve PROPERTIES COMPILE_FLAGS "${OPENRAVE_CXXFLAGS}")
-set_target_properties(Evolve PROPERTIES LINK_FLAGS "${OPENRAVE_LINK_FLAGS}")
-# target_link_libraries(Evolve ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} ${Boost_THREAD_LIBRARY} ${OpenCV_LIBS} VisualTracker)
-target_link_libraries(Evolve ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} ${Boost_THREAD_LIBRARY} ${OpenCV_LIBS})
 
 
-add_executable(Evaluate
-  Evaluation/EvaluateController.cpp
-  Flood/Perceptron/Perceptron.cpp
-  Flood/MultilayerPerceptron/MultilayerPerceptron.cpp
-  Flood/ObjectiveFunctional/ObjectiveFunctional.cpp  # Only for resolving dependency of TrainingAlgorithm.cpp
-  Flood/TrainingAlgorithm/TrainingAlgorithm.cpp  # Only for resolving dependency of EvolutionaryAlgorithm.cpp
-  Flood/TrainingAlgorithm/EvolutionaryAlgorithm.cpp  # Only for resolving dependency of FileHandler.cpp
-  Robot/Robot.cpp
-  SimulationOpenRave/SimulationOpenRave.cpp
-  Y1ModularRobot/Y1ModularRobot.cpp
-  Controller/Controller.cpp
- # ServoFeedback/ServoFeedback.cpp
-  FileHandler/FileHandler.cpp
-  GraphFile/GraphFile.cpp
- # OscillationAnalyzer_OutputSignal/OscillationAnalyzer_OutputSignal.cpp
-  VisualTracker/VisualTracker.cpp
-  VisualTracker/disjoint_sets2.cpp
-  VisualTracker/comp_labeller_interface.cpp
-  SerialCommunication/SerialCommunication.c
-)
+# Controller #################################################################################
+add_subdirectory(Controller)
 
-### opencv executable
-set_target_properties(Evaluate PROPERTIES COMPILE_FLAGS "${OPENRAVE_CXXFLAGS}")
-set_target_properties(Evaluate PROPERTIES LINK_FLAGS "${OPENRAVE_LINK_FLAGS}")
-# target_link_libraries(Evaluate ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} ${Boost_THREAD_LIBRARY} ${OpenCV_LIBS} VisualTracker)
-target_link_libraries(Evaluate ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} ${Boost_THREAD_LIBRARY} ${OpenCV_LIBS})
+# Executables ################################################################################
+#add_subdirectory( Evolution )
+#add_subdirectory( Evaluation )
 
-
-### Neural Model Evaluator
-add_executable(NeuralModelEvaluator
-  Evaluation/NeuralModelEvaluator.cpp
-  Flood/Perceptron/Perceptron.cpp
-  Flood/MultilayerPerceptron/MultilayerPerceptron.cpp
-  Flood/ObjectiveFunctional/ObjectiveFunctional.cpp  # Only for resolving dependency of TrainingAlgorithm.cpp
-  Flood/TrainingAlgorithm/TrainingAlgorithm.cpp  # Only for resolving dependency of EvolutionaryAlgorithm.cpp
-  Flood/TrainingAlgorithm/EvolutionaryAlgorithm.cpp  # Only for resolving dependency of FileHandler.cpp
-  Robot/Robot.cpp
-  SimulationOpenRave/SimulationOpenRave.cpp
-  Controller/Controller.cpp
- # ServoFeedback/ServoFeedback.cpp
-  FileHandler/FileHandler.cpp
-  GraphFile/GraphFile.cpp
- # OscillationAnalyzer_OutputSignal/OscillationAnalyzer_OutputSignal.cpp
-)
-
-set_target_properties(NeuralModelEvaluator PROPERTIES COMPILE_FLAGS "${OPENRAVE_CXXFLAGS}")
-set_target_properties(NeuralModelEvaluator PROPERTIES LINK_FLAGS "${OPENRAVE_LINK_FLAGS}")
-target_link_libraries(NeuralModelEvaluator ${OpenRAVE_LIBRARIES} ${OpenRAVE_CORE_LIBRARIES} ${Boost_THREAD_LIBRARY})
-
-### Serial Communication Evaluator
-add_executable(SerialCommunicationEvaluator
-  SerialCommunication/SerialCommunicationEvaluator.cpp
-  SerialCommunication/SerialCommunication.c
-)
-
-TARGET_LINK_LIBRARIES(SerialCommunicationEvaluator)
-
-
-### VisualTracker Evaluator
-add_executable(VisualTrackerEvaluator
-  VisualTracker/VisualTrackerApplication.cpp
-  VisualTracker/VisualTracker.cpp
-  VisualTracker/disjoint_sets2.cpp
-  VisualTracker/comp_labeller_interface.cpp
-)
-
-# target_link_libraries(VisualTrackerEvaluator ${OpenCV_LIBS} VisualTracker)
-target_link_libraries(VisualTrackerEvaluator ${OpenCV_LIBS})
 
