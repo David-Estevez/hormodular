@@ -1,0 +1,32 @@
+<!-- [Back-Inverted] Piece for building 3D quadrupeds --> 
+
+<Kinbody name="k3DQuad-Back-Inv">
+  <Body name="3DQuad-Back-Inv" type="dynamic">
+      <mass type="sphere">
+        <total>0.075</total>
+        <radius>0.051</radius>
+      </mass>
+     
+      <Geom type="trimesh">
+        <Render>Y1-head.iv 0.001</Render>
+        <data>Y1-head.iv 0.001</data>
+        <translation>0 -0.018 -0.007</translation>
+      </Geom> 
+      <Geom type="trimesh">
+        <Render>Y1-body.iv 0.001</Render>
+        <data>Y1-body.iv 0.001</data>
+        <rotationaxis>1 0 0 90</rotationaxis>
+        <rotationaxis>0 1 0 -180</rotationaxis> <!-- Inverting the hind leg -->
+        <translation>0.0390 0.02300 -0.051</translation> 
+      </Geom>
+      <Geom type="trimesh">
+        <Render>Y1-body.iv 0.001</Render>
+        <data>Y1-body.iv 0.001</data>
+        <rotationaxis>1 0 0 90</rotationaxis>
+        <rotationaxis>0 1 0 -180</rotationaxis> <!-- Inverting the hind leg -->
+        <translation>-0.0390 0.02300 -0.051</translation> 
+      </Geom>
+  </Body>
+</Kinbody>
+
+

@@ -1,0 +1,26 @@
+<!-- Piece for building pitch snake robots
+     These pieces are connected forming a chain
+--> 
+
+<Kinbody name="MinicubeSym_middle">
+  <Body name="MinicubeSym-Mid" type="dynamic">
+      <mass type="sphere">
+        <total>0.075</total>
+        <radius>0.051</radius>
+      </mass>
+     
+      <Geom type="trimesh">
+        <Render>Y1-body.iv 0.001</Render>
+        <data>Y1-body.iv 0.001</data>
+        <translation>0 0.033 -0.007</translation>
+      </Geom> 
+      <Geom type="trimesh">
+        <Render>Y1-body.iv 0.001</Render>
+        <data>Y1-body.iv 0.001</data>
+        <rotationaxis>0 0 1 180</rotationaxis>
+        <translation>0.0 -0.0030 -0.007</translation> 
+      </Geom>
+  </Body>
+</Kinbody>
+
+

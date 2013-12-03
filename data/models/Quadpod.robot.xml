@@ -1,0 +1,83 @@
+<Robot name="Star3">
+  <KinBody name="kStar3">
+
+    <!-- The middle part of the robot -->
+    <Kinbody file="Quad_P-middle.kinbody.xml"/>
+
+    <!-- Leg 1 -->
+    <Kinbody prefix="1" file="HeadP.kinbody.xml">
+      <translation>0 0.051 0</translation>
+    </Kinbody>
+
+    <!-- Leg 2 -->
+    <Kinbody prefix="2" file="HeadP.kinbody.xml">
+      <rotationaxis>0 0 1 -90</rotationaxis>
+      <translation>0.062 -0.0110 </translation>
+    </Kinbody>
+
+    <!-- Leg 3 -->
+    <Kinbody prefix="3" file="HeadP.kinbody.xml">
+      <rotationaxis>0 0 1 180</rotationaxis>
+      <translation>0. -0.0720 </translation>
+    </Kinbody>
+
+    <!-- Leg 4 -->
+    <Kinbody prefix="4" file="HeadP.kinbody.xml">
+      <rotationaxis>0 0 1 90</rotationaxis>
+      <translation>-0.062 -0.0110 </translation>
+    </Kinbody>
+
+    <!-- Joints -->
+    <Joint type="hinge" name="J1">
+      <Body>1Head</Body>
+      <Body>QuadMid</Body>
+      <offsetfrom>1Head</offsetfrom>
+      <axis>1 0 0</axis>
+      <maxtorque>0.4</maxtorque>
+      <maxvel>4.5</maxvel>
+      <limitsdeg>-90 90</limitsdeg>
+    </Joint>
+
+    <Joint type="hinge" name="J2">
+      <Body>2Head</Body>
+      <Body>QuadMid</Body>
+      <offsetfrom>2Head</offsetfrom>
+      <axis>1 0 0</axis>
+      <maxtorque>0.4</maxtorque>
+      <maxvel>4.5</maxvel>
+      <limitsdeg>-90 90</limitsdeg>
+    </Joint>
+
+    <Joint type="hinge" name="J3">
+      <Body>3Head</Body>
+      <Body>QuadMid</Body>
+      <offsetfrom>3Head</offsetfrom>
+      <axis>1 0 0</axis>
+      <maxtorque>0.4</maxtorque>
+      <maxvel>4.5</maxvel>
+      <limitsdeg>-90 90</limitsdeg>
+    </Joint>
+
+    <Joint type="hinge" name="J4">
+      <Body>4Head</Body>
+      <Body>QuadMid</Body>
+      <offsetfrom>4Head</offsetfrom>
+      <axis>1 0 0</axis>
+      <maxtorque>0.4</maxtorque>
+      <maxvel>4.5</maxvel>
+      <limitsdeg>-90 90</limitsdeg>
+    </Joint>
+
+        <!-- <Joint type="hinge" name="J3">
+      <Body>3Head</Body>
+      <Body>Mid</Body>
+      <offsetfrom>3Head</offsetfrom>
+      <axis>1 0 0</axis>
+      <maxtorque>0.4</maxtorque>
+      <maxvel>4.5</maxvel>
+      <limitsdeg>-90 90</limitsdeg>
+    </Joint> -->
+
+
+  </KinBody>
+</Robot>

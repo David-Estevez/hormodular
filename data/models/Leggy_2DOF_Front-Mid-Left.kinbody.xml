@@ -1,0 +1,23 @@
+<!-- [Front] Piece for building 3D quadrupeds --> 
+
+<Kinbody name="kLeggy_2DOF_Front-Mid-Left">
+  <Body name="Leggy_2DOF_Front-Mid-Left" type="dynamic">
+      <mass type="sphere">
+        <total>0.5</total>
+        <radius>0.036</radius>
+      </mass>
+     
+      <Geom type="trimesh">
+        <Render>Y1-head.iv 0.001</Render>
+        <data>Y1-head.iv 0.001</data>
+      </Geom>
+      <Geom type="trimesh">
+        <Render>Y1-body.iv 0.001</Render>
+        <data>Y1-body.iv 0.001</data>
+        <rotationaxis>0 0 1 90</rotationaxis>
+        <translation>-0.041 0.044 0</translation>
+      </Geom>
+  </Body>
+</Kinbody>
+
+
