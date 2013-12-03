@@ -66,7 +66,7 @@ public:
   void set_moduleServo_position(unsigned int, double);
   double get_moduleServo_position(unsigned int);
   //void get_all_moduleServo_position(vector<ServoFeedback*>&);
-  unsigned long get_elapsed_evaluation_time(void);
+  unsigned long get_elapsed_evaluation_time(void); //-- uS
   unsigned long get_previous_read_evaluation_time(void);
   double calculate_distance_travelled_euclidean(void);
   void measure_cumulative_distance(void);
@@ -82,7 +82,7 @@ private:
   std::string scene_file_name;
   //Vector robot_pos_initial;
   Vector robot_pos_previous;
-  double simu_resolution_microseconds;
+  double simu_resolution_seconds;
 };
 
 #endif

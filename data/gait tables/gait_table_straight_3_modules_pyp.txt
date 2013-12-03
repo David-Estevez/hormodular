@@ -1,0 +1,9 @@
+# Gait Table created by Hormodular [https://github.com/David-Estevez/hormodular.git]
+# name: gaitTable
+# type: matrix
+# rows: 3
+# columns: 3
+60 0 0 
+ 0 0 0 
+60 0 120
+ 

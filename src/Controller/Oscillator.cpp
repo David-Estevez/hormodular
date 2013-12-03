@@ -38,7 +38,7 @@ void Oscillator::setParameters(uint8_t amplitude, uint8_t offset, float phase, u
     setAmplitude(amplitude);
     setOffset(offset);
     setPhase(phase);
-    if ( period_ms != 0 ) this->period_ms = period_ms;
+    setPeriod(period_ms);
 }
 
 uint16_t Oscillator::getPeriod()    { return period_ms; }
@@ -57,8 +57,21 @@ Oscillator::Oscillator()
 
 Oscillator::Oscillator(uint8_t amplitude, uint8_t offset, float phase, uint16_t period_ms)
 {
-    this->amplitude = amplitude;
-    this->offset = offset;
+    //-- Check parameters before assignment
+    if ( amplitude <= 90 )
+        this->amplitude = amplitude;
+    else
+        this->amplitude = 0;
+
+    if ( offset >= -90 && offset <= 90 )
+        this->offset = offset;
+    else
+        this->offset = 0;
+
     this->phase = phase;
-    this->period_ms = period_ms;
+
+    if ( period_ms != 0)
+        setPeriod(period_ms);
+    else
+        this->period_ms = 4000;
 }

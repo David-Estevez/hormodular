@@ -199,9 +199,9 @@ void SimulationOpenRave::init_simu_env(std::string controller)
 
 void SimulationOpenRave::set_default_parameters(void)
 {
-  scene_file_name = "/home/nash/Dropbox/PhD/modularRobotics/morphomotion/models/Minicube-I.env.xml";
+  scene_file_name = "/home/def/Repositories/openmr/models/Minicube-I.env.xml";
   //simu_resolution_microseconds = 0.005;  //-- Bug
-  simu_resolution_microseconds = 0.0025; //-- Bug (fix?): When this parameter is 0.005, while evaluating Simulated_Cube2 configuration with controller evolved using a value of '0.0025', the single phase between two modules starts to oscillate, making the robot move forward and backward, just as observed while evaluating Simulated_Robot evolved controller on the Real_Robot.
+  simu_resolution_seconds = 0.0025; //-- Bug (fix?): When this parameter is 0.005, while evaluating Simulated_Cube2 configuration with controller evolved using a value of '0.0025', the single phase between two modules starts to oscillate, making the robot move forward and backward, just as observed while evaluating Simulated_Robot evolved controller on the Real_Robot.
   this->set_robot_environment("SimulationOpenRave");
 }
 
@@ -241,13 +241,13 @@ std::string SimulationOpenRave::get_scene_file_name(void)
 
 void SimulationOpenRave::set_simu_resolution_microseconds(double new_simu_resolution_microseconds)
 {
-  simu_resolution_microseconds = new_simu_resolution_microseconds;
+  simu_resolution_seconds = new_simu_resolution_microseconds;
 }
 
 
 double SimulationOpenRave::get_simu_resolution_microseconds(void)
 {
-  return(simu_resolution_microseconds);
+  return(simu_resolution_seconds);
 }
 
 
@@ -269,10 +269,10 @@ void SimulationOpenRave::reset_robot(void)
   }
 
   // Wait for two seconds.
-  int two_seconds = (1/simu_resolution_microseconds)*2;
+  int two_seconds = (1/simu_resolution_seconds)*2;
   for (int ss=0; ss<two_seconds; ss++)
   {
-    penv->StepSimulation(simu_resolution_microseconds);
+    penv->StepSimulation(simu_resolution_seconds);
   }
 
   //-- Set the translation of the robot to the initial position.
@@ -354,13 +354,14 @@ double SimulationOpenRave::get_moduleServo_position(unsigned int module)
 }
 
 
-void SimulationOpenRave::get_all_moduleServo_position(vector<ServoFeedback*>& servo_feedback)
+//Broken
+/*void SimulationOpenRave::get_all_moduleServo_position(vector<ServoFeedback*>& servo_feedback)
 {
   get_all_moduleServo_position_with_time(servo_feedback);
-}
+}*/
 
-
-void SimulationOpenRave::get_all_moduleServo_position_with_time(vector<ServoFeedback*>& servo_feedback)
+//Broken
+/*void SimulationOpenRave::get_all_moduleServo_position_with_time(vector<ServoFeedback*>& servo_feedback)
 {
   stringstream os,is;
   double angle = 12.3456; //-- This value set to 12.3456 as a way of detecting when a failuer to read module position occurs.
@@ -372,7 +373,7 @@ void SimulationOpenRave::get_all_moduleServo_position_with_time(vector<ServoFeed
     os >> angle;
     servo_feedback[module]->set_new_value(elapsed_evaluation_time, angle);
   }
-}
+}*/
 
 
 void SimulationOpenRave::init_elapsed_evaluation_time(void)
@@ -385,7 +386,7 @@ void SimulationOpenRave::init_elapsed_evaluation_time(void)
 void SimulationOpenRave::update_elapsed_evaluation_time(void)
 {
   previous_read_evaluation_time = elapsed_evaluation_time;
-  elapsed_evaluation_time = elapsed_evaluation_time + (simu_resolution_microseconds * 1000000);
+  elapsed_evaluation_time = elapsed_evaluation_time + (simu_resolution_seconds * 1000000);
 }
 
 
@@ -435,7 +436,7 @@ double SimulationOpenRave::get_robot_Y(void)
 
 void SimulationOpenRave::step(const std::string& type)
 {
-  penv->StepSimulation(simu_resolution_microseconds);
+  penv->StepSimulation(simu_resolution_seconds);
 
   if(this->robot_priority == Robot_Primary)
   {
