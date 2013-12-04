@@ -51,7 +51,7 @@ class Controller
 
         ~Controller();
 
-        int run();
+        int run( uint32_t run_time_ms = 0);
         int reset();
 
         //! \brief Loads a gait table from file:

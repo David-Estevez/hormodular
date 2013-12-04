@@ -204,12 +204,12 @@ int main(int argc, char* argv[])
   /*simuOR_robot.set_scene_file_name("../models/Leggy_3DOF/Leggy_3DOF.env.xml");
   robot_primary->set_number_of_modules(15);*/
 
-  if(robot_primary->get_robot_environment() == "SimulationOpenRave" || robot_secondary)
+  /*if(robot_primary->get_robot_environment() == "SimulationOpenRave" || robot_secondary)
   {
     simuOR_robot.init_simu_env(controller.get_controller_type());
-  }
+  }*/
 
-  controller.init_controller();
+  //controller.init_controller();
   population.subtract_row(0);
 
   robot_primary->set_evaluation_method("Euclidean_Distance_Final");  // Debugger;
@@ -292,7 +292,7 @@ int main(int argc, char* argv[])
       //oscAnlz.set_record_phase(true);
       //oscAnlz.set_record_trajectory(true);
 
-      controller.run_Controller("evaluation",1,best_individual_fitness_index+1,1);
+      controller.run();
 
       std::cout << "    (" << best_individual_fitness_index+1 << ") " << "Simulated Robot: Distance travelled = " << robot_primary->get_distance_travelled() << std::endl;
 
@@ -336,7 +336,7 @@ int main(int argc, char* argv[])
       //controller.set_sinusoidal_frequency(0.11,6);
       //std::cout << std::endl << "Freuency: " << controller.get_sinusoidal_frequency() << std::endl; // TODO: Debugger to be removed.
 
-      controller.run_Controller("evaluation",1,i,1);
+      controller.run();
 
       std::cout << "    (" << i+1 << ") " << robot_primary->get_robot_environment() << ": Distance travelled = " << robot_primary->get_distance_travelled() << std::endl;
 

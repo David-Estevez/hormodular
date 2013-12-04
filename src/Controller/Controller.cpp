@@ -3,15 +3,15 @@
 
 Controller::Controller()
 {
-    this->oscillator = NULL;
-    this->control_table = NULL;
+    this->oscillator = new SinusoidalOscillator( 0, 0, 0, 0);;
+    this->control_table = new GaitTable(1, 3);
     this->reset();
 }
 
 Controller::Controller(Robot *module)
 {
-    this->oscillator = NULL;
-    this->control_table = NULL;
+    this->oscillator = new SinusoidalOscillator( 0, 0, 0, 0);;
+    this->control_table = new GaitTable(1, 3);
     this->reset();
     this->module = module;
 }
@@ -22,18 +22,20 @@ Controller::~Controller()
     delete control_table;
 }
 
-int Controller::run()
+int Controller::run( uint32_t max_iter )
 {
+    //-- If run time is 0, run the controller forever
+    bool run_forever = max_iter == 0;
 
     //-- Read values of the oscillator from the gait table:
     mappingFunction();
 
+    //-- Simulation variables:
     static const float simulation_step = 0.0025; //-- uS
     unsigned long currentTime =  0;
-
     int counter = 0;
 
-    while(1)
+    do
     {
         currentTime = module->get_elapsed_evaluation_time();
         float position = oscillator->calculatePos( currentTime / 1000 ); //-- localtime returns us
@@ -44,6 +46,9 @@ int Controller::run()
 
         while( module->get_elapsed_evaluation_time() - currentTime < simulation_step );
     }
+    while ( counter < max_iter || run_forever);
+
+    std::cout << "Controller: " << (int) id << " ended!" << std::endl;
     return 0;
 }
 
@@ -52,11 +57,9 @@ int Controller::reset()
     id = 0;
     internal_time = 0;
     adjust_time = 0;
+    oscillator->setParameters(0,0,0,0);
 
-    if (oscillator != NULL) delete oscillator;
-    if (control_table != NULL) delete control_table;
-
-    oscillator = new SinusoidalOscillator( 0, 0, 0, 0);
+    delete control_table;
     control_table = new GaitTable(1, 3);
 
     return 0;
@@ -64,11 +67,8 @@ int Controller::reset()
 
 int Controller::loadGaitTable( const std::string& file_path )
 {
-    //-- Free previous control table:
-    if (control_table != NULL) delete control_table;
-
     //-- Load new data
-    control_table = new GaitTable( file_path);
+    control_table->loadFromFile( file_path);
 
     return 0;
 }

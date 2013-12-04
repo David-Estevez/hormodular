@@ -16,23 +16,35 @@ GaitTable::GaitTable(uint8_t n_modules, uint8_t n_parameters)
     //-- Initialize the empty gait table:
     for (int i = 0; i < n_modules * n_parameters; i++)
     {
-	*(this->data) = 0;
+    *(this->data + i) = 0;
     }
 }
 
 //-- Create a gait table from a octave file:
 GaitTable::GaitTable(const std::string file_path)
 {
+    this->data = NULL;
+    this->loadFromFile( file_path);
+}
+
+//-- Free the memory
+GaitTable::~GaitTable()
+{
+    delete[] data;
+}
+
+int GaitTable::loadFromFile( const std::string file_path)
+{
     //! \TODO change this temporary code to something more permanent
 
     //--Variables to store:
-    int rows = 0, cols = 0;        //-- Matrix dimensions
-    const int BUFFER_SIZE = 32;    //-- Characters to store in number
+    int rows = 0, cols = 0;               //-- Matrix dimensions
+    static const int BUFFER_SIZE = 32;    //-- Characters to store in number
 
     char ch;                       //-- Current character read
     char number[BUFFER_SIZE];	   //-- Number stored as characters
 
-    std::vector<float> data;	   //-- Vector containing data
+    std::vector<float> data_tmp;	   //-- Vector containing data
 
 
     //-- Open the file
@@ -42,125 +54,129 @@ GaitTable::GaitTable(const std::string file_path)
     {
         //-- Erase the buffer:
         for (int i = 0; i < BUFFER_SIZE; i++)
-        number[i] = '\0';
+            number[i] = '\0';
 
         //-- Extracting data from file:
         while (!input_file.eof())
         {
-        input_file.get(ch);  	//-- Get a character
+            input_file.get(ch);  	//-- Get a character
 
-        //-- Ignore comments
-        if (ch == '#')
-        {
-            //-- Ignore data until next line:
-            while( !input_file.eof() && ch != '\n')
-            input_file.get(ch);
+            //-- Ignore comments
+            if (ch == '#')
+            {
+                //-- Ignore data until next line:
+                while( !input_file.eof() && ch != '\n')
+                    input_file.get(ch);
 
-            continue;
+                continue;
+            }
+
+            //-- Check if it is a number:
+            if (ch == '-')
+            {
+                //-- Read next character:
+                input_file.get(ch);
+
+                //-- For Negative numbers:
+                if ( ch >= '0' && ch <= '9' )
+                {
+                    number[0] = '-';
+                    number[1] = ch;
+
+                    int i = 2;
+
+                    //-- Store the number in 'number'
+                    while( !input_file.eof() && ch != '\n' && ch != ' ' && i < BUFFER_SIZE)
+                    {
+                        input_file.get(ch);
+                        if ( ( ch >= '0' && ch <= '9' ) || ch == 'e' || ch == '.' || ch == '-')
+                            number[i] = ch;
+                        i++;
+                    }
+
+                    //-- Convert the string to a double and store it in vector 'data'
+                    data_tmp.push_back( atof(number) );
+
+                    //-- Erase the buffer:
+                    for (int i = 0; i < BUFFER_SIZE; i++)
+                        number[i] = '\0';
+                }
+            }
+            else
+            {
+                //-- For positive numbers:
+                if ( ch >= '0' && ch <= '9' )
+                {
+                    number[0] = ch;
+
+                    int i = 1;
+
+                    //-- Store the number in 'number'
+                    while( !input_file.eof() && ch != '\n' && ch != ' ' && i < BUFFER_SIZE)
+                    {
+                        input_file.get(ch);
+                        if ( ( ch >= '0' && ch <= '9' ) || ch == 'e' || ch == '.' || ch == '-')
+                            number[i] = ch;
+                        i++;
+                    }
+
+                    //-- Convert the string to a double and store it in vector 'data'
+                    data_tmp.push_back( atof(number) );
+
+                    //-- Erase the buffer:
+                    for (int i = 0; i < BUFFER_SIZE; i++)
+                        number[i] = '\0';
+                }
+            }
+
+            //-- New line detection / number of columns
+            if (ch == '\n' && !input_file.eof())
+            {
+                //-- For first row
+                if ( rows == 0)
+                    cols = data_tmp.size(); //-- Obtain the number of columns
+
+                rows++;
+            }
         }
 
-        //-- Check if it is a number:
-        if (ch == '-')
-        {
-            //-- Read next character:
-            input_file.get(ch);
-
-            //-- For Negative numbers:
-            if ( ch >= '0' && ch <= '9' )
-            {
-            number[0] = '-';
-            number[1] = ch;
-
-            int i = 2;
-
-            //-- Store the number in 'number'
-            while( !input_file.eof() && ch != '\n' && ch != ' ' && i < BUFFER_SIZE)
-            {
-                input_file.get(ch);
-                if ( ( ch >= '0' && ch <= '9' ) || ch == 'e' || ch == '.' || ch == '-')
-                number[i] = ch;
-                i++;
-            }
-
-            //-- Convert the string to a double and store it in vector 'data'
-            data.push_back( atof(number) );
-
-            //-- Erase the buffer:
-            for (int i = 0; i < BUFFER_SIZE; i++)
-                number[i] = '\0';
-            }
-    }
-    else
-    {
-        //-- For positive numbers:
-        if ( ch >= '0' && ch <= '9' )
-        {
-            number[0] = ch;
-
-            int i = 1;
-
-            //-- Store the number in 'number'
-            while( !input_file.eof() && ch != '\n' && ch != ' ' && i < BUFFER_SIZE)
-            {
-            input_file.get(ch);
-            if ( ( ch >= '0' && ch <= '9' ) || ch == 'e' || ch == '.' || ch == '-')
-                number[i] = ch;
-            i++;
-            }
-
-            //-- Convert the string to a double and store it in vector 'data'
-            data.push_back( atof(number) );
-
-            //-- Erase the buffer:
-            for (int i = 0; i < BUFFER_SIZE; i++)
-            number[i] = '\0';
-         }
-    }
-
-    //-- New line detection / number of columns
-    if (ch == '\n' && !input_file.eof())
-    {
-        //-- For first row
-        if ( rows == 0)
-        cols = data.size(); //-- Obtain the number of columns
-
-        rows++;
-    }
-    }
-
-    //-- Close the file:
-    input_file.close();
+        //-- Close the file:
+        input_file.close();
 
 
-    /* You can keep this */
-    //-- Set parameters:
-    this->n_modules = rows;
-    this->n_parameters = cols;
+        /* You can keep this */
+        //-- Set parameters:
+        this->n_modules = rows;
+        this->n_parameters = cols;
 
-    //-- Allocate memory for the table:
-    this->data = new float[ n_modules * n_parameters];
+        //-- Allocate memory for the table:
+        delete[] this->data;
+        this->data = NULL;
 
-    //-- Initialize the empty gait table:
-    for (int i = 0; i < n_modules * n_parameters; i++)
-        *(this->data) = 0;
+        this->data = new float[ n_modules * n_parameters];
 
-    //-- Add the data to the table
-    for (int i = 0; i < rows; i ++)
-        for (int j = 0; j < cols; j++)
-            this->set( i, j, data[i*cols + j]);
+        //-- Initialize the empty gait table:
+        for (int i = 0; i < n_modules * n_parameters; i++)
+            *(this->data+i) = 0;
+
+        //-- Add the data to the table
+        for (int i = 0; i < n_modules; i ++)
+            for (int j = 0; j < n_parameters; j++)
+                this->set(i, j, data_tmp[i*cols+j]);
 
     }
     else
     {
+        //-- Show error message
         std::cerr <<"[GaitTable] Error: File " << file_path << " could not be opened!" << std::endl;
+        return -1;
     }
+
+    return 0;
 }
 
-//-- Free the memory
-GaitTable::~GaitTable()
-{
-    delete[] data;
-}
+
+
 
 
 //-- Get things
@@ -168,13 +184,13 @@ GaitTable::~GaitTable()
 //-- Get element of the gait table
 float GaitTable::at(uint8_t id, uint8_t parameter)
 {
-    return *(data + parameter + id*n_modules);
+    return *(data + id * n_parameters + parameter);
 }
 
 //-- Get all parameters of a certain id
 float * GaitTable::getParameters( uint8_t id)
 {
-    return data + id*n_modules;
+    return data + id*n_parameters;
 }
 
 //-- Get number of modules
@@ -185,7 +201,7 @@ uint8_t GaitTable::getNParameters() { return n_parameters; }
 //---------------------------------------------------------------------------------------
 void GaitTable::set(uint8_t id, uint8_t parameter, float value)
 {
-    *(data + parameter + id * n_modules ) = value;
+    *(data + id * n_parameters + parameter) = value;
 }
 
 //-- Save file

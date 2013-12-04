@@ -31,7 +31,7 @@
 
 #include "Oscillator.h"
 
-/*! \class SinsoidalOscillator
+/*! \class SinusoidalOscillator
  *  \brief Generate oscillations using a sine function
  */
 class SinusoidalOscillator: public Oscillator

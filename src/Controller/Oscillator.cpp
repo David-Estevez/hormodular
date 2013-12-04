@@ -7,25 +7,40 @@
 void Oscillator::setPeriod(uint16_t period_ms)
 {
     if ( period_ms != 0)
+    {
         this->period_ms = period_ms;
+    }
     else
-        std::cerr << "[Oscillator] Period cannot be set to 0 ms";
+    {
+        this->period_ms = 4000;
+        std::cerr << "[Oscillator] Period cannot be set to 0 ms. Setting to " << this->period_ms << std::endl;
+    }
 }
 
 void Oscillator::setAmplitude(uint8_t amplitude)
 {
     if ( amplitude <= 90 )
+    {
         this->amplitude = amplitude;
+    }
     else
-        std::cerr << "[Oscillator] Amplitude out of range [0,90] (Got: " << amplitude << ")\n";
+    {
+        this->amplitude = 0;
+        std::cerr << "[Oscillator] Amplitude out of range [0,90] (Got: " << amplitude << ")" << std::endl;
+    }
 }
 
 void Oscillator::setOffset(int8_t offset)
 {
     if ( offset >= -90 && offset <= 90 )
+    {
         this->offset = offset;
+    }
     else
-        std::cerr << "[Oscillator] Offset out of range [-90,90] (Got: " << offset << ")\n";
+    {
+        this->offset = 0;
+        std::cerr << "[Oscillator] Offset out of range [-90,90] (Got: " << offset << ")" << std::endl;
+    }
 }
 
 void Oscillator::setPhase(float phase)
@@ -57,21 +72,5 @@ Oscillator::Oscillator()
 
 Oscillator::Oscillator(uint8_t amplitude, uint8_t offset, float phase, uint16_t period_ms)
 {
-    //-- Check parameters before assignment
-    if ( amplitude <= 90 )
-        this->amplitude = amplitude;
-    else
-        this->amplitude = 0;
-
-    if ( offset >= -90 && offset <= 90 )
-        this->offset = offset;
-    else
-        this->offset = 0;
-
-    this->phase = phase;
-
-    if ( period_ms != 0)
-        setPeriod(period_ms);
-    else
-        this->period_ms = 4000;
+    setParameters(amplitude, offset, phase, period_ms);
 }

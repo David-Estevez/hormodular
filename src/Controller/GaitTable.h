@@ -58,6 +58,10 @@ public:
 
     //! \brief Change a value of the table
     void set( uint8_t id, uint8_t parameter, float value);
+
+    //! \brief Loads a gait table from a file:
+    int loadFromFile( const std::string file_path);
+
     //! \brief Saves the gait table to a octave file
     void saveToFile(const std::string file_path);
 
@@ -75,8 +79,8 @@ private:
      *  And internally is stored like this:
      *  | X00 | X01 | ... | X0N | X10 | X11 | ... | XM0 | XM1 | ... | XMN |
      *
-     *  Therefore to access the element i,j:
-     *  element(i, j) = *(data + i + n_modules * j)
+     *  Therefore to access the element Xij:
+     *  element(i, j) = *(data + i * n_param + j)
      */
     float * data;
     uint8_t n_modules;
