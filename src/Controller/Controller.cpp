@@ -45,6 +45,7 @@ int Controller::run( uint32_t max_iter )
         std::cout <<"[Debug][Controller] ID:" << (int) id << " Iteration: " << counter++ << " Position: " << position << std::endl;
 
         while( module->get_elapsed_evaluation_time() - currentTime < simulation_step );
+        //usleep(2500);
     }
     while ( counter < max_iter || run_forever);
 

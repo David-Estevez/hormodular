@@ -45,7 +45,8 @@ int main(void)
     Controller hormoneController3( &module_OpenRave );
 
 
-    for (int i = 0; i < gaits; i++ )
+    int i = 0;
+    do
     {
         //-- Setup controllers
         hormoneController1.reset();
@@ -56,9 +57,9 @@ int main(void)
         hormoneController2.setId(1);
         hormoneController3.setId(2);
 
-        hormoneController1.loadGaitTable( gait_table_file.at(i) );
-        hormoneController2.loadGaitTable( gait_table_file.at(i) );
-        hormoneController3.loadGaitTable( gait_table_file.at(i) );
+        hormoneController1.loadGaitTable( gait_table_file.at(i%gaits) );
+        hormoneController2.loadGaitTable( gait_table_file.at(i%gaits) );
+        hormoneController3.loadGaitTable( gait_table_file.at(i%gaits) );
 
          //-- Create three threads:
          pthread_t controller1, controller2, controller3;
@@ -72,9 +73,7 @@ int main(void)
          pthread_join(controller2, NULL);
          pthread_join(controller3, NULL);
 
-    }
-
-    while(1);     //-- Avoid openrave crashing
+    }  while(++i);     //-- Avoid openrave crashing
 
     return 0;
 }
