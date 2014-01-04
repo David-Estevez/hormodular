@@ -18,8 +18,10 @@ EXEC_PROGRAM("openrave-config --share-dir" OUTPUT_VARIABLE OpenRAVE_SHARE_DIR)
 find_library(OPENMR openmr ${OpenRAVE_SHARE_DIR}/plugins)
 message(STATUS "Looking for OpenMR... ${OPENMR}")
 
-if (NOT OPENMR)
+if(NOT OPENMR)
   message(SEND_ERROR "OPENMR not found")
+else()
+  message(STATUS "OpenMR located at: ${OpenRAVE_SHARE_DIR}/plugins")
 endif()
 
 
@@ -33,6 +35,9 @@ link_directories(${OpenRAVE_LIBRARY_DIRS} ${Boost_LIBRARY_DIRS})
 
 FIND_PACKAGE( OpenCV REQUIRED )
 MESSAGE("OpenCV_LIBS : ${OpenCV_LIBS}")
+
+### Look for the threads library
+find_package(Threads)
 
 ### include dirs
 INCLUDE_DIRECTORIES(
@@ -53,6 +58,7 @@ GraphFile FileHandler OscillationAnalyzer_OutputSignal VisualTracker SerialCommu
 
 # Controller #################################################################################
 add_subdirectory(Controller)
+add_subdirectory(Module)
 
 # Executables ################################################################################
 #add_subdirectory( Evolution )

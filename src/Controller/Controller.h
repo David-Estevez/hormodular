@@ -30,13 +30,14 @@
 #include <iostream>
 #include <string>
 
-//-- Morphomotion includes
-#include "Robot.h"
 
 //-- Hormodular includes
 #include "Oscillator.h"
 #include "SinusoidalOscillator.h"
 #include "GaitTable.h"
+
+//-- Module interface
+#include "../Module/Servo.h"
 
 
 /*! \class Controller
@@ -45,47 +46,46 @@
 class Controller
 {
     public:
-        Controller();
-        Controller( Robot* module );
-        //--Controller( const Controller& src_controller );
-
+        //-- Constructors & destructor
+        Controller( Servo * servos, std::string gait_table_file, uint32_t * time);
         ~Controller();
 
-        int run( uint32_t run_time_ms = 0);
-        int reset();
+        //-- Setup functions
+        //int run( uint32_t run_time_ms = 0); //-- Deprecated
+        void reset();
 
         //! \brief Loads a gait table from file:
-        int loadGaitTable( const std::string& file_path );
+        void loadGaitTable();
 
-        Robot *getModule() const;
-        uint8_t getId() const;
-        uint32_t getInternal_time() const;
-        int32_t getAdjust_time() const;
-        Oscillator *getOscillator() const;
-        GaitTable *getControl_table() const;
-
-        void setModule(Robot *value);
-        void setId(const uint8_t &value);       
-        void setInternal_time(const uint32_t &value);
-        void setAdjust_time(const int32_t &value);
-        void setOscillator(Oscillator *value);
-        void setControl_table(GaitTable *value);
-
-
-
-private:
-        //! \brief Function mapping the gait table with the oscillator outputs
-        int mappingFunction();
+        //-- Controller main functions:
+        void runOscillator();
+        void syncMechanism();
+        void morphFinder();
+        void sensorDataManagement();
+        void hormoneQueueManagement();
 
         //! \brief Returns the local time at the current module (for internal calculations)
         uint32_t localtime();
 
-        Robot * module;
+private:
+
+        //! \brief Recalculates oscillator parameters as a function of the module current state
+        void runController();
+
+        Servo * servos;
+
         uint8_t id;
-        uint32_t internal_time;
+        pthread_mutex_t id_mutex;
+
+        uint32_t * internal_time;
         int32_t adjust_time;
+
         Oscillator * oscillator;
+        pthread_mutex_t oscillator_mutex;
+
+        std::string gait_table_file;
         GaitTable * control_table;
+
 };
 
 #endif

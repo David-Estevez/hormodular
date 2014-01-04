@@ -14,9 +14,9 @@ void* runController( void* arg );
 int main(void)
 {
     std::vector< std::string > gait_table_file;
-    gait_table_file.push_back("../../data/gait tables/gait_table_straight_3_modules_pyp.txt");
-    gait_table_file.push_back("../../data/gait tables/gait_table_sidewalk_3_modules_pyp.txt");
-    gait_table_file.push_back("../../data/gait tables/gait_table_turn_3_modules_pyp.txt");
+    gait_table_file.push_back("../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt");
+    gait_table_file.push_back("../../../../data/gait tables/gait_table_sidewalk_3_modules_pyp.txt");
+    gait_table_file.push_back("../../../../data/gait tables/gait_table_turn_3_modules_pyp.txt");
 
     int gaits = gait_table_file.size();
 
@@ -24,7 +24,7 @@ int main(void)
     std::cout << "Testing controller..." << std::endl;
     SimulationOpenRave module_OpenRave;
     module_OpenRave.set_number_of_modules(3);
-    module_OpenRave.set_scene_file_name("../../data/models/Minicube-II.env.xml");
+    module_OpenRave.set_scene_file_name("../../../../data/models/Minicube-II.env.xml");
     module_OpenRave.init_simu_env("");
     module_OpenRave.load_controller("servocontroller");
     module_OpenRave.set_evaluation_method("Euclidean_Distance_Final");

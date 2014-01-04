@@ -6,7 +6,8 @@ SinusoidalOscillator::SinusoidalOscillator(uint8_t amplitude, uint8_t offset, fl
 
 float SinusoidalOscillator::calculatePos(uint32_t time)
 {
-    return 90 + amplitude*sin( 2*M_PI*time/period_ms + deg2rad(phase)) + offset;
+   // return 90 + amplitude*sin( 2*M_PI*time/period_ms + deg2rad(phase)) + offset;
+   return amplitude*sin( 2*M_PI*time/period_ms + deg2rad(phase)) + offset;
 }
 
 float SinusoidalOscillator::deg2rad(float angle_deg)

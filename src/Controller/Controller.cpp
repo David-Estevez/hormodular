@@ -1,19 +1,22 @@
 #include "Controller.h"
 
 
-Controller::Controller()
+Controller::Controller(Servo *servos, std::string gait_table_file, uint32_t *time)
 {
-    this->oscillator = new SinusoidalOscillator( 0, 0, 0, 0);;
-    this->control_table = new GaitTable(1, 3);
-    this->reset();
-}
+    //-- Default values
+    this->servos = servos;
+    this->gait_table_file = gait_table_file;
+    this->oscillator = new SinusoidalOscillator( 0, 0, 0, 0);
+    this->control_table = new GaitTable( gait_table_file);
+    this->id = 0;
+    this->internal_time = time;
 
-Controller::Controller(Robot *module)
-{
-    this->oscillator = new SinusoidalOscillator( 0, 0, 0, 0);;
-    this->control_table = new GaitTable(1, 3);
+    //-- Create mutexes
+    pthread_mutex_init( &id_mutex, NULL);
+    pthread_mutex_init( &oscillator_mutex, NULL);
+
+    //-- Reset module
     this->reset();
-    this->module = module;
 }
 
 Controller::~Controller()
@@ -22,7 +25,7 @@ Controller::~Controller()
     delete control_table;
 }
 
-int Controller::run( uint32_t max_iter )
+/*int Controller::run( uint32_t max_iter )
 {
     //-- If run time is 0, run the controller forever
     bool run_forever = max_iter == 0;
@@ -51,105 +54,59 @@ int Controller::run( uint32_t max_iter )
 
     std::cout << "Controller: " << (int) id << " ended!" << std::endl;
     return 0;
-}
+} */
 
-int Controller::reset()
+void Controller::reset()
 {
     id = 0;
-    internal_time = 0;
-    adjust_time = 0;
+    adjust_time = 0; //! \todo make this random to test sync
     oscillator->setParameters(0,0,0,0);
+    loadGaitTable();
 
-    delete control_table;
-    control_table = new GaitTable(1, 3);
-
-    return 0;
+    //-- Run controller once to start oscillator parameters
+    runController();
 }
 
-int Controller::loadGaitTable( const std::string& file_path )
+void Controller::loadGaitTable()
 {
-    //-- Load new data
-    control_table->loadFromFile( file_path);
-
-    return 0;
+    control_table->loadFromFile( gait_table_file);
 }
 
-//-- Getters and setters (to be modified later)
-//-----------------------------------------------------------------------------------
-Robot *Controller::getModule() const
+void Controller::runOscillator()
 {
-    return module;
+    //-- Calculate actuator new position
+    float angle = oscillator->calculatePos( localtime() );
+
+    //-- Lock the semaphore
+
+    //-- Move the servo
+    servos[0].write( angle);
+
+    //-- Unlock the semaphore
 }
 
-void Controller::setModule(Robot *value)
-{
-    module = value;
-}
-
-uint8_t Controller::getId() const
-{
-    return id;
-}
-
-void Controller::setId(const uint8_t &value)
-{
-    id = value;
-}
-
-uint32_t Controller::getInternal_time() const
-{
-    return internal_time;
-}
-
-void Controller::setInternal_time(const uint32_t &value)
-{
-    internal_time = value;
-}
-
-
-int32_t Controller::getAdjust_time() const
-{
-    return adjust_time;
-}
-
-void Controller::setAdjust_time(const int32_t &value)
-{
-    adjust_time = value;
-}
-
-Oscillator *Controller::getOscillator() const
-{
-    return oscillator;
-}
-
-void Controller::setOscillator(Oscillator *value)
-{
-    oscillator = value;
-}
-
-GaitTable *Controller::getControl_table() const
-{
-    return control_table;
-}
-
-void Controller::setControl_table(GaitTable *value)
-{
-    control_table = value;
-}
 
 //-- Private functions
 //-----------------------------------------------------------------------------------
 
-int Controller::mappingFunction()
+void Controller::runController()
 {
+    //-- Lock the oscillator & id mutexes
+    pthread_mutex_lock( &oscillator_mutex);
+    pthread_mutex_lock( &id_mutex);
+
+    //-- Recalculate oscillator parameters according to the current state
     oscillator->setAmplitude( control_table->at(id, 0) );
     oscillator->setOffset(control_table->at(id, 1));
     oscillator->setPhase( control_table->at(id, 2));
 
-    return 0;
+    //-- Unlock the oscillator & id mutexes
+    pthread_mutex_unlock( &oscillator_mutex);
+    pthread_mutex_unlock(&id_mutex);
+
 }
 
 uint32_t Controller::localtime()
 {
-    return internal_time + adjust_time;
+    return *internal_time + adjust_time;
 }
