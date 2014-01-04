@@ -23,25 +23,27 @@ SimulatedServo::SimulatedServo()
     //-- Default values
     configured = false;
     joint_id = -1;
-    key_update_time = -1;
-    key_current_servo = -1;
+    update_time_sem = NULL;
+    current_servo_sem = NULL;
 }
 
 void SimulatedServo::write(float angle)
 {
     if ( configured )
     {
-
         std::stringstream is, os;
         is << "setpos1 " << joint_id << " " << angle;
 
         //-- Lock semaphore
+        sem_wait( current_servo_sem);
 
         //-- Move servo
         openRave_pcontroller->SendCommand(os, is);
-        std::cout << "Wrote: " << angle << " to servo." << std::endl;
+        std::cout <<"[Debug]Wrote: " << angle << " to servo " << joint_id << std::endl;
+        std::cout.flush();
 
         //-- Unlock semaphore
+        sem_post( update_time_sem);
 
         //-- Store new value:
         this->pos_angle = angle;
@@ -50,7 +52,6 @@ void SimulatedServo::write(float angle)
 
 void SimulatedServo::init()
 {
-    //-- Create semaphores
     //-- Set configured to true
     configured = true;
 }
@@ -69,11 +70,11 @@ void SimulatedServo::setJointID(int joint_id)
         std::cerr << "[SimulatedServo] Error: invalid joint ID, must be >= 0." << std::endl;
 }
 
-void SimulatedServo::setSemaphoreKeys(int key_update_time, int key_current_servo)
+void SimulatedServo::setSemaphores(sem_t* update_time_sem, sem_t* current_servo_sem)
 {
-    if ( key_update_time >= 0 && key_current_servo >= 0)
+    if ( update_time_sem != NULL && current_servo_sem != NULL)
     {
-        this->key_update_time = key_update_time;
-        this->key_current_servo = key_current_servo;
+        this->update_time_sem = update_time_sem;
+        this->current_servo_sem = current_servo_sem;
     }
 }

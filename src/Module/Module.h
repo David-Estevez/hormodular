@@ -22,6 +22,8 @@
 #include <stdint.h>
 #include <iostream>
 #include <string>
+#include <pthread.h>
+#include <semaphore.h>
 
 //-- Hormodular includes
 #include "Servo.h"
@@ -37,7 +39,7 @@ enum ModuleType { SimulatedModule, SerialPortRobot };
 class Module
 {
     public:
-        Module(ModuleType type, uint8_t num_servos, std::string gait_table_file , OpenRAVE::ControllerBasePtr openRave_pcontroller);
+        Module(ModuleType type, uint8_t num_servos, std::string gait_table_file , OpenRAVE::ControllerBasePtr openRave_pcontroller, sem_t *update_time_sem, std::vector<sem_t *> current_servo_sem);
         ~Module();
 
         //-- Controller main interface
@@ -62,6 +64,10 @@ class Module
         void morphFinder();
         void sensorDataManagement();
         void hormoneQueueManagement();
+
+        //-- Semaphore interface
+//        sem_t * getUpdateTimeSemaphore();
+//        sem_t * getServoWriteSemaphore();
 
    private:
         Module();
@@ -90,11 +96,15 @@ class Module
         std::string gait_table_file;
         GaitTable * control_table;
 
-        //-- Thread pointers (why?)
-        pthread_t oscillator_process;
+        //-- Threads
+        pthread_t oscillator_thread;
 
         //-- Static thread wrappers
         static void * runOscillatorThread( void * This);
+
+        //-- Semaphores for sync simulation
+//        sem_t * updateTimeSemaphore;
+//        sem_t * servoWriteSemaphore;
 };
 
 //-- Thread wrappers:

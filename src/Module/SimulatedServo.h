@@ -21,6 +21,7 @@
 #include <openrave-core.h>
 #include <iostream>
 #include <sstream>
+#include <semaphore.h>
 
 #include "Servo.h"
 
@@ -35,15 +36,15 @@ class SimulatedServo : public Servo
         void init();
         void setOpenRaveController( OpenRAVE::ControllerBasePtr openRave_pcontroller);
         void setJointID( int joint_id);
-        void setSemaphoreKeys( int key_update_time, int key_current_servo);
+        void setSemaphores( sem_t* update_time_sem, sem_t* current_servo_sem);
 
 
    private:
         bool configured;
         OpenRAVE::ControllerBasePtr openRave_pcontroller;
         int joint_id;
-        int key_update_time;
-        int key_current_servo;
+        sem_t * update_time_sem;
+        sem_t * current_servo_sem;
 
 };
 

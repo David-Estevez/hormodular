@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <inttypes.h>
+#include <semaphore.h>
+#include <pthread.h>
 
 #include "../Module.h"
 
@@ -15,6 +17,8 @@ void * updateTime( void * args);
 struct UpdateTimeArgs {
     Module * pmodule;
     OpenRAVE::EnvironmentBasePtr penv;
+    sem_t* updateTime_sem;
+    std::vector< sem_t *> *modules_sem;
 };
 
 int main(int argc, char * argv[] )
@@ -93,9 +97,22 @@ int main(int argc, char * argv[] )
     //---------------------------------------------------------------------------------------------------
     //-- Alt actions with Module:
     //---------------------------------------------------------------------------------------------------
-    //-- Create a module:
+    //-- Module required arguments:
+
+    //-- Gait table:
     std::string gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
-    Module module( SimulatedModule,  probot->GetDOF(), gait_table_file, pcontroller );
+
+    //-- Create sync semaphores
+    sem_t updateTime_sem;
+    sem_init( &updateTime_sem, 0, 0);
+
+    sem_t module_sem;
+    sem_init( &module_sem, 0, 1);
+    std::vector< sem_t* > module_sem_vector;
+    module_sem_vector.push_back( &module_sem);
+
+    //-- Create a module:
+    Module module( SimulatedModule,  probot->GetDOF(), gait_table_file, pcontroller, &updateTime_sem, module_sem_vector);
 
     module.reset();
     module.run( 20000); //-- 2000 ms
@@ -104,6 +121,8 @@ int main(int argc, char * argv[] )
     struct UpdateTimeArgs updateTimeArgs;
     updateTimeArgs.penv = penv;
     updateTimeArgs.pmodule = &module;
+    updateTimeArgs.updateTime_sem = &updateTime_sem;
+    updateTimeArgs.modules_sem = &module_sem_vector;
     pthread_create( &updateTime_thread, NULL, &updateTime, (void *) &updateTimeArgs );
 
     pthread_join( updateTime_thread, NULL );
@@ -143,14 +162,24 @@ void * updateTime( void * args)
     uint32_t time = 0;
     Module * pmodule = updateTimeArgs->pmodule;
     OpenRAVE::EnvironmentBasePtr penv = updateTimeArgs->penv;
+    sem_t * updateTime_sem = updateTimeArgs->updateTime_sem;
+    std::vector< sem_t* > * pmodule_sem_vector = updateTimeArgs->modules_sem;
 
     while (time < 20000)
     {
+        //-- Lock this thread semaphores:
+        for (int i = 0; i < pmodule_sem_vector->size(); i++)
+            sem_wait( updateTime_sem);
+
         //-- Increment time
         pmodule->incrementTime( 2); //-- 2ms
 
         //-- Update simulation
         penv->StepSimulation( 0.002);
+
+        //-- Unlock modules threads:
+        for (int i = 0; i < pmodule_sem_vector->size(); i++)
+            sem_post( pmodule_sem_vector->at(i));
 
         //-- Increment time counter
         time += 2;
@@ -159,9 +188,10 @@ void * updateTime( void * args)
         usleep( 1000*2);
 
         //-- Print time:
-        std::cout << "Current time: " << time << std::endl;
+        std::cout << "[Debug] Current time: " << time << std::endl;
+        std::cout.flush();
     }
-    std::cout << "I'm supposed to increment time here." << std::endl;
+    std::cout << "Time up!" << std::endl;
 
     return NULL;
 }

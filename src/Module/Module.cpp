@@ -20,7 +20,7 @@
 
 //-- Constructors & destructors
 //------------------------------------------------------------------------------
-Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file, OpenRAVE::ControllerBasePtr openRave_pcontroller)
+Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file, OpenRAVE::ControllerBasePtr openRave_pcontroller, sem_t * update_time_sem, std::vector<sem_t*> current_servo_sem)
 {
 
     //-- Create servos:
@@ -34,7 +34,7 @@ Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file,
         {
             sim_servos[i].setOpenRaveController( openRave_pcontroller );
             sim_servos[i].setJointID( i );
-            //-- sim_servos[i].setSemaphoreKeys();
+            sim_servos[i].setSemaphores( update_time_sem, current_servo_sem[0]);
             sim_servos[i].init();
         }
 
@@ -64,7 +64,7 @@ Module::~Module()
 {
     //-- Cancel threads & wait for them to finish:
     //pthread_cancel( oscillator_process);
-    pthread_join( oscillator_process, NULL );
+    pthread_join( oscillator_thread, NULL );
 
     //-- Free memory:
     delete control_table;
@@ -138,19 +138,6 @@ void Module::loadGaitTable()
 
 //-- Controller main functions
 //----------------------------------------------------------------------------------
-void Module::runOscillator()
-{
-    //-- Calculate actuator new position
-    float angle = oscillator->calculatePos( localtime() );
-
-    //-- Lock the semaphore
-
-    //-- Move the servo
-    servos[0].write( angle);
-
-    //-- Unlock the semaphore
-}
-
 void Module::runController()
 {
     //-- Lock the oscillator & id mutexes
@@ -167,6 +154,29 @@ void Module::runController()
     pthread_mutex_unlock(&id_mutex);
 
 }
+
+void Module::runOscillator()
+{
+    //-- Calculate actuator new position
+    float angle = oscillator->calculatePos( localtime() );
+
+    //-- Move the servo
+    servos[0].write( angle);
+}
+
+//-- Semaphore interface
+//-----------------------------------------------------------------------------------
+//sem_t *Module::getUpdateTimeSemaphore()
+//{
+//    return &updateTimeSemaphore;
+//}
+
+//sem_t *Module::getServoWriteSemaphore()
+//{
+//    return &servoWriteSemaphore;
+//}
+
+
 
 //-- Thread wrappers
 void *Module::runOscillatorThread(void *This)
