@@ -20,7 +20,7 @@
 
 //-- Constructors & destructors
 //------------------------------------------------------------------------------
-Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file, OpenRAVE::ControllerBasePtr openRave_pcontroller, sem_t * update_time_sem, std::vector<sem_t*> current_servo_sem)
+Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file, OpenRAVE::ControllerBasePtr openRave_pcontroller, std::vector<int> joint_ids, sem_t * update_time_sem, std::vector<sem_t*> current_servo_sem)
 {
 
     //-- Create servos:
@@ -33,8 +33,8 @@ Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file,
         for (int i = 0; i < num_servos; i++)
         {
             sim_servos[i].setOpenRaveController( openRave_pcontroller );
-            sim_servos[i].setJointID( i );
-            sim_servos[i].setSemaphores( update_time_sem, current_servo_sem[0]);
+            sim_servos[i].setJointID( joint_ids[i] );
+            sim_servos[i].setSemaphores( update_time_sem, current_servo_sem[i]);
             sim_servos[i].init();
         }
 
@@ -43,7 +43,7 @@ Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file,
 
     //-- Set default values for variables:
     this->gait_table_file = gait_table_file;
-    this->oscillator = new SinusoidalOscillator( 0, 0, 0, 0);
+    this->oscillator = new SinusoidalOscillator( 0, 0, 0, OSCILLATOR_PERIOD);
     this->control_table = new GaitTable( gait_table_file);
     this->id = 0;
     this->internal_time = 0;
@@ -92,7 +92,7 @@ void Module::reset()
     //-- Reset controller
     this->id = 0;
     this->adjust_time = 0; //! \todo make this random to test sync
-    this->oscillator->setParameters(0,0,0,0);
+    this->oscillator->setParameters(0,0,0, OSCILLATOR_PERIOD);
     loadGaitTable();
 
     //-- Run controller once to start oscillator parameters
@@ -120,6 +120,26 @@ void Module::incrementTime(int timeIncrement)
 void Module::setMaxRuntime(uint32_t max_runtime)
 {
     this->max_runtime = max_runtime;
+}
+
+void Module::setID(uint8_t id)
+{
+    //-- Lock mutex
+    pthread_mutex_lock( &id_mutex);
+
+    //-- Change id
+    this->id = id;
+
+    //-- Unlock mutex
+    pthread_mutex_unlock( &id_mutex);
+
+#ifdef DEBUG_MESSAGES
+    //-- Debug message:
+    std::cout << "[Debug] ID set to: " << (int) this->id << std::endl;
+#endif
+
+    //-- Run controller
+    runController();
 }
 
 uint32_t Module::localtime()
@@ -152,6 +172,13 @@ void Module::runController()
     //-- Unlock the oscillator & id mutexes
     pthread_mutex_unlock( &oscillator_mutex);
     pthread_mutex_unlock(&id_mutex);
+
+#ifdef DEBUG_MESSAGES
+    //-- Debug: print parameters
+    std::cout << "[Debug] Amplitude for module: " << (int) id << " -> " << control_table->at(id, 0) <<std::endl;
+    std::cout << "[Debug] Offset for module: " << (int) id << " -> " << control_table->at(id, 1) <<std::endl;
+    std::cout << "[Debug] Phase for module: " << (int) id << " -> " << control_table->at(id, 2) <<std::endl;
+#endif
 
 }
 

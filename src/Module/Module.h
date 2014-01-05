@@ -34,12 +34,14 @@
 #include "../Controller/GaitTable.h"
 #include "../Controller/Controller.h"
 
+#define DEBUG_MESSAGES
+
 enum ModuleType { SimulatedModule, SerialPortRobot };
 
 class Module
 {
     public:
-        Module(ModuleType type, uint8_t num_servos, std::string gait_table_file , OpenRAVE::ControllerBasePtr openRave_pcontroller, sem_t *update_time_sem, std::vector<sem_t *> current_servo_sem);
+        Module(ModuleType type, uint8_t num_servos, std::string gait_table_file , OpenRAVE::ControllerBasePtr openRave_pcontroller, std::vector<int> joint_ids, sem_t *update_time_sem, std::vector<sem_t *> current_servo_sem);
         ~Module();
 
         //-- Controller main interface
@@ -50,6 +52,9 @@ class Module
         uint32_t * getTimePtr();
         void incrementTime( int timeIncrement);
         void setMaxRuntime( uint32_t max_runtime);
+
+        //-- Set id manually (only for testing)
+        void setID( uint8_t id);
 
         //! \brief Returns the local time at the current module (for internal calculations)
         uint32_t localtime();
@@ -91,6 +96,7 @@ class Module
         //-- Oscillator
         Oscillator * oscillator;
         pthread_mutex_t oscillator_mutex;
+        static const float OSCILLATOR_PERIOD = 2000;
 
         //-- Control table(s)
         std::string gait_table_file;

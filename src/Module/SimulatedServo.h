@@ -25,6 +25,7 @@
 
 #include "Servo.h"
 
+//#define DEBUG_MESSAGES
 
 class SimulatedServo : public Servo
 {

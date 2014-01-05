@@ -39,8 +39,11 @@ void SimulatedServo::write(float angle)
 
         //-- Move servo
         openRave_pcontroller->SendCommand(os, is);
+
+#ifdef DEBUG_MESSAGES
         std::cout <<"[Debug]Wrote: " << angle << " to servo " << joint_id << std::endl;
         std::cout.flush();
+#endif
 
         //-- Unlock semaphore
         sem_post( update_time_sem);

@@ -10,15 +10,19 @@
 
 #include "../Module.h"
 
+//-- Testing timing
+#include <sys/time.h>
+
+#define DEBUG_MESSAGES
 
 void startViewer( OpenRAVE::EnvironmentBasePtr penv,  bool showgui );
 void * updateTime( void * args);
 
 struct UpdateTimeArgs {
-    Module * pmodule;
+    std::vector<Module*> pmodules;
     OpenRAVE::EnvironmentBasePtr penv;
     sem_t* updateTime_sem;
-    std::vector< sem_t *> *modules_sem;
+    sem_t *modules_sem;
 };
 
 int main(int argc, char * argv[] )
@@ -28,7 +32,8 @@ int main(int argc, char * argv[] )
     if ( argc == 2 )
         scene_file = argv[1];
     else
-        scene_file = "../../../../data/models/Unimod1.env.xml";
+        //scene_file = "../../../../data/models/Unimod1.env.xml";
+        scene_file = "../../../../data/models/Minicube-II.env.xml";
 
     //-- Initialize OpenRAVE:
     OpenRAVE::RaveInitialize(true);
@@ -74,25 +79,25 @@ int main(int argc, char * argv[] )
     //-- Send a simple command to the robot:
     //-------------------------------------------------------------------------------------------------
     pcontroller->Reset();
-    penv->StartSimulation(0.0025, true);
+//    penv->StartSimulation(0.0025, true);
 
-    std::cin.get();
-    std::cout << "Start!" << std::endl;
+      std::cin.get();
+      std::cout << "Start!" << std::endl;
 
-    std::stringstream is,os;
-    is << "Setpos1 0 90";
-    pcontroller->SendCommand(os, is);
+//    std::stringstream is,os;
+//    is << "Setpos1 0 90";
+//    pcontroller->SendCommand(os, is);
 
-    sleep(3);
+//    sleep(3);
 
-    //-- Get actual dof values:
-    std::stringstream is2, os2;
-    is2 << "getpos1 0";
-    pcontroller->SendCommand(os2, is2);
-    float value = 1.23456; os2 >> value;
-    std::cout << "Values: " << value << std::endl;
+//    //-- Get actual dof values:
+//    std::stringstream is2, os2;
+//    is2 << "getpos1 0";
+//    pcontroller->SendCommand(os2, is2);
+//    float value = 1.23456; os2 >> value;
+//    std::cout << "Values: " << value << std::endl;
 
-    penv->StopSimulation();
+//    penv->StopSimulation();
 
     //---------------------------------------------------------------------------------------------------
     //-- Alt actions with Module:
@@ -106,26 +111,52 @@ int main(int argc, char * argv[] )
     sem_t updateTime_sem;
     sem_init( &updateTime_sem, 0, 0);
 
-    sem_t module_sem;
-    sem_init( &module_sem, 0, 1);
-    std::vector< sem_t* > module_sem_vector;
-    module_sem_vector.push_back( &module_sem);
+    sem_t module_sem_vector[ probot->GetDOF()];
+    for( int i = 0; i < probot->GetDOF(); i++)
+        sem_init( module_sem_vector+i, 0, 1);
 
-    //-- Create a module:
-    Module module( SimulatedModule,  probot->GetDOF(), gait_table_file, pcontroller, &updateTime_sem, module_sem_vector);
+    //sem_init( module_sem_vector, 0, 1);
 
-    module.reset();
-    module.run( 20000); //-- 2000 ms
+    //-- Create modules
+    std::vector<Module*> robot_modules;
+    for( int i = 0; i< probot->GetDOF(); i++)
+    {
+        std::vector<sem_t* > temp_sem_vector;
+        std::vector<int> temp_indices;
+        temp_sem_vector.push_back( module_sem_vector+i);
+        temp_indices.push_back(dofindices[i]);
+        Module * temp_module = new Module( SimulatedModule,  1, gait_table_file, pcontroller, temp_indices, &updateTime_sem, temp_sem_vector);
+        robot_modules.push_back( temp_module);
+    }
+
+    //-- Reset modules
+    for(int i = 0; i < probot->GetDOF(); i++)
+    {
+        robot_modules[i]->reset();
+        robot_modules[i]->setID( (uint8_t) i);
+    }
+
+    //-- Record initial position:
+    OpenRAVE::Vector start_pos = probot->GetCenterOfMass();
+
+    //-- Run modules
+    for(int i = 0; i < probot->GetDOF(); i++)
+        robot_modules[i]->run( 15000); //-- 20000 ms
 
     pthread_t updateTime_thread;
     struct UpdateTimeArgs updateTimeArgs;
     updateTimeArgs.penv = penv;
-    updateTimeArgs.pmodule = &module;
+    updateTimeArgs.pmodules = robot_modules;
     updateTimeArgs.updateTime_sem = &updateTime_sem;
-    updateTimeArgs.modules_sem = &module_sem_vector;
+    updateTimeArgs.modules_sem = module_sem_vector;
     pthread_create( &updateTime_thread, NULL, &updateTime, (void *) &updateTimeArgs );
 
     pthread_join( updateTime_thread, NULL );
+
+    //-- Record final position:
+    OpenRAVE::Vector end_pos = probot->GetCenterOfMass();
+    OpenRAVE::Vector distance_travelled = end_pos - start_pos;
+    std::cout << "Distance travelled: " << sqrt( pow(distance_travelled.x, 2) + pow( distance_travelled.y, 2)) << std::endl;
 
     //--------------------------------------------------------------------------------------------------
 
@@ -156,42 +187,66 @@ void startViewer( OpenRAVE::EnvironmentBasePtr penv,  bool showgui )
 
 void * updateTime( void * args)
 {
+    static const int RUNTIME_S = 15;
+    static const float STEP_MS = 2;
+
     //-- Get the args:
     struct UpdateTimeArgs * updateTimeArgs = (struct UpdateTimeArgs *) args;
 
     uint32_t time = 0;
-    Module * pmodule = updateTimeArgs->pmodule;
+    std::vector<Module*> pmodules = updateTimeArgs->pmodules;
     OpenRAVE::EnvironmentBasePtr penv = updateTimeArgs->penv;
     sem_t * updateTime_sem = updateTimeArgs->updateTime_sem;
-    std::vector< sem_t* > * pmodule_sem_vector = updateTimeArgs->modules_sem;
+    sem_t* pmodule_sem_vector = updateTimeArgs->modules_sem;
 
-    while (time < 20000)
+    //-- Testing timing:
+    struct timeval starttime, endtime;
+    gettimeofday( &starttime, NULL);
+
+    while (time < RUNTIME_S*1000)
     {
         //-- Lock this thread semaphores:
-        for (int i = 0; i < pmodule_sem_vector->size(); i++)
+        for (int i = 0; i < pmodules.size(); i++)
             sem_wait( updateTime_sem);
 
         //-- Increment time
-        pmodule->incrementTime( 2); //-- 2ms
+        for(int i = 0; i < pmodules.size(); i++)
+            pmodules.at(i)->incrementTime( STEP_MS); //-- 2ms
 
         //-- Update simulation
-        penv->StepSimulation( 0.002);
+        penv->StepSimulation( STEP_MS / 1000.0);
 
         //-- Unlock modules threads:
-        for (int i = 0; i < pmodule_sem_vector->size(); i++)
-            sem_post( pmodule_sem_vector->at(i));
+        for (int i = 0; i < pmodules.size(); i++)
+            sem_post( pmodule_sem_vector+i);
 
         //-- Increment time counter
-        time += 2;
+        time += STEP_MS;
 
         //-- Wait for time period
-        usleep( 1000*2);
+        //usleep( 1000*STEP_MS);
 
+#ifdef DEBUG_MESSAGES
         //-- Print time:
         std::cout << "[Debug] Current time: " << time << std::endl;
         std::cout.flush();
+#endif
     }
+
+    gettimeofday(&endtime, NULL);
+
     std::cout << "Time up!" << std::endl;
+    //std::cout << "Start time: " << starttime.tv_sec << "s " << starttime.tv_usec << "us" << std::endl;
+    //std::cout << "End time: " << endtime.tv_sec << "s " << endtime.tv_usec << "us" << std::endl;
+    int sec_diff = endtime.tv_sec-starttime.tv_sec;
+    int usec_diff = endtime.tv_usec-starttime.tv_usec;
+    if (usec_diff < 0)
+    {
+        usec_diff += 1000000;
+        sec_diff -= 1;
+    }
+    std::cout << "Runtime selected: " << RUNTIME_S << "s" << std::endl;
+    std::cout << "Actual runtime: " << sec_diff << "." << usec_diff << "s" << std::endl;
 
     return NULL;
 }
