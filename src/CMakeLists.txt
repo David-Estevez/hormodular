@@ -59,6 +59,7 @@ GraphFile FileHandler OscillationAnalyzer_OutputSignal VisualTracker SerialCommu
 # Controller #################################################################################
 add_subdirectory(Controller)
 add_subdirectory(Module)
+add_subdirectory(ModularRobot)
 
 # Executables ################################################################################
 #add_subdirectory( Evolution )

@@ -20,26 +20,12 @@
 
 //-- Constructors & destructors
 //------------------------------------------------------------------------------
-Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file, OpenRAVE::ControllerBasePtr openRave_pcontroller, std::vector<int> joint_ids, sem_t * update_time_sem, std::vector<sem_t*> current_servo_sem)
+Module::Module( uint8_t num_servos, std::string gait_table_file)
 {
 
     //-- Create servos:
     this->num_servos = num_servos;
-
-    if ( type == SimulatedModule )
-    {
-        SimulatedServo * sim_servos = new SimulatedServo[num_servos];
-
-        for (int i = 0; i < num_servos; i++)
-        {
-            sim_servos[i].setOpenRaveController( openRave_pcontroller );
-            sim_servos[i].setJointID( joint_ids[i] );
-            sim_servos[i].setSemaphores( update_time_sem, current_servo_sem[i]);
-            sim_servos[i].init();
-        }
-
-        this->servos = sim_servos;
-    }
+    this->servos = NULL;
 
     //-- Set default values for variables:
     this->gait_table_file = gait_table_file;
@@ -51,9 +37,6 @@ Module::Module(ModuleType type, uint8_t num_servos, std::string gait_table_file,
     //-- Create mutexes
     pthread_mutex_init( &id_mutex, NULL);
     pthread_mutex_init( &oscillator_mutex, NULL);
-
-    //-- Reset module
-    this->reset();
 
     //-- Create controller:
     //this->controller = new Controller( this->servos, gait_table_file, &this->time );
@@ -89,6 +72,9 @@ void Module::run(uint32_t time)
 
 void Module::reset()
 {
+    //-- Wait for threads to finish
+    //pthread_join( oscillator_thread, NULL );
+
     //-- Reset controller
     this->id = 0;
     this->adjust_time = 0; //! \todo make this random to test sync

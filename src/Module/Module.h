@@ -27,21 +27,17 @@
 
 //-- Hormodular includes
 #include "Servo.h"
-#include "SimulatedServo.h"
 
 #include "../Controller/Oscillator.h"
 #include "../Controller/SinusoidalOscillator.h"
 #include "../Controller/GaitTable.h"
 #include "../Controller/Controller.h"
 
-#define DEBUG_MESSAGES
-
-enum ModuleType { SimulatedModule, SerialPortRobot };
+//#define DEBUG_MESSAGES
 
 class Module
 {
     public:
-        Module(ModuleType type, uint8_t num_servos, std::string gait_table_file , OpenRAVE::ControllerBasePtr openRave_pcontroller, std::vector<int> joint_ids, sem_t *update_time_sem, std::vector<sem_t *> current_servo_sem);
         ~Module();
 
         //-- Controller main interface
@@ -74,12 +70,15 @@ class Module
 //        sem_t * getUpdateTimeSemaphore();
 //        sem_t * getServoWriteSemaphore();
 
-   private:
-        Module();
+   protected:
+        Module(uint8_t num_servos, std::string gait_table_file);
 
         //-- Servos
         Servo * servos;
         uint8_t num_servos;
+
+   private:
+        Module();
 
         //-- Controller (deprecated)
         //Controller * controller;

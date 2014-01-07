@@ -8,8 +8,10 @@
 #include <semaphore.h>
 #include <pthread.h>
 
-#include "../Module.h"
-#include "../SimulatedModule.h"
+#include "../ModularRobot.h"
+#include "../Module/Module.h"
+#include "../Module/SimulatedModule.h"
+#include "../SimulatedModularRobot.h"
 
 //-- Testing timing
 #include <sys/time.h>
@@ -77,120 +79,116 @@ int main(int argc, char * argv[] )
     //-- Unlock the environment mutex:
     lock.unlock();
 
-    //-- Send a simple command to the robot:
-    //-------------------------------------------------------------------------------------------------
+    //-- Reset controller and wait:
     pcontroller->Reset();
-//    penv->StartSimulation(0.0025, true);
 
-      std::cin.get();
-      std::cout << "Start!" << std::endl;
+    std::cin.get();
+    std::cout << "Start!" << std::endl;
 
-//    std::stringstream is,os;
-//    is << "Setpos1 0 90";
-//    pcontroller->SendCommand(os, is);
-
-//    sleep(3);
-
-//    //-- Get actual dof values:
-//    std::stringstream is2, os2;
-//    is2 << "getpos1 0";
-//    pcontroller->SendCommand(os2, is2);
-//    float value = 1.23456; os2 >> value;
-//    std::cout << "Values: " << value << std::endl;
-
-//    penv->StopSimulation();
 
     //---------------------------------------------------------------------------------------------------
-    //-- Run individual modules:
+    //-- Create robot:
     //---------------------------------------------------------------------------------------------------
-    //-- Module required arguments:
+    //-- ModularRobot required arguments:
 
     //-- Gait table:
     std::string gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
 
-    //-- Create sync semaphores
-    sem_t updateTime_sem;
-    sem_init( &updateTime_sem, 0, 0);
+    //-- Create robot:
+    SimulatedModularRobot myRobot( probot, penv, gait_table_file);
+    myRobot.setTimeStep( 1);
+    myRobot.selectDistanceCalculationMethod( ModularRobot::START_END_POINTS );
 
-    sem_t module_sem_vector[ probot->GetDOF()];
-    for( int i = 0; i < probot->GetDOF(); i++)
-        sem_init( module_sem_vector+i, 0, 1);
+    //-- Reset robot:
+    myRobot.reset();
 
-    //-- Create modules:
+    //-- Testing timing:
+    struct timeval starttime, endtime;
+    gettimeofday( &starttime, NULL);
 
-    std::vector<Module*> robot_modules;
-    for( int i = 0; i< probot->GetDOF(); i++)
+    //-- Run controller
+    myRobot.run();
+
+    //-- Get actual elapsed time:
+    gettimeofday(&endtime, NULL);
+
+    int sec_diff = endtime.tv_sec-starttime.tv_sec;
+    int usec_diff = endtime.tv_usec-starttime.tv_usec;
+    if (usec_diff < 0)
     {
-        std::vector<sem_t* > temp_sem_vector;
-        std::vector<int> temp_indices;
-        temp_sem_vector.push_back( module_sem_vector+i);
-        temp_indices.push_back(dofindices[i]);
-        Module * temp_module;
-        temp_module = new SimulatedModule(1, gait_table_file, pcontroller, temp_indices, &updateTime_sem, temp_sem_vector);
-        robot_modules.push_back((Module *) temp_module);
+        usec_diff += 1000000;
+        sec_diff -= 1;
     }
 
-    //-- Reset modules
-    for(int i = 0; i < probot->GetDOF(); i++)
-    {
-        robot_modules[i]->reset();
-        robot_modules[i]->setID( (uint8_t) i);
-    }
+    //-- Report distance travelled:
+    std::cout << "Distance travelled: " << myRobot.getDistanceTravelled() << std::endl;
+    std::cout << "Robot time elapsed:" << myRobot.getTimeElapsed() << std::cout;
+    std::cout << "Real time elapsed:" << sec_diff << "s " << usec_diff << "us " << std::endl;
 
-    //-- Record initial position:
-    OpenRAVE::Vector start_pos = probot->GetCenterOfMass();
+    //-- Old things:
+    //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-    //-- Run modules
-    for(int i = 0; i < probot->GetDOF(); i++)
-        robot_modules[i]->run( 15000); //-- 20000 ms
+//    //-- Create sync semaphores
+//    sem_t updateTime_sem;
+//    sem_init( &updateTime_sem, 0, 0);
 
-    pthread_t updateTime_thread;
-    struct UpdateTimeArgs updateTimeArgs;
-    updateTimeArgs.penv = penv;
-    updateTimeArgs.pmodules = robot_modules;
-    updateTimeArgs.updateTime_sem = &updateTime_sem;
-    updateTimeArgs.modules_sem = module_sem_vector;
-    pthread_create( &updateTime_thread, NULL, &updateTime, (void *) &updateTimeArgs );
+//    sem_t module_sem_vector[ probot->GetDOF()];
+//    for( int i = 0; i < probot->GetDOF(); i++)
+//        sem_init( module_sem_vector+i, 0, 1);
 
-    pthread_join( updateTime_thread, NULL );
+//    //-- Create modules:
 
-    //-- Record final position:
-    OpenRAVE::Vector end_pos = probot->GetCenterOfMass();
-    OpenRAVE::Vector distance_travelled = end_pos - start_pos;
-    std::cout << "Distance travelled: " << sqrt( pow(distance_travelled.x, 2) + pow( distance_travelled.y, 2)) << std::endl;
+//    std::vector<Module*> robot_modules;
+//    for( int i = 0; i< probot->GetDOF(); i++)
+//    {
+//        std::vector<sem_t* > temp_sem_vector;
+//        std::vector<int> temp_indices;
+//        temp_sem_vector.push_back( module_sem_vector+i);
+//        temp_indices.push_back(dofindices[i]);
+//        Module * temp_module;
+//        temp_module = new SimulatedModule(1, gait_table_file, pcontroller, temp_indices, &updateTime_sem, temp_sem_vector);
+//        robot_modules.push_back((Module *) temp_module);
+//    }
+
+//    //-- Reset modules
+//    for(int i = 0; i < probot->GetDOF(); i++)
+//    {
+//        robot_modules[i]->reset();
+//        robot_modules[i]->setID( (uint8_t) i);
+//    }
+
+//    //-- Record initial position:
+//    OpenRAVE::Vector start_pos = probot->GetCenterOfMass();
+
+//    //-- Run modules
+//    for(int i = 0; i < probot->GetDOF(); i++)
+//        robot_modules[i]->run( 15000); //-- 20000 ms
+
+//    pthread_t updateTime_thread;
+//    struct UpdateTimeArgs updateTimeArgs;
+//    updateTimeArgs.penv = penv;
+//    updateTimeArgs.pmodules = robot_modules;
+//    updateTimeArgs.updateTime_sem = &updateTime_sem;
+//    updateTimeArgs.modules_sem = module_sem_vector;
+//    pthread_create( &updateTime_thread, NULL, &updateTime, (void *) &updateTimeArgs );
+
+//    pthread_join( updateTime_thread, NULL );
+
+//    //-- Record final position:
+//    OpenRAVE::Vector end_pos = probot->GetCenterOfMass();
+//    OpenRAVE::Vector distance_travelled = end_pos - start_pos;
+//    std::cout << "Distance travelled: " << sqrt( pow(distance_travelled.x, 2) + pow( distance_travelled.y, 2)) << std::endl;
 
 
-    //-- Run it again: --------------------
-    for(int j = 0; j < 9; j++) {
-    //-- Reset modules
-    for(int i = 0; i < probot->GetDOF(); i++)
-    {
-        robot_modules[i]->reset();
-        robot_modules[i]->setID( (uint8_t) i);
-    }
+    //-- End of old things
+    //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-    //-- Record initial position:
-    start_pos = probot->GetCenterOfMass();
-
-    //-- Run modules
-    for(int i = 0; i < probot->GetDOF(); i++)
-        robot_modules[i]->run( 15000); //-- 20000 ms
-
-    pthread_create( &updateTime_thread, NULL, &updateTime, (void *) &updateTimeArgs );
-    pthread_join( updateTime_thread, NULL );
-
-    //-- Record final position:
-    end_pos = probot->GetCenterOfMass();
-    distance_travelled = end_pos - start_pos;
-    std::cout << "Distance travelled: " << sqrt( pow(distance_travelled.x, 2) + pow( distance_travelled.y, 2)) << std::endl;
-
-    }
     //-- Wait for the viewer to be closed:
     pthviewer->join();
 
     //-- Clean up things:
-    for( int i = 0; i< probot->GetDOF(); i++)
-        delete robot_modules[probot->GetDOF()-1-i];
+//    for( int i = 0; i< probot->GetDOF(); i++)
+//        delete robot_modules[probot->GetDOF()-1-i];
 
     delete pthviewer;
     penv->Destroy();
