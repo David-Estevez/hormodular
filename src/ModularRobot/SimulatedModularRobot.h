@@ -25,19 +25,24 @@
 
 #include "ModularRobot.h"
 #include "../Module/SimulatedModule.h"
+#include "SimulationOpenRAVE.h"
 
 class SimulatedModularRobot: public ModularRobot
 {
     public:
-        SimulatedModularRobot( OpenRAVE::RobotBasePtr openRAVE_robot, OpenRAVE::EnvironmentBasePtr penv, std::string gait_table_file);
+        SimulatedModularRobot( std::string environment_file, std::string gait_table_file);
         ~SimulatedModularRobot();
+
+        void showSimulationViewer();
+
+        void reset();
 
     private:
         virtual void updateTime();
         virtual void calculatePos();
 
+        Simulation_OpenRAVE * simulation;
         OpenRAVE::RobotBasePtr openRAVE_robot;
-        OpenRAVE::EnvironmentBasePtr penv;
 
         //-- Semaphores for syncing:
         sem_t* modules_semaphores;

@@ -1,21 +1,23 @@
 #include "SimulatedModularRobot.h"
 
-SimulatedModularRobot::SimulatedModularRobot(OpenRAVE::RobotBasePtr openRAVE_robot, OpenRAVE::EnvironmentBasePtr penv, std::string gait_table_file) : ModularRobot()
+SimulatedModularRobot::SimulatedModularRobot( std::string environment_file, std::string gait_table_file) : ModularRobot()
 {
-    //-- Gather simulation objects
-    this->openRAVE_robot = openRAVE_robot;
-    this->penv = penv;
+    //-- Create simulation
+    this->simulation = new Simulation_OpenRAVE( environment_file, false);
 
+    //-- Gather simulation objects
+    this->openRAVE_robot = simulation->getRobot(0);
 
     //-- Get modules info from openRAVE robot:
     int num_modules = openRAVE_robot->GetDOF();
 
-    std::vector<int> dofindices( openRAVE_robot->GetDOF());
+    //-- Get vector with dof indices
+    std::vector<int> dofindices( num_modules );
     for (int i = 0; i < (int) dofindices.size(); i++)
         dofindices[i] = i;
 
+    //-- Get controller from robot
     OpenRAVE::ControllerBasePtr pcontroller = openRAVE_robot->GetController();
-
 
     //-- Create sync semaphores
     sem_init( &this->updateTime_semaphore, 0, 0);
@@ -35,7 +37,7 @@ SimulatedModularRobot::SimulatedModularRobot(OpenRAVE::RobotBasePtr openRAVE_rob
         temp_indices.push_back(dofindices[i]);
 
         Module * temp_module = new SimulatedModule(1, gait_table_file, pcontroller, temp_indices,
-                                                   &updateTime_semaphore, temp_semaphores);
+                                                   &this->updateTime_semaphore, temp_semaphores);
         modules.push_back( temp_module );
     }
 
@@ -44,29 +46,58 @@ SimulatedModularRobot::SimulatedModularRobot(OpenRAVE::RobotBasePtr openRAVE_rob
 
 SimulatedModularRobot::~SimulatedModularRobot()
 {
+    //-- Free modules
+    int num_modules = openRAVE_robot->GetDOF();
+
+    for (int i = 0; i < num_modules; i++)
+        delete modules[i];
+
+    //-- Free semaphores
     delete[] modules_semaphores;
+
+    //-- Free simulation
+    delete simulation;
+}
+
+void SimulatedModularRobot::showSimulationViewer()
+{
+    simulation->showViewer();
+}
+
+void SimulatedModularRobot::reset()
+{
+    this->ModularRobot::reset();
+    simulation->reset();
+    simulation->stop();
 }
 
 
 void SimulatedModularRobot::updateTime()
 {
+    std::cout << "[Debug] Running robot with " << this->modules.size() << " modules for " << max_runtime_ms << "ms." << std::endl;
 
-    while (time_elapsed < max_runtime_ms)
+    while (time_elapsed <= max_runtime_ms)
     {
+        std::cout << "[Debug] Current time: " << time_elapsed << std::endl;
+        std::cout.flush();
+
         //-- Lock this thread semaphores:
         for (int i = 0; i < (int) this->modules.size(); i++)
             sem_wait( &updateTime_semaphore);
+
 
         //-- Increment time
         for(int i = 0; i < (int) this->modules.size(); i++)
             modules.at(i)->incrementTime( time_step_ms); //-- 2ms
 
         //-- Update simulation
-        penv->StepSimulation( time_step_s);
+        simulation->step( time_step_s);
 
         //-- Unlock modules threads:
         for (int i = 0; i < (int) modules.size(); i++)
             sem_post( modules_semaphores+i);
+
+
 
         //-- Increment time counter
         time_elapsed += time_step_ms;
