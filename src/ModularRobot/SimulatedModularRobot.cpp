@@ -69,6 +69,12 @@ void SimulatedModularRobot::reset()
     this->ModularRobot::reset();
     simulation->reset();
     simulation->stop();
+
+    //-- Reset semaphores:
+    sem_init( &this->updateTime_semaphore, 0, 0);
+
+    for( int i = 0; i < (int) this->modules.size(); i++)
+        sem_init( this->modules_semaphores+i, 0, 1);
 }
 
 
@@ -76,15 +82,14 @@ void SimulatedModularRobot::updateTime()
 {
     std::cout << "[Debug] Running robot with " << this->modules.size() << " modules for " << max_runtime_ms << "ms." << std::endl;
 
-    while (time_elapsed <= max_runtime_ms)
+    while (time_elapsed < max_runtime_ms)
     {
-        std::cout << "[Debug] Current time: " << time_elapsed << std::endl;
-        std::cout.flush();
+//        std::cout << "[Debug] Current time: " << time_elapsed << std::endl;
+//        std::cout.flush();
 
         //-- Lock this thread semaphores:
         for (int i = 0; i < (int) this->modules.size(); i++)
             sem_wait( &updateTime_semaphore);
-
 
         //-- Increment time
         for(int i = 0; i < (int) this->modules.size(); i++)
@@ -97,10 +102,11 @@ void SimulatedModularRobot::updateTime()
         for (int i = 0; i < (int) modules.size(); i++)
             sem_post( modules_semaphores+i);
 
-
-
         //-- Increment time counter
         time_elapsed += time_step_ms;
+
+        //-- Calculate distance travelled this step:
+        calculateDistanceTravelled();
 
         //-- Wait for time period
         //usleep( 1000*STEP_MS);
