@@ -27,14 +27,16 @@ int main(int argc, char * argv[] )
         scene_file = argv[1];
     else
         //scene_file = "../../../../data/models/Unimod1.env.xml";
-        scene_file = "../../../../data/models/Minicube-II.env.xml";
+        //scene_file = "../../../../data/models/Minicube-II.env.xml";
+        scene_file = "../../../../data/models/Cube5-I.env.xml";
 
 
     //---------------------------------------------------------------------------------------------------
     //-- Create robot:
     //---------------------------------------------------------------------------------------------------
     //-- Gait table:
-    std::string gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
+    //std::string gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
+    std::string gait_table_file = "../../../../data/gait tables/test_gait_5.txt";
 
     //-- Create robot:
     SimulatedModularRobot myRobot( scene_file, gait_table_file);
@@ -53,7 +55,7 @@ int main(int argc, char * argv[] )
     std::cin.get();
     std::cout << "Start!" << std::endl;
 
-    for (int i=0; i < 10; i++)
+    for (int i=0; i < 20; i++)
     {
         std::cout << "Run #" << i << std::endl;
 

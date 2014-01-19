@@ -56,7 +56,6 @@ Module::~Module()
 }
 
 
-
 //-- Main module interface
 //---------------------------------------------------------------------------------------
 
@@ -69,6 +68,7 @@ void Module::run(uint32_t time)
     this->max_runtime = time;
     pthread_create( &oscillator_process, NULL, &runOscillatorThread, (void *) this);
 }
+
 
 void Module::reset()
 {
