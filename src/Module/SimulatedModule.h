@@ -33,6 +33,7 @@ class SimulatedModule: public Module
                         std::vector<int> joint_ids,
                         sem_t * update_time_sem,
                         std::vector<sem_t*> current_servo_sem);
+        ~SimulatedModule();
     private:
         SimulatedModule();
 };

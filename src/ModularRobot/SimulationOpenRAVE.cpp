@@ -86,6 +86,7 @@ Simulation_OpenRAVE::~Simulation_OpenRAVE()
 
     //-- Destroy the environment
     penv->Destroy();
+    std::cout << "This is executed! -> ~SimulationOpenRAVE" << std::endl;
 }
 
 

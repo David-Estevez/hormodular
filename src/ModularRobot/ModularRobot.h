@@ -51,7 +51,7 @@ class ModularRobot
         //-- System timer:
         virtual void updateTime() = 0;
         static void * updateTimeThread( void * This);
-        pthread_t updateTime_thread;
+        pthread_t updateTime_pthread;
         uint32_t max_runtime_ms; //-- Simulation only
         uint32_t time_step_ms;
         float time_step_s;

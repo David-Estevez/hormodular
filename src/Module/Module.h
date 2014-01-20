@@ -43,6 +43,7 @@ class Module
         //-- Controller main interface
         void run(uint32_t time);
         void reset();
+        void join();
 
         //-- Timing interface (to simulate internal timers)
         uint32_t * getTimePtr();

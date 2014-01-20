@@ -47,10 +47,12 @@ SimulatedModularRobot::SimulatedModularRobot( std::string environment_file, std:
 SimulatedModularRobot::~SimulatedModularRobot()
 {
     //-- Free modules
-    int num_modules = openRAVE_robot->GetDOF();
+    //int num_modules = modules.size();
 
-    for (int i = 0; i < num_modules; i++)
-        delete modules[i];
+    //std::cout << "[Debug] Just called -> ~SimulatedModularRobot(), " << num_modules << " modules to destroy." << std::endl;
+
+//    for (int i = 0; i < num_modules; i++)
+//        delete modules[i];
 
     //-- Free semaphores
     delete[] modules_semaphores;
@@ -66,7 +68,10 @@ void SimulatedModularRobot::showSimulationViewer()
 
 void SimulatedModularRobot::reset()
 {
+    //-- Call the parent reset function
     this->ModularRobot::reset();
+
+    //-- Reset simulation
     simulation->reset();
     simulation->stop();
 

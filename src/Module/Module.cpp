@@ -45,14 +45,10 @@ Module::Module( uint8_t num_servos, std::string gait_table_file)
 
 Module::~Module()
 {
-    //-- Cancel threads & wait for them to finish:
-    //pthread_cancel( oscillator_process);
-    pthread_join( oscillator_thread, NULL );
-
     //-- Free memory:
     delete control_table;
     delete oscillator;
-    delete[] servos;
+    //delete[] servos;
 }
 
 
@@ -61,12 +57,13 @@ Module::~Module()
 
 void Module::run(uint32_t time)
 {
-    //-- Create threads for each of the components:
-    pthread_t oscillator_process; //, sync_process, morph_process, hormoneQueue_process;
+    //-- Create threads for each of the components: (you shouldn't do that, they are already created)
+    //pthread_t oscillator_process; //, sync_process, morph_process, hormoneQueue_process;
 
     //-- Run threads:
     this->max_runtime = time;
-    pthread_create( &oscillator_process, NULL, &runOscillatorThread, (void *) this);
+    pthread_create( &oscillator_thread, NULL, &runOscillatorThread, (void *) this);
+    //std::cout << "[Debug] Just run thread: " << oscillator_thread << " from id: " << (int) id << std::endl;
 }
 
 
@@ -86,6 +83,14 @@ void Module::reset()
 
     //-- Reset time
     this->internal_time = 0;
+}
+
+void Module::join()
+{
+    //std::cout << "[Debug] Joining thread " << oscillator_thread << " from id: " << (int) id << std::endl;
+
+    //-- Wait for all the threads of this module to end
+    pthread_join( this->oscillator_thread, NULL);
 }
 
 
@@ -138,7 +143,7 @@ uint32_t Module::localtime()
 
 void Module::loadGaitTable()
 {
-        control_table->loadFromFile( gait_table_file);
+    control_table->loadFromFile( gait_table_file);
 }
 
 

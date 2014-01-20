@@ -27,16 +27,16 @@ int main(int argc, char * argv[] )
         scene_file = argv[1];
     else
         //scene_file = "../../../../data/models/Unimod1.env.xml";
-        //scene_file = "../../../../data/models/Minicube-II.env.xml";
-        scene_file = "../../../../data/models/Cube5-I.env.xml";
+        scene_file = "../../../../data/models/Minicube-II.env.xml";
+        //scene_file = "../../../../data/models/Cube5-I.env.xml";
 
 
     //---------------------------------------------------------------------------------------------------
     //-- Create robot:
     //---------------------------------------------------------------------------------------------------
     //-- Gait table:
-    //std::string gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
-    std::string gait_table_file = "../../../../data/gait tables/test_gait_5.txt";
+    std::string gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
+    //std::string gait_table_file = "../../../../data/gait tables/test_gait_5.txt";
 
     //-- Create robot:
     SimulatedModularRobot myRobot( scene_file, gait_table_file);
@@ -108,7 +108,7 @@ int main(int argc, char * argv[] )
 
     std::cout << "Statistics report" << std::endl;
     std::cout << "-----------------------------------------" << std::endl;
-    std::cout << "Runned " << 10 << " simulations for " << 10000 << " ms each." << std::endl << std::endl;
+    std::cout << "Runned " << run_times.size() << " simulations for " << 10000 << " ms each." << std::endl << std::endl;
     std::cout << "Average actual run time: " << mean_run_times << "s. " << std::endl;
     std::cout << "Std. Dev. actual run time: " << stdev_run_times << "s. " << std::endl;
     std::cout << std::endl;

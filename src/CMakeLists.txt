@@ -1,17 +1,31 @@
+# Alternative compilations:
+#########################################################################################
+# For release build, run cmake with this arguments:
+#-DCMAKE_BUILD_TYPE=RELEASE
+# For debugging purposes compilation, run cmake with this arguments:
+#-DCMAKE_BUILD_TYPE=DEBUG
+# For debugging and profiling purposes, run cmake with this arguments:
+#-DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_CXX_FLAGS=-pg
+
+
 cmake_minimum_required (VERSION 2.6.0)
+
+# Configure the project:
 PROJECT( hormodular )
-find_package(OpenRAVE 0.8 REQUIRED)
+
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
   add_definitions("-fno-strict-aliasing -Wall")
 endif( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
 
+# Dependencies
+##########################################################################################
+# For the simulation:
+find_package(OpenRAVE 0.8 REQUIRED)
 find_package(Boost ${OpenRAVE_Boost_VERSION} EXACT COMPONENTS iostreams python thread)
 
-
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
-
-# Make sure the openmr plugin is installed!
+# Find openMR
 # Get the openrave share directory
 EXEC_PROGRAM("openrave-config --share-dir" OUTPUT_VARIABLE OpenRAVE_SHARE_DIR)
 
@@ -25,6 +39,17 @@ else()
 endif()
 
 
+# Thread support:
+find_package(Threads)
+
+
+# For CV robot tracking:
+#FIND_PACKAGE( OpenCV REQUIRED )
+#MESSAGE("OpenCV_LIBS : ${OpenCV_LIBS}")
+
+
+
+
 # Include and link directories
 include_directories(${OpenRAVE_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} )
 if( Boost_INCLUDE_DIRS )
@@ -33,11 +58,7 @@ endif()
 
 link_directories(${OpenRAVE_LIBRARY_DIRS} ${Boost_LIBRARY_DIRS})
 
-FIND_PACKAGE( OpenCV REQUIRED )
-MESSAGE("OpenCV_LIBS : ${OpenCV_LIBS}")
 
-### Look for the threads library
-find_package(Threads)
 
 ### include dirs
 INCLUDE_DIRECTORIES(
@@ -46,6 +67,7 @@ Flood/Utilities Flood/MultilayerPerceptron Flood/ObjectiveFunctional Flood/Train
 GraphFile FileHandler OscillationAnalyzer_OutputSignal VisualTracker SerialCommunication
 )
 
+# For the CV robot tracking
 # add_library(VisualTracker
 #   VisualTracker/VisualTracker.cpp
 #   VisualTracker/disjoint_sets2.cpp
@@ -56,12 +78,18 @@ GraphFile FileHandler OscillationAnalyzer_OutputSignal VisualTracker SerialCommu
 
 
 
-# Controller #################################################################################
+# Hormodular internal libs:
+##############################################################################################
+# Controller #
 add_subdirectory(Controller)
+
+# Module #
 add_subdirectory(Module)
+
+# ModularRobot #
 add_subdirectory(ModularRobot)
 
-# Executables ################################################################################
+# Hormodular main executables ################################################################
 #add_subdirectory( Evolution )
 #add_subdirectory( Evaluation )
 

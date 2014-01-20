@@ -35,4 +35,9 @@ SimulatedModule::SimulatedModule(uint8_t num_servos, std::string gait_table_file
     this->reset();
 }
 
+SimulatedModule::~SimulatedModule()
+{
+    delete[] servos;
+}
+
 #include "SimulatedModule.h"

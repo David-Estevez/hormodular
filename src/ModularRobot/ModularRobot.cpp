@@ -37,8 +37,9 @@ ModularRobot::ModularRobot()
 
 ModularRobot::~ModularRobot()
 {
-    pthread_join(updateTime_thread, NULL);
+    //pthread_join(updateTime_pthread, NULL);
 
+    //std::cout << "[Debug] Just called -> ~ModularRobot(), " << modules.size() << " modules to destroy." << std::endl;
     for(int i = 0; i < (int) modules.size(); i++)
         delete modules.at( modules.size() - 1 - i);
 }
@@ -46,7 +47,7 @@ ModularRobot::~ModularRobot()
 void ModularRobot::run()
 {
     //-- Launch system timer thread
-    pthread_create( &updateTime_thread, NULL, &updateTimeThread, (void *) this );
+    pthread_create( &updateTime_pthread, NULL, &updateTimeThread, (void *) this );
 
     //-- As we don't have yet a method to determine the module
     //-- local id, we force them temporarily:
@@ -59,7 +60,12 @@ void ModularRobot::run()
 
     //-- Temporarily wait for timer thread to end:
     //-- This could be later selected by a NO_WAIT parameter
-    pthread_join( updateTime_thread, NULL);
+    pthread_join( updateTime_pthread, NULL);
+
+    //-- Wait for all the modules to end:
+    for(int i = 0; i < (int) modules.size() ; i++)
+        modules[i]->join();
+
 }
 
 void ModularRobot::reset()
@@ -124,6 +130,7 @@ void *ModularRobot::updateTimeThread(void *This)
 void ModularRobot::calculateDistanceTravelled()
 {
     calculatePos();
+
     //-- Only calculates distance if integration is needed, to
     //-- recalculating point-to-point distances each iteration
     if ( distance_calculation_method == INTEGRATE_PATH )
