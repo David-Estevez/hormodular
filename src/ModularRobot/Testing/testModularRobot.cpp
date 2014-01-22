@@ -43,7 +43,7 @@ int main(int argc, char * argv[] )
     myRobot.setTimeStep( 1);
     myRobot.setMaxRuntime( 10000);
     myRobot.selectDistanceCalculationMethod( ModularRobot::START_END_POINTS );
-    myRobot.showSimulationViewer();
+    //myRobot.showSimulationViewer();
 
     //-- Create variables to store simulation results:
     std::vector< double > run_times;
@@ -55,7 +55,7 @@ int main(int argc, char * argv[] )
     std::cin.get();
     std::cout << "Start!" << std::endl;
 
-    for (int i=0; i < 20; i++)
+    for (int i=0; i < 10; i++)
     {
         std::cout << "Run #" << i << std::endl;
 
