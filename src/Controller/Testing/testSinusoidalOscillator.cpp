@@ -1,4 +1,4 @@
-#include "SinusoidalOscillator.h"
+#include "../SinusoidalOscillator.h"
 #include "assert.h"
 #include <iostream>
 

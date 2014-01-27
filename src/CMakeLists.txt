@@ -43,6 +43,10 @@ endif()
 find_package(Threads)
 
 
+# ECF -> Evolutionary Computation Framework
+set( ECF_LINK_FLAGS "-lecf" )
+
+
 # For CV robot tracking:
 #FIND_PACKAGE( OpenCV REQUIRED )
 #MESSAGE("OpenCV_LIBS : ${OpenCV_LIBS}")
@@ -61,11 +65,11 @@ link_directories(${OpenRAVE_LIBRARY_DIRS} ${Boost_LIBRARY_DIRS})
 
 
 ### include dirs
-INCLUDE_DIRECTORIES(
-Evolution Evaluation Robot SimulationOpenRave Y1ModularRobot Controller ServoFeedback
-Flood/Utilities Flood/MultilayerPerceptron Flood/ObjectiveFunctional Flood/TrainingAlgorithm
-GraphFile FileHandler OscillationAnalyzer_OutputSignal VisualTracker SerialCommunication
-)
+#INCLUDE_DIRECTORIES(
+#Evolution Evaluation Robot SimulationOpenRave Y1ModularRobot Controller ServoFeedback
+#Flood/Utilities Flood/MultilayerPerceptron Flood/ObjectiveFunctional Flood/TrainingAlgorithm
+#GraphFile FileHandler OscillationAnalyzer_OutputSignal VisualTracker SerialCommunication
+#)
 
 # For the CV robot tracking
 # add_library(VisualTracker
@@ -90,6 +94,12 @@ add_subdirectory(Module)
 add_subdirectory(ModularRobot)
 
 # Hormodular main executables ################################################################
+# Evolve gaits -> Evolves gaits for a given robot trough differential evolution
+add_executable( evolve-gaits evolve_gaits.cpp ModularRobotEvalOp.cpp )
+set_target_properties(evolve-gaits PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS}")
+set_target_properties(evolve-gaits PROPERTIES LINK_FLAGS "${ECF_LINK_FLAGS}")
+target_link_libraries(evolve-gaits ModularRobot Controller ${ECF_LINK_FLAGS})
+
 #add_subdirectory( Evolution )
 #add_subdirectory( Evaluation )
 

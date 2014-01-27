@@ -8,11 +8,8 @@
 #include <semaphore.h>
 #include <pthread.h>
 
-#include "../ModularRobot.h"
-#include "../Module/Module.h"
-#include "../Module/SimulatedModule.h"
 #include "../SimulatedModularRobot.h"
-#include "../SimulationOpenRAVE.h"
+
 
 //-- Testing timing
 #include <sys/time.h>

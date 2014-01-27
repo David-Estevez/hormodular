@@ -1,4 +1,4 @@
-#include "GaitTable.h"
+#include "../GaitTable.h"
 #include "assert.h"
 #include <iostream>
 #include <string>
