@@ -22,19 +22,44 @@
 
 Simulation_OpenRAVE::Simulation_OpenRAVE(std::string environment_file, bool show_simulation)
 {
+    this->environment_file = environment_file;
+
     //-- Initialize OpenRAVE:
     OpenRAVE::RaveInitialize(true);
 
     //-- Create main environment:
     penv = OpenRAVE::RaveCreateEnvironment();
-    OpenRAVE::RaveSetDebugLevel(OpenRAVE::Level_Debug);
+    //OpenRAVE::RaveSetDebugLevel(OpenRAVE::Level_Debug);
     penv->StopSimulation();
 
     //-- Run the viewer on a different thread, and wait for it to be ready:
-
     if ( show_simulation )
         showViewer();
 
+    //-- Init (load and setup everything)
+    init();
+
+
+
+}
+
+Simulation_OpenRAVE::~Simulation_OpenRAVE()
+{
+    if (show_simulation)
+    {
+        //-- Wait for the viewer to finish
+        pthviewer->join();
+        delete pthviewer;
+    }
+
+    //-- Destroy the environment
+    penv->Destroy();
+    //std::cout << "[Debug] This is executed! -> ~SimulationOpenRAVE" << std::endl;
+}
+
+
+void Simulation_OpenRAVE::init()
+{
     //-- Load the scene and wait for it to be ready:
     if ( !penv->Load( environment_file) )
     {
@@ -72,22 +97,8 @@ Simulation_OpenRAVE::Simulation_OpenRAVE(std::string environment_file, bool show
     //-- Reset controller and wait:
     for( int i = 0; i < (int) robots.size(); i++)
         robots[i]->GetController()->Reset();
-
 }
 
-Simulation_OpenRAVE::~Simulation_OpenRAVE()
-{
-    if (show_simulation)
-    {
-        //-- Wait for the viewer to finish
-        pthviewer->join();
-        delete pthviewer;
-    }
-
-    //-- Destroy the environment
-    penv->Destroy();
-    //std::cout << "[Debug] This is executed! -> ~SimulationOpenRAVE" << std::endl;
-}
 
 
 OpenRAVE::EnvironmentBasePtr Simulation_OpenRAVE::getPenv() const
@@ -105,6 +116,7 @@ OpenRAVE::RobotBasePtr Simulation_OpenRAVE::getRobot(int index) const
 {
     return robots[index];
 }
+
 
 void Simulation_OpenRAVE::showViewer()
 {
@@ -130,7 +142,9 @@ void Simulation_OpenRAVE::step(OpenRAVE::dReal step_period)
 
 void Simulation_OpenRAVE::reset()
 {
-    //penv->Reset();
+    penv->Reset();
+
+    init();
 }
 
 void Simulation_OpenRAVE::startViewer()

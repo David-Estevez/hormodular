@@ -40,4 +40,13 @@ SimulatedModule::~SimulatedModule()
     delete[] servos;
 }
 
+void SimulatedModule::setOpenRAVEController(OpenRAVE::ControllerBasePtr openRave_pcontroller)
+{
+    for (int i = 0; i < num_servos; i++)
+    {
+        ((SimulatedServo *)servos)[i].setOpenRaveController( openRave_pcontroller );
+        ((SimulatedServo *)servos)[i].init();
+    }
+}
+
 #include "SimulatedModule.h"

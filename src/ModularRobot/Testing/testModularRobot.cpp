@@ -20,7 +20,7 @@ int main(int argc, char * argv[] )
 {
     //-- Config data:
     std::string scene_file;
-    if ( argc == 2 )
+    if ( argc == 2 || argc == 3 )
         scene_file = argv[1];
     else
         //scene_file = "../../../../data/models/Unimod1.env.xml";
@@ -32,15 +32,21 @@ int main(int argc, char * argv[] )
     //-- Create robot:
     //---------------------------------------------------------------------------------------------------
     //-- Gait table:
-    std::string gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
+    std::string gait_table_file;
+    if ( argc == 3 )
+        gait_table_file = argv[2];
+    else
+        gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
     //std::string gait_table_file = "../../../../data/gait tables/test_gait_5.txt";
+
+
 
     //-- Create robot:
     SimulatedModularRobot myRobot( scene_file, gait_table_file);
     myRobot.setTimeStep( 1);
     myRobot.setMaxRuntime( 10000);
     myRobot.selectDistanceCalculationMethod( ModularRobot::START_END_POINTS );
-    //myRobot.showSimulationViewer();
+    myRobot.showSimulationViewer();
 
     //-- Create variables to store simulation results:
     std::vector< double > run_times;

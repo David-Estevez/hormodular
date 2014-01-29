@@ -70,9 +70,16 @@ void ModularRobot::run()
 
 void ModularRobot::reset()
 {
-
     //-- Get current pos
-    calculatePos();
+    this->calculatePos();
+
+    //-- [Debug] Track robot position on file
+    std::ofstream debug_pos_file("./pos.txt", std::fstream::app);
+    if ( debug_pos_file.is_open() )
+    {
+        debug_pos_file << current_pos.first << " " << current_pos.second << std::endl;
+        debug_pos_file.close();
+    }
 
     //-- Reset position/distance values
     this->start_pos = current_pos;

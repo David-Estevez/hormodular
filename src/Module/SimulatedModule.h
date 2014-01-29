@@ -34,6 +34,9 @@ class SimulatedModule: public Module
                         sem_t * update_time_sem,
                         std::vector<sem_t*> current_servo_sem);
         ~SimulatedModule();
+
+        void setOpenRAVEController( OpenRAVE::ControllerBasePtr openRave_pcontroller );
+
     private:
         SimulatedModule();
 };

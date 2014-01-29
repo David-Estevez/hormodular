@@ -35,6 +35,8 @@ class Simulation_OpenRAVE
         Simulation_OpenRAVE( std::string environment_file , bool show_simulation = true);
         ~Simulation_OpenRAVE();
 
+        void init(); //-- Loads the environment and sets everything needed
+
         OpenRAVE::EnvironmentBasePtr getPenv() const;
         std::vector<OpenRAVE::RobotBasePtr> getRobots() const;
         OpenRAVE::RobotBasePtr getRobot( int index = 0) const;
@@ -48,6 +50,7 @@ class Simulation_OpenRAVE
 
 private:
         void startViewer();
+        std::string environment_file;
         OpenRAVE::EnvironmentBasePtr penv;
         OpenRAVE::ViewerBasePtr pviewer;
         boost::thread * pthviewer;

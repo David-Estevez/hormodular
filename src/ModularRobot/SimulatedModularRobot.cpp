@@ -75,6 +75,16 @@ void SimulatedModularRobot::reset()
     simulation->reset();
     simulation->stop();
 
+    //-- Gather simulation objects
+    this->openRAVE_robot = simulation->getRobot(0);
+
+    //-- Get controller from robot
+    OpenRAVE::ControllerBasePtr pcontroller = openRAVE_robot->GetController();
+
+    //-- Set controller on robots again:
+    for( int i = 0; i < (int) this->modules.size(); i++)
+        ((SimulatedModule*)modules[i])->setOpenRAVEController( pcontroller);
+
     //-- Reset semaphores:
     sem_init( &this->updateTime_semaphore, 0, 0);
 
