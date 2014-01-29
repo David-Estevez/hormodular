@@ -164,6 +164,12 @@ int GaitTable::loadFromFile( const std::string file_path)
             for (int j = 0; j < n_parameters; j++)
                 this->set(i, j, data_tmp[i*cols+j]);
 
+        //-- Just debug
+//        std::cout << "[Debug] Data loaded from table: ";
+//        for (int i = 0; i < n_modules * n_parameters; i++)
+//            std::cout << *(this->data+i) << " ";
+//        std::cout << std::endl;
+
     }
     else
     {

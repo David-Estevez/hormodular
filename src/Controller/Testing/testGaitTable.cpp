@@ -5,7 +5,7 @@
 
 int main(void)
 {
-    static const uint8_t N_MODULES = 3;
+    static const uint8_t N_MODULES = 5;
     static const uint8_t N_PARAM = 3;
     static const std::string FILEPATH = "./test_gaittable_file.txt";
 

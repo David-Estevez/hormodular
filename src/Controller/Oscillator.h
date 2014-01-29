@@ -38,11 +38,11 @@ class Oscillator
         void setPeriod( uint16_t period_ms);
         uint16_t getPeriod( );
 
-        void setAmplitude( uint8_t amplitude);
-        uint8_t getAmplitude();
+        void setAmplitude( float amplitude);
+        float getAmplitude();
 
-        void setOffset( int8_t offset);
-        int8_t getOffset();
+        void setOffset(float offset);
+        float getOffset();
 
         void setPhase( float phase);
         float getPhase();
@@ -65,11 +65,11 @@ class Oscillator
 
     protected:
         Oscillator();
-        Oscillator( uint8_t amplitude, uint8_t offset, float phase, uint16_t period_ms = 4000);
+        Oscillator(float amplitude, float offset, float phase, uint16_t period_ms = 4000);
 
         uint16_t period_ms;
-        uint8_t amplitude;
-        int8_t offset;
+        float amplitude;
+        float offset;
         float phase;
 };
 

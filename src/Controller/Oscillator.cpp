@@ -13,11 +13,11 @@ void Oscillator::setPeriod(uint16_t period_ms)
     else
     {
         this->period_ms = 4000;
-        std::cerr << "[Oscillator] Period cannot be set to 0 ms. Setting to " << this->period_ms << std::endl;
+        std::cerr << "[Oscillator] Period cannot be set to 0 ms. Setting to " << (int)this->period_ms << std::endl;
     }
 }
 
-void Oscillator::setAmplitude(uint8_t amplitude)
+void Oscillator::setAmplitude(float amplitude)
 {
     if ( amplitude <= 90 )
     {
@@ -26,11 +26,11 @@ void Oscillator::setAmplitude(uint8_t amplitude)
     else
     {
         this->amplitude = 0;
-        std::cerr << "[Oscillator] Amplitude out of range [0,90] (Got: " << amplitude << ")" << std::endl;
+        std::cerr << "[Oscillator] Amplitude out of range [0,90] (Got: " << (int)amplitude << ")" << std::endl;
     }
 }
 
-void Oscillator::setOffset(int8_t offset)
+void Oscillator::setOffset(float offset)
 {
     if ( offset >= -90 && offset <= 90 )
     {
@@ -39,7 +39,7 @@ void Oscillator::setOffset(int8_t offset)
     else
     {
         this->offset = 0;
-        std::cerr << "[Oscillator] Offset out of range [-90,90] (Got: " << offset << ")" << std::endl;
+        std::cerr << "[Oscillator] Offset out of range [-90,90] (Got: " << (int)offset << ")" << std::endl;
     }
 }
 
@@ -57,8 +57,8 @@ void Oscillator::setParameters(uint8_t amplitude, uint8_t offset, float phase, u
 }
 
 uint16_t Oscillator::getPeriod()    { return period_ms; }
-uint8_t Oscillator::getAmplitude() { return amplitude; }
-int8_t Oscillator::getOffset()    { return offset; }
+float Oscillator::getAmplitude() { return amplitude; }
+float Oscillator::getOffset()    { return offset; }
 float Oscillator::getPhase()     { return phase; }
 
 //-- Constructors
@@ -70,7 +70,7 @@ Oscillator::Oscillator()
     this->period_ms = 4000;
 }
 
-Oscillator::Oscillator(uint8_t amplitude, uint8_t offset, float phase, uint16_t period_ms)
+Oscillator::Oscillator(float amplitude, float offset, float phase, uint16_t period_ms)
 {
     setParameters(amplitude, offset, phase, period_ms);
 }

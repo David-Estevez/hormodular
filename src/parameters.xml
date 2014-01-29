@@ -1,8 +1,10 @@
 <ECF>
-	<DifferentialEvolution>
-		<Entry key="F">1</Entry>                  <!-- scaling constant -->
-		<Entry key="CR">0.9</Entry>               <!-- crossover rate -->
-	</DifferentialEvolution>
+	<Algorithm>
+		<DifferentialEvolution>
+			<Entry key="F">1</Entry>                  <!-- scaling constant -->
+			<Entry key="CR">0.9</Entry>               <!-- crossover rate -->
+		</DifferentialEvolution>
+	</Algorithm>
 	
     <Genotype>
     
