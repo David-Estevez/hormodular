@@ -68,9 +68,6 @@ void SimulatedModularRobot::showSimulationViewer()
 
 void SimulatedModularRobot::reset()
 {
-    //-- Call the parent reset function
-    this->ModularRobot::reset();
-
     //-- Reset simulation
     simulation->reset();
     simulation->stop();
@@ -90,6 +87,9 @@ void SimulatedModularRobot::reset()
 
     for( int i = 0; i < (int) this->modules.size(); i++)
         sem_init( this->modules_semaphores+i, 0, 1);
+
+    //-- Call the parent reset function
+    this->ModularRobot::reset();
 }
 
 
