@@ -100,6 +100,11 @@ set_target_properties(evolve-gaits PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS}"
 set_target_properties(evolve-gaits PROPERTIES LINK_FLAGS "${ECF_LINK_FLAGS}")
 target_link_libraries(evolve-gaits ModularRobot Controller ${ECF_LINK_FLAGS})
 
+add_executable( evaluate-gaits evaluate_gaits.cpp )
+set_target_properties(evaluate-gaits PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS}")
+set_target_properties(evaluate-gaits PROPERTIES LINK_FLAGS "${ECF_LINK_FLAGS}")
+target_link_libraries(evaluate-gaits ModularRobot )
+
 #add_subdirectory( Evolution )
 #add_subdirectory( Evaluation )
 
