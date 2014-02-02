@@ -127,6 +127,7 @@ class MainWin( wx.Frame):
 		# Extract fitness history:
 		fitness_history = []
 		generation_history = []
+		avg_fitness_history = []
 		
 		for line in f.readlines():
 			if line.find( 'Generation: ') != -1:
@@ -136,6 +137,10 @@ class MainWin( wx.Frame):
 			if line.find( '\tmax: ') != -1:
 				fitness_history.append( float( line.split(' ')[1]))
 				continue
+				
+			if line.find( '\tavg: ') != -1:
+				avg_fitness_history.append( float( line.split(' ')[1]))
+				continue
 	
 		f.close()					
 		
@@ -144,6 +149,7 @@ class MainWin( wx.Frame):
 		
 		# Plot	
 		pylab.plot( generation_history, fitness_history, 'b-')
+		#pylab.plot( generation_history, avg_fitness_history, 'r-')
 		pylab.show()
 		
 		
