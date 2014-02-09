@@ -87,21 +87,42 @@ class SerialRobot:
 		# Send the command
 		try:		
 			self.serialPort.write( command )
-			print command
  		except AttributeError, e:
 			print 'Not connected: [' + str(e) + ']'	
+			
+	def sendPosSingle( self, joint, pos):
+		# Compose the command
+		command = chr(0x51)
+		command += chr( joint) + chr( int(pos))
+		
+		# Send the command
+		try:		
+			self.serialPort.write( command )
+ 		except AttributeError, e:
+			print 'Not connected: [' + str(e) + ']'	
+	
+	def sendToggleLED( self ):
+		# Send the command
+		try:		
+			self.serialPort.write( chr(0x5F) )
+ 		except AttributeError, e:
+			print 'Not connected: [' + str(e) + ']'	
+			
+	def __del__(self):
+		# Close the serial port
+		self.serialPort.close()
 
 
 def main():
 	myRobot = SerialRobot(8);
-	myRobot.start( '/dev/ttyUSB0', 9600)
+	myRobot.start( '/dev/ttyUSB0', 57600)
 	
 	i = 0
 	while i < 200000:
 		pos = 90 * ( 1 + math.sin(2*3.1416/4000.0 *i) )
 		myRobot.sendPosAll( pos )
-		time.sleep(0.1)
-		i += 100
+		time.sleep(0.02)
+		i += 20
 
 if __name__ == '__main__':
 	main()

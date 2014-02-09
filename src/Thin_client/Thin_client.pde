@@ -11,7 +11,7 @@
 
 //-- Definitions of configuration parameters
 #define N_SERVOS 8
-#define BAUD_RATE 9600
+#define BAUD_RATE 57600
 
 static const uint8_t pin_map[N_SERVOS] = { 8, 9, 10, 11, A0, A1, A2, A3 };
 static const uint8_t initial_pos[N_SERVOS] = { 90, 90, 90, 90, 90, 90, 90, 90};
@@ -51,64 +51,29 @@ void setup()
 void loop()
 {
   
-  //-- Wait for input
-  if ( Serial.available() > 0 )
+  //-- Read command
+  char command = readNext();
+  
+  if ( command >= 0x50 && command <= 0x5F )
   {
-    //-- Read into the buffer
-    uint8_t i = 0;
-    while ( Serial.available() > 0 || i > BUFF_SIZE )
-    {
-      buffer[i] = Serial.read();
-      i++;  
-    }
-    
-    for ( int j = 0; j < i; j++)
-      Serial.print( *(buffer+j) );
-    Serial.print('\n');
-    
-    //-- Look for the start packet 0101 0000 -> 0x50 to 0101 1111 -> 0x5F
-    uint8_t command_start = 0;
-    uint8_t command_found = 0;
-    while( ! command_found && command_start < BUFF_SIZE)
-    {
-      if ( *(buffer+command_start) >= 0x50 && *(buffer+command_start) <= 0x5F )
-      {
-        command_found = 1;
-      }
-    }
-    
-    //-- Interpret the command:
-    switch ( *(buffer+command_start))
+    //-- Correct command
+    switch ( command )
     {
       case 0x50:
-      {
-          //-- Joint pos to every joint
-          for ( uint8_t i = 0; i < N_SERVOS; i++)
-          {
-            uint8_t joint_pos = *(buffer+i+1);
-            servo[i].write( joint_pos);
-          }
-      }   
-          break;
-          
+        //-- Set position of all joints
+        posAllJointsHandler();
+        break;
+                      
       case 0x51:
-      {
-          //-- Joint pos to a single joint
-          uint8_t joint_id = *(buffer+1);
-          uint8_t joint_pos = *(buffer+2);
-          servo[joint_id].write( joint_pos);
-      }
-          break;
-          
+        //-- Set position of a single joint
+        posSingleJointHandler();
+        break;
+                      
       case 0x5F:
-          //-- Toggle LED (test command)
-          digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-          break;
-    }
-    
-    memset( buffer, 0, BUFF_SIZE * sizeof( char) );
-    Serial.flush();
-    Serial.println("Ok!");
+        //-- Toggle LED (test command)
+        toggleLEDHandler();
+        break;
+      }
   }  
   
 }
@@ -120,3 +85,25 @@ char readNext( )
   return Serial.read();
 }
 
+void posAllJointsHandler()
+{       
+  //-- Joint pos to every joint
+  for ( uint8_t i = 0; i < N_SERVOS; i++)
+  {
+    uint8_t joint_pos = readNext();
+    servo[i].write( joint_pos);
+  }
+}
+       
+void posSingleJointHandler()
+{
+  //-- Joint pos to a single joint
+  uint8_t joint_id = readNext();
+  uint8_t joint_pos = readNext();
+  servo[joint_id].write( joint_pos);
+}
+
+void toggleLEDHandler()
+{
+  digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+}
