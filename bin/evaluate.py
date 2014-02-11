@@ -122,6 +122,7 @@ class MainWin( wx.Frame):
 		
 		# Get text from log file
 		print 'Opening ' + self.logFile
+		
 		f = open( self.logFile, 'r')
 		
 		# Extract fitness history:
@@ -169,7 +170,7 @@ class MainWin( wx.Frame):
 		xmlfile = parseString( fileContents)
 		
 		# Getting population data:
-		# -------------------------------------------------------------------------------------------------------
+		# ---------------------------------------------------------------------------------------------
 		xmlPopulation = xmlfile.getElementsByTagName('Deme')[0]
 		
 		# Create new individuals list:
@@ -186,7 +187,7 @@ class MainWin( wx.Frame):
 		self.listBoxIndividuals.Set( [ str(i) for i in self.individuals] )		
 		
 		# Getting scene file / log file filepath
-		# ---------------------------------------------------------------------------------------------------------
+		# ----------------------------------------------------------------------------------------------
 		xmlSceneFile = xmlfile.getElementsByTagName('Registry')[0]
 		found = False
 		for entry in xmlSceneFile.getElementsByTagName( 'Entry'):
