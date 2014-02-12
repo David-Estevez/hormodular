@@ -93,6 +93,9 @@ add_subdirectory(Module)
 # ModularRobot #
 add_subdirectory(ModularRobot)
 
+# SerialPort #
+add_subdirectory(Thin_client)
+
 # Hormodular main executables ################################################################
 # Evolve gaits -> Evolves gaits for a given robot trough differential evolution
 add_executable( evolve-gaits evolve_gaits.cpp ModularRobotEvalOp.cpp )

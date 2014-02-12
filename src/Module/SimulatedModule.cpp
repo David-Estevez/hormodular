@@ -17,7 +17,8 @@
 
 #include "SimulatedModule.h"
 
-SimulatedModule::SimulatedModule(uint8_t num_servos, std::string gait_table_file, OpenRAVE::ControllerBasePtr openRave_pcontroller, std::vector<int> joint_ids, sem_t * update_time_sem, std::vector<sem_t*> current_servo_sem) : Module( num_servos, gait_table_file )
+SimulatedModule::SimulatedModule(uint8_t num_servos, std::string gait_table_file, OpenRAVE::ControllerBasePtr openRave_pcontroller, std::vector<int> joint_ids, sem_t * update_time_sem, std::vector<sem_t*> current_servo_sem)
+    : Module( num_servos, gait_table_file )
 {
     SimulatedServo * sim_servos = new SimulatedServo[num_servos];
 
@@ -49,4 +50,3 @@ void SimulatedModule::setOpenRAVEController(OpenRAVE::ControllerBasePtr openRave
     }
 }
 
-#include "SimulatedModule.h"

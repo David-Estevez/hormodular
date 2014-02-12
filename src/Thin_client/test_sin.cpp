@@ -82,8 +82,7 @@ int main(int argc, char * argv[] )
             outputBuff.push_back( (char) pos );
         }
 
-        for (int j = 0; j < 9; j++)
-            serialPort.Write( outputBuff );
+        serialPort.Write( outputBuff );
 
         usleep( 20000 );
     }

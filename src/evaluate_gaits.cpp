@@ -32,7 +32,7 @@ int main(int argc, char * argv[] )
 
     //-- Create robot:
     SimulatedModularRobot myRobot( scene_file, gait_table_file);
-    myRobot.setTimeStep( 1);
+    myRobot.setTimeStep( 2);
     myRobot.setMaxRuntime( run_time );
     myRobot.selectDistanceCalculationMethod( ModularRobot::START_END_POINTS );
     myRobot.showSimulationViewer();

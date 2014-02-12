@@ -94,6 +94,7 @@ FitnessP ModularRobotEvalOp::evaluate(IndividualP individual)
 
     //-- Set the fitness value
     fitness->setValue( fitness_value);
+
     return fitness;
 }
 
