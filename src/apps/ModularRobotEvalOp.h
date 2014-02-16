@@ -16,8 +16,8 @@
 //------------------------------------------------------------------------------
 
 #include <ecf/ECF.h>
-#include "ModularRobot/SimulatedModularRobot.h"
-#include "Controller/GaitTable.h"
+#include "SimulatedModularRobot.h"
+#include "GaitTable.h"
 
 class ModularRobotEvalOp : public EvaluateOp
 {

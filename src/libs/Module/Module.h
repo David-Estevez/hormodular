@@ -28,10 +28,10 @@
 //-- Hormodular includes
 #include "Servo.h"
 
-#include "../Controller/Oscillator.h"
-#include "../Controller/SinusoidalOscillator.h"
-#include "../Controller/GaitTable.h"
-#include "../Controller/Controller.h"
+#include "Oscillator.h"
+#include "SinusoidalOscillator.h"
+#include "GaitTable.h"
+#include "Controller.h"
 
 //#define DEBUG_MESSAGES
 

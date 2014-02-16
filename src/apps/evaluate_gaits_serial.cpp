@@ -8,7 +8,7 @@
 #include <semaphore.h>
 #include <pthread.h>
 
-#include "ModularRobot/SimulatedModularRobot.h"
+#include "SimulatedModularRobot.h"
 
 //#define DEBUG_MESSAGES
 

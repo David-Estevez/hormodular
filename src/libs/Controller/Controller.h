@@ -37,7 +37,7 @@
 #include "GaitTable.h"
 
 //-- Module interface
-#include "../Module/Servo.h"
+#include "Servo.h"
 
 
 /*! \class Controller
