@@ -21,6 +21,7 @@
 SimulatedServo::SimulatedServo()
 {
     //-- Default values
+    pos_angle = 0;
     configured = false;
     joint_id = -1;
     update_time_sem = NULL;
@@ -55,7 +56,6 @@ void SimulatedServo::write(float angle)
 
 void SimulatedServo::init()
 {
-    //-- Set configured to true
     configured = true;
 }
 

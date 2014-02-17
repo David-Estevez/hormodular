@@ -31,7 +31,6 @@
 #include "Oscillator.h"
 #include "SinusoidalOscillator.h"
 #include "GaitTable.h"
-#include "Controller.h"
 
 //#define DEBUG_MESSAGES
 
@@ -67,10 +66,6 @@ class Module
         void sensorDataManagement();
         void hormoneQueueManagement();
 
-        //-- Semaphore interface
-//        sem_t * getUpdateTimeSemaphore();
-//        sem_t * getServoWriteSemaphore();
-
    protected:
         Module(uint8_t num_servos, std::string gait_table_file);
 
@@ -80,9 +75,6 @@ class Module
 
    private:
         Module();
-
-        //-- Controller (deprecated)
-        //Controller * controller;
 
         //-- Module id (shape+pos id)
         uint8_t id;
@@ -107,19 +99,6 @@ class Module
 
         //-- Static thread wrappers
         static void * runOscillatorThread( void * This);
-
-        //-- Semaphores for sync simulation
-//        sem_t * updateTimeSemaphore;
-//        sem_t * servoWriteSemaphore;
 };
-
-//-- Thread wrappers:
-//struct RunOscillatorArgs {
-//        //Controller * controller;
-//        //uint32_t * time;
-//        uint32_t max_time;
-//};
-
-//void * runOscillatorHelper( void * args);
 
 #endif //-- MODULE_H

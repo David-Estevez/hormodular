@@ -24,7 +24,7 @@
 #include <semaphore.h>
 
 #include "ModularRobot.h"
-#include "../Module/SimulatedModule.h"
+#include "SimulatedModule.h"
 #include "SimulationOpenRAVE.h"
 
 class SimulatedModularRobot: public ModularRobot

@@ -23,7 +23,7 @@
 #include <semaphore.h>
 
 #include "ModularRobot.h"
-#include "../Module/SerialModule.h"
+#include "SerialModule.h"
 #include "SerialStream.h"
 
 class SerialModularRobot : public ModularRobot

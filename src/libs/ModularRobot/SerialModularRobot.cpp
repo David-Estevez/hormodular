@@ -27,7 +27,7 @@ SerialModularRobot::SerialModularRobot(std::string port_name, int n_modules, std
 
     //-- Create array to store the joint positions
     joint_position_array = new int[n_modules];
-    for ( int i = 0; i < n_modules; i ++)
+    for ( int i = 0; i < (int) n_modules; i ++)
         joint_position_array[i] = 0;
 
     //-- Create sync semaphores
@@ -65,9 +65,6 @@ SerialModularRobot::SerialModularRobot(std::string port_name, int n_modules, std
 
 SerialModularRobot::~SerialModularRobot()
 {
-    //-- Delete modules
-    //-- ??
-
     //-- Free semaphores
     delete[] modules_semaphores;
 
@@ -104,7 +101,7 @@ void SerialModularRobot::reset()
     }
 
     //-- Reset joint positions
-    for ( int i = 0; i < this->modules.size() ; i ++)
+    for ( int i = 0; i < (int) this->modules.size() ; i ++)
         joint_position_array[i] = 0;
 
     //-- Reset semaphores:
@@ -165,7 +162,7 @@ void SerialModularRobot::updateTime()
         SerialPort::DataBuffer outputBuff;
         outputBuff.push_back(0x50); //-- 0x50 -> Set pos to all joints
         std::cout << "[Debug] Command: " ;
-        for (int i = 0; i < this->modules.size() ; i++)
+        for (int i = 0; i < (int) this->modules.size() ; i++)
         {
             outputBuff.push_back( (char) joint_position_array[i] );
             std::cout << (int) outputBuff[i+1] << " ";

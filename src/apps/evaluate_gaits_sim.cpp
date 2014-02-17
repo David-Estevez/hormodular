@@ -15,7 +15,7 @@
 int main(int argc, char * argv[] )
 {
     //-- Extract data from arguments
-    std::string scene_file, gait_table_file, run_time_str;
+    std::string scene_file, gait_table_file;
     int run_time;
 
     if ( argc == 4 )
@@ -26,7 +26,7 @@ int main(int argc, char * argv[] )
     }
     else
     {
-        std::cout << "Usage: evaluate-gaits [scene file] [gait table file] [run time(ms)]" << std::cout;
+        std::cout << "Usage: evaluate-gaits-sim [scene file] [gait table file] [run time(ms)]" << std::cout;
         exit(-1);
     }
 
@@ -38,7 +38,7 @@ int main(int argc, char * argv[] )
     myRobot.showSimulationViewer();
 
 
-    std::cout << "Evaluate-Gaits" << std::endl
+    std::cout << "Evaluate-Gaits (simulated version)" << std::endl
               << "------------------------------------" << std::endl;
 
     //-- Reset robot:

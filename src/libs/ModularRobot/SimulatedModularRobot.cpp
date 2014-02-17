@@ -46,14 +46,6 @@ SimulatedModularRobot::SimulatedModularRobot( std::string environment_file, std:
 
 SimulatedModularRobot::~SimulatedModularRobot()
 {
-    //-- Free modules
-    //int num_modules = modules.size();
-
-    //std::cout << "[Debug] Just called -> ~SimulatedModularRobot(), " << num_modules << " modules to destroy." << std::endl;
-
-//    for (int i = 0; i < num_modules; i++)
-//        delete modules[i];
-
     //-- Free semaphores
     delete[] modules_semaphores;
 

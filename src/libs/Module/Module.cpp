@@ -38,9 +38,6 @@ Module::Module( uint8_t num_servos, std::string gait_table_file)
     pthread_mutex_init( &id_mutex, NULL);
     pthread_mutex_init( &oscillator_mutex, NULL);
 
-    //-- Create controller:
-    //this->controller = new Controller( this->servos, gait_table_file, &this->time );
-
 }
 
 Module::~Module()
@@ -57,9 +54,6 @@ Module::~Module()
 
 void Module::run(uint32_t time)
 {
-    //-- Create threads for each of the components: (you shouldn't do that, they are already created)
-    //pthread_t oscillator_process; //, sync_process, morph_process, hormoneQueue_process;
-
     //-- Run threads:
     this->max_runtime = time;
     pthread_create( &oscillator_thread, NULL, &runOscillatorThread, (void *) this);
@@ -140,7 +134,6 @@ uint32_t Module::localtime()
 
 //-- Load gait table
 //----------------------------------------------------------------------------------
-
 void Module::loadGaitTable()
 {
     control_table->loadFromFile( gait_table_file);
@@ -170,8 +163,8 @@ void Module::runController()
     std::cout << "[Debug] Offset for module: " << (int) id << " -> " << control_table->at(id, 1) <<std::endl;
     std::cout << "[Debug] Phase for module: " << (int) id << " -> " << control_table->at(id, 2) <<std::endl;
 #endif
-
 }
+
 
 void Module::runOscillator()
 {
@@ -181,19 +174,6 @@ void Module::runOscillator()
     //-- Move the servo
     servos[0].write( angle);
 }
-
-//-- Semaphore interface
-//-----------------------------------------------------------------------------------
-//sem_t *Module::getUpdateTimeSemaphore()
-//{
-//    return &updateTimeSemaphore;
-//}
-
-//sem_t *Module::getServoWriteSemaphore()
-//{
-//    return &servoWriteSemaphore;
-//}
-
 
 
 //-- Thread wrappers
@@ -210,19 +190,3 @@ void *Module::runOscillatorThread(void *This)
 
     return NULL;
 }
-
-//void * runOscillatorHelper(void *args)
-//{
-//    //-- Get parameters
-//    struct RunOscillatorArgs * runOscillatorArgs = (struct RunOscillatorArgs *) args;
-//    //Controller * controller = runOscillatorArgs->controller;
-//    //uint32_t * time = runOscillatorArgs->time;
-//    uint32_t max_time = runOscillatorArgs->max_time;
-
-//    //-- Run oscillator
-//    while ( controller->localtime() < max_time ){
-//        controller->runOscillator();
-//        usleep(2000);}
-
-//    return NULL;
-//}

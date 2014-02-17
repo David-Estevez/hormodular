@@ -20,6 +20,7 @@
 SerialServo::SerialServo()
 {
     //-- Default values:
+    pos_angle = 90;
     configured = false;
     pjoint_value = NULL;
     update_time_sem = NULL;
@@ -53,7 +54,6 @@ void SerialServo::write(float angle)
 
 void SerialServo::init()
 {
-    //-- Set configured to true
     configured = true;
 }
 

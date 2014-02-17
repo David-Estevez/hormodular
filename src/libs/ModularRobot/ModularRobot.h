@@ -21,7 +21,7 @@
 #include <utility>
 #include <inttypes.h>
 
-#include "../Module/Module.h"
+#include "Module.h"
 
 class ModularRobot
 {

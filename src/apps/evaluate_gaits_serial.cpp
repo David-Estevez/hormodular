@@ -8,37 +8,36 @@
 #include <semaphore.h>
 #include <pthread.h>
 
-#include "SimulatedModularRobot.h"
+#include "SerialModularRobot.h"
 
 //#define DEBUG_MESSAGES
 
 int main(int argc, char * argv[] )
 {
     //-- Extract data from arguments
-    std::string scene_file, gait_table_file, run_time_str;
-    int run_time;
+    std::string serial_port, gait_table_file;
+    int n_modules, run_time;
 
-    if ( argc == 4 )
+    if ( argc == 5 )
     {
-        scene_file = argv[1];
-        gait_table_file = argv[2];
-        run_time = atoi (argv[3] );
+        n_modules = atoi( argv[1]);
+        serial_port = argv[2];
+        gait_table_file = argv[3];
+        run_time = atoi (argv[4] );
     }
     else
     {
-        std::cout << "Usage: evaluate-gaits [scene file] [gait table file] [run time(ms)]" << std::cout;
+        std::cout << "Usage: evaluate-gaits-serial [number of modules] [serial port] [gait table file] [run time(ms)]" << std::cout;
         exit(-1);
     }
 
     //-- Create robot:
-    SimulatedModularRobot myRobot( scene_file, gait_table_file);
-    myRobot.setTimeStep( 2);
+    SerialModularRobot myRobot(  serial_port, n_modules, gait_table_file);
+    myRobot.setTimeStep( 25);
     myRobot.setMaxRuntime( run_time );
-    myRobot.selectDistanceCalculationMethod( ModularRobot::START_END_POINTS );
-    myRobot.showSimulationViewer();
 
 
-    std::cout << "Evaluate-Gaits" << std::endl
+    std::cout << "Evaluate-Gaits (serial version)" << std::endl
               << "------------------------------------" << std::endl;
 
     //-- Reset robot:
@@ -63,7 +62,6 @@ int main(int argc, char * argv[] )
     }
 
     //-- Report distance travelled:
-    std::cout << "Distance travelled: " << myRobot.getDistanceTravelled() << std::endl;
     std::cout << "Robot time elapsed: " << (int) myRobot.getTimeElapsed() << std::endl;
     std::cout << "Real time elapsed: " << sec_diff << "s " << usec_diff << "us " << std::endl;
     std::cout << std::endl;
