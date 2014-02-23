@@ -1,0 +1,48 @@
+<ECF>
+	<Algorithm>
+	    <RouletteWheel>
+            <Entry key="crxprob">0.5</Entry>          <!-- crossover rate -->
+            <Entry key="selpressure">10</Entry>       <!-- selection pressure: how much the best individual is 'better' than the worst -->
+        </RouletteWheel>
+	</Algorithm>
+	
+    <Genotype>
+    
+   		<FloatingPoint>			<!-- Genotype for the amplitudes -->
+			<Entry key="lbound">0</Entry>
+			<Entry key="ubound">90</Entry>
+			<Entry key="dimension">x</Entry>
+			
+			<Entry key="mut.simple">0.05</Entry>
+			<Entry key="crx.arithmetic">1</Entry>
+		</FloatingPoint>
+    	
+		<FloatingPoint>			<!-- Genotype for the offsets -->
+			<Entry key="lbound">-90</Entry>
+			<Entry key="ubound">90</Entry>
+			<Entry key="dimension">x</Entry>
+			
+			<Entry key="mut.simple">0.05</Entry>
+			<Entry key="crx.arithmetic">1</Entry>
+		</FloatingPoint>
+		
+		<FloatingPoint>			<!-- Genotype for the phases -->
+			<Entry key="lbound">0</Entry>
+			<Entry key="ubound">360</Entry>
+			<Entry key="dimension">x</Entry>
+
+			<Entry key="mut.simple">0.05</Entry>
+			<Entry key="crx.arithmetic">1</Entry>
+		</FloatingPoint>
+		
+    </Genotype>
+    
+    <Registry>
+    	<!-- population -->
+		<Entry key="population.size">40</Entry> <!-- number of individuals (default: 100) -->
+	
+    	<!-- Termination conditions -->
+    	<Entry key="term.maxgen">50</Entry> 	<!-- max number of generations (default: none) -->	
+    	
+    </Registry>
+</ECF>

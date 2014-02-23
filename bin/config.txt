@@ -1,0 +1,5 @@
+name=Test01
+runtime=20000
+timestep=2
+nModules=3
+simulationfile=../data/models/Tripod.env.xml
