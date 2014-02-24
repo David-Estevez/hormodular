@@ -43,5 +43,5 @@ public:
         std::string gaittable_file;
 
  private:
-        void genotypeToGaitTable(FloatingPoint::FloatingPoint* genotype_amplitude, FloatingPoint::FloatingPoint *genotype_offset, FloatingPoint::FloatingPoint* genotype_phase );
+        void genotypeToGaitTable(FloatingPoint::FloatingPoint* genotype);
 };

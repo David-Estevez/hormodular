@@ -41,6 +41,7 @@
 		<Entry key="log.level">5</Entry> <!-- log level; valid values are 1 (minimal) to 5 (verbose) (default: 3) -->
 		<Entry key="log.filename">log.txt</Entry> <!-- log filename (default: none) -->
 		<Entry key="log.frequency">5</Entry> <!-- log only every 'frequency' generations (default: 1) -->
+		<Entry key="log.level">5</Entry> <!-- log level; valid values are 1 (minimal) to 5 (verbose) (default: 3) -->
 		<Entry key="milestone.filename">out.txt</Entry> <!-- milestone file (if stated) stores all the population (default: none) -->
 		<Entry key="milestone.interval">5</Entry> <!-- milestone saving interval in generations; 0: save only at the end (default: 0) -->
     	

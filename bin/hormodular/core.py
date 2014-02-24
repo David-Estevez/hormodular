@@ -255,7 +255,7 @@ def setRobotDimensions( xmlfile, robot ):
 		if element.getAttribute('key') == 'dimension':
 			if element.hasChildNodes:
 				# If xml parser considers that the value is a child entry
-				element.childNodes[0].data = unicode( str( robot.nModules))
+				element.childNodes[0].data = unicode( str( robot.nModules*3))
 			else:
 				#If xml parser considers that the value is part of the node data
 				element.data = unicode( str( robot.nModules))

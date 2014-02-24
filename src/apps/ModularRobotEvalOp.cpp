@@ -72,16 +72,14 @@ FitnessP ModularRobotEvalOp::evaluate(IndividualP individual)
     //-- Create a fitness object to maximize the objective (distance travelled)
     FitnessP fitness (new FitnessMax);
 
-    //-- We get the genotypes:
-    FloatingPoint::FloatingPoint* genotype_amplitude = (FloatingPoint::FloatingPoint*) individual->getGenotype(0).get();
-    FloatingPoint::FloatingPoint* genotype_offset = (FloatingPoint::FloatingPoint*) individual->getGenotype(1).get();
-    FloatingPoint::FloatingPoint* genotype_phase = (FloatingPoint::FloatingPoint*) individual->getGenotype(2).get();
+    //-- We get the genotype:
+    FloatingPoint::FloatingPoint* genotype = (FloatingPoint::FloatingPoint*) individual->getGenotype(0).get();
 
     //-- Value to store the fitness (distance travelled)
     double fitness_value = 0;
 
     //-- Here we record the genotypes on a gait table file:
-    genotypeToGaitTable( genotype_amplitude, genotype_offset, genotype_phase );
+    genotypeToGaitTable( genotype );
 
     //-- Reset the robot:
     modularRobot->reset();
@@ -98,22 +96,22 @@ FitnessP ModularRobotEvalOp::evaluate(IndividualP individual)
     return fitness;
 }
 
-void ModularRobotEvalOp::genotypeToGaitTable(FloatingPoint::FloatingPoint *genotype_amplitude, FloatingPoint::FloatingPoint* genotype_offset, FloatingPoint::FloatingPoint *genotype_phase)
+void ModularRobotEvalOp::genotypeToGaitTable(FloatingPoint::FloatingPoint *genotype)
 {
     //-- Create temporal table:
     GaitTable temp_table( n_modules, 3);
 
     //-- Set the genotype values to the table:
-    for (int i = 0; i < n_modules; i ++ )
+    for (int i = 0; i < n_modules; i++ )
     {
         //-- Set amplitude
-        temp_table.set(i, 0, genotype_amplitude->realValue[i]);
+        temp_table.set(i, 0, genotype->realValue[i*3] * 45 + 45);
 
         //-- Set offset
-        temp_table.set(i, 1, genotype_offset->realValue[i]);
+        temp_table.set(i, 1, genotype->realValue[i*3+1] * 90);
 
         //-- Set phase
-        temp_table.set(i, 2, genotype_phase->realValue[i]);
+        temp_table.set(i, 2, genotype->realValue[i*3+2] * 180 + 180);
     }
 
     //-- Save the table to a file:

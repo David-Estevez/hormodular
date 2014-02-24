@@ -37,17 +37,18 @@ class Individual:
 		xmlMotionInfo = xml_description.getElementsByTagName('FloatingPoint')
 
 		try:
-			amplitude_str = xmlMotionInfo[0].childNodes[0].data
-			offset_str = xmlMotionInfo[1].childNodes[0].data
-			phase_str = xmlMotionInfo[2].childNodes[0].data
+			data_str = xmlMotionInfo[0].childNodes[0].data
 		except Exception, e:
 			print str(e)
 			print "Bad data from file. Exiting..."
 			exit(-1)
 				
-		self.amplitudes = [ float(i) for i in amplitude_str.strip().split('\t') ]
-		self.offsets = [ float(i) for i in offset_str.strip().split('\t') ]
-		self.phases = [ float(i) for i in phase_str.strip().split('\t') ]
+		data = [ float(i) for i in data_str.strip().split('\t') ]
+		
+		for i in len(data)/3:
+			self.amplitudes.append( data[i*3] )
+			self.offsets.append( data[i*3+1] )
+			self.phases.append( data[i*3+2] )
 
 		
 	def __str__( self):

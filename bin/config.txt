@@ -1,4 +1,4 @@
-name=Test01
+name=Test02
 runtime=20000
 timestep=2
 nModules=3
