@@ -28,7 +28,7 @@ class Individual:
 		self.fitnessMax = float( xml_description.getElementsByTagName('FitnessMax')[0].getAttribute('value') )
 		
 		# Motion-related info ( amplitude, offset, phase)
-		self.size = int(xml_description.getElementsByTagName('FloatingPoint')[0].getAttribute('size') )
+		self.size = int(xml_description.getElementsByTagName('FloatingPoint')[0].getAttribute('size') ) / 3
 		
 		self.amplitudes = []
 		self.offsets = []
@@ -45,11 +45,10 @@ class Individual:
 				
 		data = [ float(i) for i in data_str.strip().split('\t') ]
 		
-		for i in len(data)/3:
-			self.amplitudes.append( data[i*3] )
-			self.offsets.append( data[i*3+1] )
-			self.phases.append( data[i*3+2] )
-
+		for i in range(len(data)/3):
+			self.amplitudes.append( data[i*3] * 45 + 45 )
+			self.offsets.append( data[i*3+1] * 90 )
+			self.phases.append( data[i*3+2] * 180 + 180)
 		
 	def __str__( self):
 		"""
@@ -70,7 +69,7 @@ class Individual:
 		individual_strings = list()
 		
 		for i in range(0, self.size):
-			return_string += ' '.join( str(j) for j in [self.amplitudes[i], self.offsets[i], self.phases[i] ]) + '\n'
+			return_string += ' '.join( [str(j) for j in [self.amplitudes[i], self.offsets[i], self.phases[i] ] ]) + '\n'
 			
 		
 		return return_string

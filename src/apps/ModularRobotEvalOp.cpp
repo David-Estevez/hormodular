@@ -61,7 +61,7 @@ bool ModularRobotEvalOp::initialize(StateP state)
     //-- Create and configure the robot:
     modularRobot = new SimulatedModularRobot( simulation_file, gaittable_file);
     modularRobot->setMaxRuntime(max_runtime);
-    modularRobot->setTimeStep(2);
+    modularRobot->setTimeStep(timestep);
     modularRobot->selectDistanceCalculationMethod( ModularRobot::START_END_POINTS );
 
     return true;
