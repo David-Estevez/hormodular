@@ -20,6 +20,7 @@
 #define SERVO_H
 
 #include <inttypes.h>
+#include <utility>
 
 class Servo
 {
@@ -28,7 +29,16 @@ class Servo
 
     protected:
         Servo();
+        /**
+         * @brief checkLimits Checks if a value is within the joint allowed values
+         * @param value Value to check
+         * @return If within the limits, returns the same value as given, if not
+         *          returns the closest limit.
+         */
+        float checkLimits( float value );
+
         float pos_angle;
+        std::pair<float, float> joint_limits;
 };
 
 #endif //-- SERVO_H
