@@ -1,5 +1,5 @@
-name=Test02
+name=Masamune02-6mod
 runtime=20000
 timestep=2
-nModules=3
-simulationfile=../data/models/Tripod.env.xml
+nModules=6
+simulationfile=../data/models/REPY-2.1/Masamune-6.env.xml
