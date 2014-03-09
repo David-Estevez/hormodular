@@ -46,7 +46,8 @@ SerialModularRobot::SerialModularRobot(std::string port_name, int n_modules, std
         std::vector<int *> temp_joint_values;
         temp_joint_values.push_back( joint_position_array+i);
         Module * temp_module;
-        if ( i != 2 )
+        //! \todo Modify this to read the robot data from conf file
+        if ( false )
         {
             temp_module = new SerialModule( 1, gait_table_file, temp_joint_values,
                                                    &updateTime_semaphore, temp_semaphores, false);

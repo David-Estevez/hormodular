@@ -22,6 +22,7 @@ SimulatedServo::SimulatedServo()
 {
     //-- Default values
     pos_angle = 0;
+    joint_limits = std::pair<float, float>( -90, 90);
     configured = false;
     joint_id = -1;
     update_time_sem = NULL;
@@ -32,8 +33,11 @@ void SimulatedServo::write(float angle)
 {
     if ( configured )
     {
+        //-- Store new value:
+        pos_angle = (int) checkLimits(angle);
+
         std::stringstream is, os;
-        is << "setpos1 " << joint_id << " " << angle;
+        is << "setpos1 " << joint_id << " " << pos_angle ;
 
         //-- Lock semaphore
         sem_wait( current_servo_sem);
@@ -49,8 +53,7 @@ void SimulatedServo::write(float angle)
         //-- Unlock semaphore
         sem_post( update_time_sem);
 
-        //-- Store new value:
-        this->pos_angle = angle;
+
     }
 }
 

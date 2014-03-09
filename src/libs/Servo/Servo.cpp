@@ -21,3 +21,14 @@ Servo::Servo()
 {
     pos_angle = 0;
 }
+
+
+float Servo::checkLimits(float value)
+{
+    if ( value < joint_limits.first )
+        return joint_limits.first;
+    else if ( value > joint_limits.second )
+        return joint_limits.second;
+    else
+        return value;
+}

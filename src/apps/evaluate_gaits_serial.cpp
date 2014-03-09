@@ -27,7 +27,7 @@ int main(int argc, char * argv[] )
     }
     else
     {
-        std::cout << "Usage: evaluate-gaits-serial [number of modules] [serial port] [gait table file] [run time(ms)]" << std::cout;
+        std::cout << "Usage: evaluate-gaits-serial [number of modules] [serial port] [gait table file] [run time(ms)]" << std::endl;
         exit(-1);
     }
 

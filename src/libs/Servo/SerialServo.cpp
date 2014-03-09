@@ -21,6 +21,7 @@ SerialServo::SerialServo()
 {
     //-- Default values:
     pos_angle = 90;
+    joint_limits = std::pair<float, float>( 0, 180);
     configured = false;
     pjoint_value = NULL;
     update_time_sem = NULL;
@@ -31,24 +32,22 @@ void SerialServo::write(float angle)
 {
     if ( configured )
     {
+        //-- Calculate new position:
+        if ( !inverted )
+            pos_angle = (int) checkLimits(90 + angle);
+        else
+            pos_angle = (int) checkLimits(90 - angle);
+
         //-- Lock semaphore
         sem_wait( current_servo_sem);
 
         //-- Move servo
-        if ( !inverted )
-        {
-            *pjoint_value = 90 + (int) angle;
-        }
-        else
-        {
-            *pjoint_value = 90 - (int) angle;
-        }
+        *pjoint_value = pos_angle;
 
         //-- Unlock semaphore
         sem_post( update_time_sem);
 
-        //-- Store new value:
-        this->pos_angle = angle;
+
     }
 }
 
