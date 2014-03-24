@@ -1,5 +1,5 @@
-name=Masamune02-6mod
+name=MultiDof-11_02
 runtime=20000
 timestep=2
-nModules=6
-simulationfile=../data/models/REPY-2.1/Masamune-6.env.xml
+nModules=11
+simulationfile=../data/models/REPY-2.1/MultiDof-11-2.env.xml
