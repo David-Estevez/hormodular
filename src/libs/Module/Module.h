@@ -34,6 +34,12 @@
 
 //#define DEBUG_MESSAGES
 
+enum ModuleFunction { ModuleFunction_none = -1,
+                      ModuleFunction_limb = 0,
+                      ModuleFunction_thorax = 1,
+                      ModuleFunction_coxa = 2 };
+
+
 class Module
 {
     public:
@@ -50,7 +56,11 @@ class Module
         void setMaxRuntime( uint32_t max_runtime);
 
         //-- Set id manually (only for testing)
-        void setID( uint8_t id);
+        void setFunctionID( ModuleFunction id_function);
+        void setDepthID( int id_depth);
+        void setShapeID( int id_shape);
+        void setNumLimbsID( int id_num_limbs);
+        void setIDs( ModuleFunction id_function, int id_depth, int id_shape, int id_num_limbs);
 
         //! \brief Returns the local time at the current module (for internal calculations)
         uint32_t localtime();
@@ -76,9 +86,18 @@ class Module
    private:
         Module();
 
-        //-- Module id (shape+pos id)
-        uint8_t id;
-        pthread_mutex_t id_mutex;
+        //-- Module ids
+        ModuleFunction id_function;
+        pthread_mutex_t id_function_mutex;
+
+        int id_depth;
+        pthread_mutex_t id_depth_mutex;
+
+        int id_shape;
+        pthread_mutex_t id_shape_mutex;
+
+        int id_num_limbs;
+        pthread_mutex_t id_num_limbs_mutex;
 
         //-- Timing
         uint32_t internal_time;
@@ -91,8 +110,11 @@ class Module
         static const float OSCILLATOR_PERIOD = 2000;
 
         //-- Control table(s)
-        std::string gait_table_file;
-        GaitTable * control_table;
+        std::string base_gait_table_file;
+        GaitTable * base_gait_table;
+
+        std::string other_gait_table_file; //! \todo Use this
+        GaitTable * other_gait_table;
 
         //-- Threads
         pthread_t oscillator_thread;

@@ -31,11 +31,18 @@ Module::Module( uint8_t num_servos, std::string gait_table_file)
     this->gait_table_file = gait_table_file;
     this->oscillator = new SinusoidalOscillator( 0, 0, 0, OSCILLATOR_PERIOD);
     this->control_table = new GaitTable( gait_table_file);
-    this->id = 0;
+    id_function = ModuleFunction_none;
+    id_depth = 0;
+    id_shape = 0;
+    id_num_limbs = 0;
+
     this->internal_time = 0;
 
-    //-- Create mutexes
-    pthread_mutex_init( &id_mutex, NULL);
+    //-- Init mutexes
+    pthread_mutex_init( &id_function_mutex, NULL);
+    pthread_mutex_init( &id_depth_mutex, NULL);
+    pthread_mutex_init( &id_shape_mutex, NULL);
+    pthread_mutex_init( &id_num_limbs_mutex, NULL);
     pthread_mutex_init( &oscillator_mutex, NULL);
 
 }
@@ -45,7 +52,6 @@ Module::~Module()
     //-- Free memory:
     delete control_table;
     delete oscillator;
-    //delete[] servos;
 }
 
 
@@ -67,7 +73,10 @@ void Module::reset()
     //pthread_join( oscillator_thread, NULL );
 
     //-- Reset controller
-    this->id = 0;
+    id_function = ModuleFunction_none;
+    id_depth = 0;
+    id_shape = 0;
+    id_num_limbs = 0;
     this->adjust_time = 0; //! \todo make this random to test sync
     this->oscillator->setParameters(0,0,0, OSCILLATOR_PERIOD);
     loadGaitTable();
@@ -107,25 +116,50 @@ void Module::setMaxRuntime(uint32_t max_runtime)
     this->max_runtime = max_runtime;
 }
 
-void Module::setID(uint8_t id)
+void Module::setFunctionID(ModuleFunction id_function)
 {
-    //-- Lock mutex
-    pthread_mutex_lock( &id_mutex);
+    pthread_mutex_lock( &id_function_mutex);
+    this->id_function = id_function;
+    pthread_mutex_unlock( &id_function_mutex);
 
-    //-- Change id
-    this->id = id;
-
-    //-- Unlock mutex
-    pthread_mutex_unlock( &id_mutex);
-
-#ifdef DEBUG_MESSAGES
-    //-- Debug message:
-    std::cout << "[Debug] ID set to: " << (int) this->id << std::endl;
-#endif
-
-    //-- Run controller
     runController();
 }
+
+void Module::setDepthID(int id_depth)
+{
+    pthread_mutex_lock(&id_depth_mutex);
+    this->id_depth = id_depth;
+    pthread_mutex_unlock(&id_depth_mutex);
+
+    runController();
+}
+
+void Module::setShapeID(int id_shape)
+{
+    pthread_mutex_lock(&id_shape_mutex);
+    this->id_shape = id_shape;
+    pthread_mutex_unlock(&id_shape_mutex);
+
+    runController();
+}
+
+void Module::setNumLimbsID(int id_num_limbs)
+{
+    pthread_mutex_lock(&id_num_limbs_mutex);
+    this->id_num_limbs = id_num_limbs;
+    pthread_mutex_unlock(&id_num_limbs_mutex);
+
+    runController();
+}
+
+void Module::setIDs(ModuleFunction id_function, int id_depth, int id_shape, int id_num_limbs)
+{
+    setFunctionID(id_function);
+    setDepthID(id_depth);
+    setShapeID(id_shape);
+    setNumLimbsID(id_num_limbs);
+}
+
 
 uint32_t Module::localtime()
 {
@@ -144,25 +178,35 @@ void Module::loadGaitTable()
 //----------------------------------------------------------------------------------
 void Module::runController()
 {
-    //-- Lock the oscillator & id mutexes
-    pthread_mutex_lock( &oscillator_mutex);
-    pthread_mutex_lock( &id_mutex);
+    float newAmplitude, newOffset, newPhase;
+    newAmplitude = newOffset = newPhase = 0;
+
+    //-- Lock the ids mutexes
+    pthread_mutex_lock( &id_function_mutex);
+    pthread_mutex_lock( &id_depth_mutex);
+    pthread_mutex_lock( &id_shape_mutex);
 
     //-- Recalculate oscillator parameters according to the current state
-    oscillator->setAmplitude( control_table->at(id, 0) );
-    oscillator->setOffset(control_table->at(id, 1));
-    oscillator->setPhase( control_table->at(id, 2));
+    newAmplitude = control_table->at(id_shape, 0);
+    newOffset = control_table->at(id_shape, 1);
+    newOffset = control_table->at(id_shape, 2);
 
-    //-- Unlock the oscillator & id mutexes
-    pthread_mutex_unlock( &oscillator_mutex);
-    pthread_mutex_unlock(&id_mutex);
+    //-- Unlock the ids mutexes
+    pthread_mutex_unlock( &id_function_mutex);
+    pthread_mutex_unlock( &id_depth_mutex);
+    pthread_mutex_unlock( &id_shape_mutex);
 
-#ifdef DEBUG_MESSAGES
-    //-- Debug: print parameters
-    std::cout << "[Debug] Amplitude for module: " << (int) id << " -> " << control_table->at(id, 0) <<std::endl;
-    std::cout << "[Debug] Offset for module: " << (int) id << " -> " << control_table->at(id, 1) <<std::endl;
-    std::cout << "[Debug] Phase for module: " << (int) id << " -> " << control_table->at(id, 2) <<std::endl;
-#endif
+    //-- Lock the oscillator mutex
+    pthread_mutex_lock(&oscillator_mutex);
+
+    //-- Set the new values on the oscillator
+    oscillator->setAmplitude(newAmplitude);
+    oscillator->setOffset(newOffset);
+    oscillator->setPhase(newPhase);
+
+    //-- Unlock the oscillator mutex
+    pthread_mutex_unlock(&oscillator_mutex);
+
 }
 
 
