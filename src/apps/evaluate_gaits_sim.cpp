@@ -16,23 +16,31 @@ int main(int argc, char * argv[] )
 {
     //-- Extract data from arguments
     std::string scene_file, gait_table_file;
-    int run_time;
+    int run_time, step_time;
 
     if ( argc == 4 )
     {
         scene_file = argv[1];
         gait_table_file = argv[2];
         run_time = atoi (argv[3] );
+        step_time = 2;
+    }
+    else if ( argc == 5)
+    {
+        scene_file = argv[1];
+        gait_table_file = argv[2];
+        run_time = atoi (argv[3] );
+        step_time = atoi(argv[4]);
     }
     else
     {
-        std::cout << "Usage: evaluate-gaits-sim [scene file] [gait table file] [run time(ms)]" << std::cout;
+        std::cout << "Usage: evaluate-gaits-sim [scene file] [gait table file] [run time(ms)] [simulation step(ms)]" << std::endl;
         exit(-1);
     }
 
     //-- Create robot:
     SimulatedModularRobot myRobot( scene_file, gait_table_file);
-    myRobot.setTimeStep( 2);
+    myRobot.setTimeStep( step_time);
     myRobot.setMaxRuntime( run_time );
     myRobot.selectDistanceCalculationMethod( ModularRobot::START_END_POINTS );
     myRobot.showSimulationViewer();
