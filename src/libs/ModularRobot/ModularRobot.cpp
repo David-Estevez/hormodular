@@ -51,8 +51,10 @@ void ModularRobot::run()
 
     //-- As we don't have yet a method to determine the module
     //-- local id, we force them temporarily:
-    for(int i = 0; i < (int) modules.size() ; i++)
-        modules[i]->setID( i);
+//    for(int i = 0; i < (int) modules.size() ; i++)
+//        modules[i]->setID( i);
+    std::cerr << "Implement this!" << std::endl;
+    //! \todo Implement this
 
     //-- Launch modules threads
     for(int i = 0; i < (int) modules.size() ; i++)
@@ -72,14 +74,6 @@ void ModularRobot::reset()
 {
     //-- Get current pos
     this->calculatePos();
-
-    //-- [Debug] Track robot position on file
-    std::ofstream debug_pos_file("./pos.txt", std::fstream::app);
-    if ( debug_pos_file.is_open() )
-    {
-        debug_pos_file << current_pos.first << " " << current_pos.second << std::endl;
-        debug_pos_file.close();
-    }
 
     //-- Reset position/distance values
     this->start_pos = current_pos;

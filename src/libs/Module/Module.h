@@ -60,7 +60,9 @@ class Module
         void setDepthID( int id_depth);
         void setShapeID( int id_shape);
         void setNumLimbsID( int id_num_limbs);
-        void setIDs( ModuleFunction id_function, int id_depth, int id_shape, int id_num_limbs);
+        void setLimbID( int id_limb);
+        void setIDs( ModuleFunction id_function, int id_depth, int id_shape,
+                     int id_num_limbs, int id_limb);
 
         //! \brief Returns the local time at the current module (for internal calculations)
         uint32_t localtime();
@@ -76,8 +78,18 @@ class Module
         void sensorDataManagement();
         void hormoneQueueManagement();
 
+        //-- Parameters constants:
+        static const int AMPLITUDE = 0;
+        static const int OFFSET = 1;
+        static const int PHASE = 2;
+        static const int FREQUENCY = 0;
+        static const int ALPHA = 1;
+        static const int OMEGA = 2;
+        static const int PHI = 3;
+        static const int PHASE_LIMB = 4;
+
    protected:
-        Module(uint8_t num_servos, std::string gait_table_file);
+        Module(uint8_t num_servos, std::string base_gait_table_file, std::string other_gait_table_file);
 
         //-- Servos
         Servo * servos;
@@ -88,16 +100,17 @@ class Module
 
         //-- Module ids
         ModuleFunction id_function;
-        pthread_mutex_t id_function_mutex;
-
         int id_depth;
-        pthread_mutex_t id_depth_mutex;
-
         int id_shape;
-        pthread_mutex_t id_shape_mutex;
-
         int id_num_limbs;
+        int id_limb;
+
+        //-- Id mutexes
+        pthread_mutex_t id_function_mutex;
+        pthread_mutex_t id_depth_mutex;
+        pthread_mutex_t id_shape_mutex;
         pthread_mutex_t id_num_limbs_mutex;
+        pthread_mutex_t id_limb_mutex;
 
         //-- Timing
         uint32_t internal_time;

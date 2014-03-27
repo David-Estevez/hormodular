@@ -40,12 +40,23 @@ endif()
 
 
 # Thread support:
-find_package(Threads)
+find_package(Threads REQUIRED)
 
 
 # ECF -> Evolutionary Computation Framework
 set( ECF_LINK_FLAGS "-lecf" )
 
+# TinyXML2 -> xml parser
+FIND_PATH(TINYXML2_INCLUDE_DIR NAMES tinyxml2.h PATHS ${TINYXML2_DIR}${TINYXML2_INCLUDE_DIR} )
+
+IF(TINYXML2_INCLUDE_DIR)
+        SET(TINYXML2_FOUND TRUE)
+ELSE(TINYXML2_INCLUDE_DIR)
+        SET(TINYXML2_FOUND FALSE)
+ENDIF(TINYXML2_INCLUDE_DIR)
+MARK_AS_ADVANCED(
+  TINYXML2_INCLUDE_DIR
+)
 
 # For CV robot tracking:
 #FIND_PACKAGE( OpenCV REQUIRED )
@@ -69,6 +80,7 @@ set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin")
 
 # Include and link directories
 include_directories(${OpenRAVE_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} )
+include_directories( ${PROJECT_SOURCE_DIR}/src/libs/ConfigParser)
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Controller)
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Servo )
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Module )

@@ -36,7 +36,8 @@ SimulatedModularRobot::SimulatedModularRobot( std::string environment_file, std:
         std::vector<int> temp_indices;
         temp_indices.push_back(dofindices[i]);
 
-        Module * temp_module = new SimulatedModule(1, gait_table_file, pcontroller, temp_indices,
+        //! \todo Change this to use 2 gait tables (different)
+        Module * temp_module = new SimulatedModule(1, gait_table_file, gait_table_file, pcontroller, temp_indices,
                                                    &this->updateTime_semaphore, temp_semaphores);
         modules.push_back( temp_module );
     }

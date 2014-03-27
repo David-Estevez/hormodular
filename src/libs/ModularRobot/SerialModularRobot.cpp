@@ -49,12 +49,14 @@ SerialModularRobot::SerialModularRobot(std::string port_name, int n_modules, std
         //! \todo Modify this to read the robot data from conf file
         if ( false )
         {
-            temp_module = new SerialModule( 1, gait_table_file, temp_joint_values,
+            //! \todo Change this to use 2 gait tables (different)
+            temp_module = new SerialModule( 1, gait_table_file, gait_table_file, temp_joint_values,
                                                    &updateTime_semaphore, temp_semaphores, false);
         }
         else
         {
-            temp_module = new SerialModule( 1, gait_table_file, temp_joint_values,
+            //! \todo Change this to use 2 gait tables (different)
+            temp_module = new SerialModule( 1, gait_table_file, gait_table_file, temp_joint_values,
                                                        &updateTime_semaphore, temp_semaphores, true);
         }
         modules.push_back( temp_module );
