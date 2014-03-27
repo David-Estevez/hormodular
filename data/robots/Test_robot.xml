@@ -1,0 +1,33 @@
+<ModularRobot name="Test_robot">
+	<simulationFile>../models/REPY-2.1/Kusanagi-2.env.xml</simulationFile>
+	
+	<Module>
+		<Joint>0</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>42</Shape>
+			<NumLimbs>1</NumLimbs>
+			<LimbID>0</LimbID>
+		</IDs>
+		
+		<Connections>
+			<front connectedTo="1" connector="Back" orientation="0"></front>
+		</Connections>
+	</Module>
+	
+	<Module>
+		<Joint>1</Joint>
+		<IDs>
+			<Function>Coxa</Function>
+			<Depth>-1</Depth>
+			<Shape>66</Shape>
+			<NumLimbs>1</NumLimbs>
+			<LimbID>-1</LimbID>
+		</IDs>
+		
+		<Connections>
+			<back connectedTo="0" connector="Front" orientation="0"></back>
+		</Connections>
+	</Module>
+</ModularRobot>

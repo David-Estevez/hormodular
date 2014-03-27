@@ -1,0 +1,22 @@
+<ModularRobot name="MultiDof-11-2">
+	<simulationFile>../models/REPY-2.1/MultiDof-11-2.env.xml</simulationFile>
+	
+	<Module>
+		<Joint>X</Joint>
+		<IDs>
+			<Function></Function>
+			<Depth></Depth>
+			<Shape></Shape>
+			<NumLimbs></NumLimbs>
+			<LimbID></LimbID>
+		</IDs>
+		
+		<Connections>
+			<left connectedTo="" connector="" orientation=""></left>
+			<right connectedTo="" connector="" orientation=""></right>
+			<front connectedTo="" connector="" orientation=""></front>
+			<back connectedTo="" connector="" orientation=""></back>
+		</Connections>
+	<Module>
+	
+</ModularRobot>
