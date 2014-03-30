@@ -51,10 +51,14 @@ void ModularRobot::run()
 
     //-- As we don't have yet a method to determine the module
     //-- local id, we force them temporarily:
-//    for(int i = 0; i < (int) modules.size() ; i++)
-//        modules[i]->setID( i);
-    std::cerr << "Implement this!" << std::endl;
-    //! \todo Implement this
+    std::vector< ModuleFunction > id_function = configParser.getFunctionIDs();
+    std::vector<int> id_shape = configParser.getShapeIDs();
+    std::vector<int> id_depth = configParser.getDepthIDs();
+    std::vector<int> id_limbs = configParser.getLimbsIDs();
+    std::vector<int> id_num_limbs = configParser.getNumLimbsIDs();
+
+    for(int i = 0; i < (int) modules.size() ; i++)
+        modules[i]->setIDs(id_function[i], id_depth[i], id_shape[i], id_num_limbs[i], id_limbs[i]);
 
     //-- Launch modules threads
     for(int i = 0; i < (int) modules.size() ; i++)

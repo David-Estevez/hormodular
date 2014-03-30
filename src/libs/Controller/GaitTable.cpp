@@ -1,36 +1,18 @@
 #include "GaitTable.h"
 
-//-- Constructors & destructors
-//----------------------------------------------------------------------------------------
 
-//-- Create an empty gait table:
-GaitTable::GaitTable(uint8_t n_modules, uint8_t n_parameters)
+GaitTable::GaitTable(const std::string file_path, const int num_parameters )
 {
     //-- Set parameters:
-    this->n_modules = n_modules;
-    this->n_parameters = n_parameters;
+    this->num_parameters = num_parameters;
 
-    //-- Allocate memory for the table:
-    this->data = new float[ n_modules * n_parameters];
-
-    //-- Initialize the empty gait table:
-    for (int i = 0; i < n_modules * n_parameters; i++)
+    //-- Check if the file exists
+    this->file_path = file_path;
+    std::ifstream file(file_path.c_str());
+    if (file.good())
     {
-    *(this->data + i) = 0;
+        loadFromFile(file_path);
     }
-}
-
-//-- Create a gait table from a octave file:
-GaitTable::GaitTable(const std::string file_path)
-{
-    this->data = NULL;
-    this->loadFromFile( file_path);
-}
-
-//-- Free the memory
-GaitTable::~GaitTable()
-{
-    delete[] data;
 }
 
 int GaitTable::loadFromFile( const std::string file_path)
@@ -143,32 +125,32 @@ int GaitTable::loadFromFile( const std::string file_path)
         //-- Close the file:
         input_file.close();
 
-
-        /* You can keep this */
-        //-- Set parameters:
-        this->n_modules = rows;
-        this->n_parameters = cols;
-
-        //-- Allocate memory for the table:
-        delete[] this->data;
-        this->data = NULL;
-
-        this->data = new float[ n_modules * n_parameters];
-
-        //-- Initialize the empty gait table:
-        for (int i = 0; i < n_modules * n_parameters; i++)
-            *(this->data+i) = 0;
+        //-- Check data
+        if ( num_parameters != cols -1 )
+        {
+            std::cerr<<"[GaitTable] Error: data on the file is not consistent with number of parameters."
+                    << std::endl;
+            return -1;
+        }
 
         //-- Add the data to the table
-        for (int i = 0; i < n_modules; i ++)
-            for (int j = 0; j < n_parameters; j++)
-                this->set(i, j, data_tmp[i*cols+j]);
+        data.clear();
+        for (int i = 0; i < rows; i ++)
+        {
+            std::vector<float> newRow;
+            for (int j = 0; j < cols; j++)
+                newRow.push_back(data_tmp[i*cols+j]);
+            data.push_back(newRow);
+        }
 
         //-- Just debug
-//        std::cout << "[Debug] Data loaded from table: ";
-//        for (int i = 0; i < n_modules * n_parameters; i++)
-//            std::cout << *(this->data+i) << " ";
-//        std::cout << std::endl;
+        std::cout << "[Debug] Data loaded from table: " << std::endl;
+        for (int i = 0; i < rows; i ++)
+        {
+            for (int j = 0; j < cols; j++)
+                std::cout << data[i][j] << " ";
+            std::cout << std::endl;
+        }
 
     }
     else
@@ -188,26 +170,115 @@ int GaitTable::loadFromFile( const std::string file_path)
 //-- Get things
 //----------------------------------------------------------------------------------------
 //-- Get element of the gait table
-float GaitTable::at(uint8_t id, uint8_t parameter)
+float GaitTable::at(int id, int parameter)
 {
-    return *(data + id * n_parameters + parameter);
+    int tableRow = lookForID(id);
+
+    if ( tableRow == -1)
+    {
+        std::cerr << "[GaitTable] Error: ID not found on gait table. Creating row..." << std::endl;
+        setValue(id, parameter, 0);
+        return 0;
+    }
+
+    return data[tableRow][parameter+1];
 }
 
 //-- Get all parameters of a certain id
-float * GaitTable::getParameters( uint8_t id)
+std::vector<float> GaitTable::getParameters(int id)
 {
-    return data + id*n_parameters;
+    int tableRow = lookForID(id);
+
+    if ( tableRow == -1)
+    {
+        std::cerr << "[GaitTable] Error: ID not found on gait table. Creating row..." << std::endl;
+        setValue(id, 0, 0);
+        return this->getParameters(id);
+    }
+
+    return data[tableRow];
 }
 
-//-- Get number of modules
-uint8_t GaitTable::getNModules()    { return n_modules; }
-uint8_t GaitTable::getNParameters() { return n_parameters; }
+int GaitTable::getNumParameters()
+{
+    return num_parameters;
+}
 
 //-- Set things
 //---------------------------------------------------------------------------------------
-void GaitTable::set(uint8_t id, uint8_t parameter, float value)
+void GaitTable::setValue(int id, int parameter, float value)
 {
-    *(data + id * n_parameters + parameter) = value;
+    int tableRow = lookForID(id);
+
+    if (tableRow == -1)
+    {
+        std::cout << "[GaitTable] ID: " << id << " was not found. Creating row for ID..." << std::endl;
+        std::vector<float> newRow;
+        newRow.push_back(id);
+
+        for (int i=0; i<num_parameters; i++)
+            newRow.push_back(0);
+
+        newRow[parameter+1] = value;
+
+        data.push_back(newRow);
+
+        saveToFile(file_path);
+    }
+    else
+    {
+        data[tableRow][parameter+1] = value;
+        saveToFile(file_path);
+    }
+}
+
+int GaitTable::setRow(int id, std::vector<float> values)
+{
+    if ( (int)values.size() != num_parameters )
+    {
+        std::cerr << "[GaitTable] Error: size of input vector does not match number of parameters ("
+                  << values.size() << "!=" << num_parameters << std::endl;
+        return -1;
+    }
+
+    int tableRow = lookForID(id);
+
+    if (tableRow == -1)
+    {
+        std::cout << "[GaitTable] ID: " << id << " was not found. Creating row for ID..." << std::endl;
+
+        std::vector<float> newRow;
+        newRow.push_back(id);
+
+        for (int i=0; i<(int)values.size(); i++)
+            newRow.push_back(values[i]);
+
+        data.push_back(newRow);
+
+        saveToFile(file_path);
+        return 0;
+    }
+    else
+    {
+        data[tableRow] = values;
+
+        saveToFile(file_path);
+        return 0;
+    }
+}
+
+int GaitTable::reload()
+{
+    return loadFromFile(file_path);
+}
+
+int GaitTable::lookForID(int id)
+{
+    for (int i = 0; i <(int) data.size(); i++)
+        if ( (int) data[i][0] == id )
+            return i;
+
+    return -1;
 }
 
 //-- Save file
@@ -226,14 +297,14 @@ void GaitTable::saveToFile(const std::string file_path)
 
         output_file << "# name: gaitTable" << std::endl;
         output_file << "# type: matrix" << std::endl;
-        output_file << "# rows: " << (int) n_modules << std::endl;
-        output_file << "# columns: " << (int) n_parameters << std::endl;
+        output_file << "# rows: " << data.size() << std::endl;
+        output_file << "# columns: " << num_parameters+1 << std::endl;
 
         //-- Print actual data of the gait table
-        for ( int i = 0; i < n_modules; i++)
+        for ( int i = 0; i < (int)data.size(); i++)
         {
-            for ( int j = 0; j < n_parameters ; j ++)
-                output_file << this->at( i, j ) << " ";
+            for ( int j = 0; j < (int)data[i].size() ; j ++)
+                output_file << data[i][j] << " ";
 
             output_file << std::endl;
         }

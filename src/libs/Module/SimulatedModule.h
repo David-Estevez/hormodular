@@ -29,7 +29,7 @@ class SimulatedModule: public Module
 {
     public:
         SimulatedModule(uint8_t num_servos,
-                        std::string gait_table_file, std::string other_gait_table_file,
+                        std::string gait_table_shape_file, std::string gait_table_limbs_file,
                         OpenRAVE::ControllerBasePtr openRave_pcontroller,
                         std::vector<int> joint_ids,
                         sem_t * update_time_sem,

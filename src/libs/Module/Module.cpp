@@ -20,7 +20,7 @@
 
 //-- Constructors & destructors
 //------------------------------------------------------------------------------
-Module::Module( uint8_t num_servos, std::string base_gait_table_file, std::string other_gait_table_file)
+Module::Module(uint8_t num_servos, std::string gait_table_shape_file, std::string gait_table_limbs_file)
 {
 
     //-- Create servos:
@@ -28,13 +28,13 @@ Module::Module( uint8_t num_servos, std::string base_gait_table_file, std::strin
     this->servos = NULL;
 
     //-- Set default values for variables:
-    this->base_gait_table_file = base_gait_table_file;
-    this->other_gait_table_file = other_gait_table_file;
+    this->base_gait_table_file = gait_table_shape_file;
+    this->other_gait_table_file = gait_table_limbs_file;
 
     this->oscillator = new SinusoidalOscillator( 0, 0, 0, OSCILLATOR_PERIOD);
 
-    this->base_gait_table = new GaitTable(base_gait_table_file);
-    this->other_gait_table = new GaitTable(other_gait_table_file);
+    this->gait_table_shape = new GaitTable(gait_table_shape_file, 3);
+    this->gait_table_limbs = new GaitTable(gait_table_limbs_file, 5);
 
     //-- ID initialization
     id_function = ModuleFunction_none;
@@ -58,8 +58,8 @@ Module::Module( uint8_t num_servos, std::string base_gait_table_file, std::strin
 Module::~Module()
 {
     //-- Free memory:
-    delete base_gait_table;
-    delete other_gait_table;
+    delete gait_table_shape;
+    delete gait_table_limbs;
     delete oscillator;
 }
 
@@ -191,8 +191,8 @@ uint32_t Module::localtime()
 //----------------------------------------------------------------------------------
 void Module::loadGaitTable()
 {
-    base_gait_table->loadFromFile(base_gait_table_file);
-    other_gait_table->loadFromFile(other_gait_table_file);
+    gait_table_shape->reload();
+    gait_table_limbs->reload();
 }
 
 
@@ -212,15 +212,15 @@ void Module::runController()
 
     //-- Recalculate oscillator parameters according to the current state
     //! \todo Calculate actual parameters
-    float baseAmplitude = base_gait_table->at(id_shape, AMPLITUDE);
-    float baseOffset = base_gait_table->at(id_shape, OFFSET);
-    float basePhase = base_gait_table->at(id_shape, PHASE);
+    float baseAmplitude = gait_table_shape->at(id_shape, AMPLITUDE);
+    float baseOffset = gait_table_shape->at(id_shape, OFFSET);
+    float basePhase = gait_table_shape->at(id_shape, PHASE);
 
-    newFrequency = other_gait_table->at(id_num_limbs, FREQUENCY);
-    float alpha = other_gait_table->at(id_num_limbs, ALPHA);
-    float omega = other_gait_table->at(id_num_limbs, OMEGA);
-    float phi = other_gait_table->at(id_num_limbs, PHI);
-    float limbPhase = other_gait_table->at(id_num_limbs, PHASE_LIMB);
+    newFrequency = gait_table_limbs->at(id_num_limbs, FREQUENCY);
+    float alpha = gait_table_limbs->at(id_num_limbs, ALPHA);
+    float omega = gait_table_limbs->at(id_num_limbs, OMEGA);
+    float phi = gait_table_limbs->at(id_num_limbs, PHI);
+    float limbPhase = gait_table_limbs->at(id_num_limbs, PHASE_LIMB);
 
     if (id_limb == ModuleFunction_limb)
     {

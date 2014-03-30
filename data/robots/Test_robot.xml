@@ -1,6 +1,6 @@
 <ModularRobot name="Test_robot">
-	<simulationFile>../models/REPY-2.1/Kusanagi-2.env.xml</simulationFile>
-	
+	<simulationFile>../../data/models/REPY-2.1/Kusanagi-2.env.xml</simulationFile>
+	<gaitTableFolder>../../data/gait tables/test</gaitTableFolder>
 	<Module>
 		<Joint>0</Joint>
 		<IDs>

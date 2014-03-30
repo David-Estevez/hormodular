@@ -7,7 +7,7 @@ Controller::Controller(Servo *servos, std::string gait_table_file, uint32_t *tim
     this->servos = servos;
     this->gait_table_file = gait_table_file;
     this->oscillator = new SinusoidalOscillator( 0, 0, 0, 0);
-    this->control_table = new GaitTable( gait_table_file);
+    this->control_table = new GaitTable( gait_table_file, 3);
     this->id = 0;
     this->internal_time = time;
 
@@ -69,7 +69,7 @@ void Controller::reset()
 
 void Controller::loadGaitTable()
 {
-    control_table->loadFromFile( gait_table_file);
+    control_table->reload();
 }
 
 void Controller::runOscillator()

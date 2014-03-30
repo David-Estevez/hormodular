@@ -31,14 +31,14 @@ int main(void)
 
     //-- Check table write / read
     std::cout << "\tTesting write..." << std::endl;
-    emptyGaitTable.set(0, 0, 3.1415);
+    emptyGaitTable.setValue(0, 0, 3.1415);
     assert( emptyGaitTable.at(0,0) - 3.1415 < 0.00001 && emptyGaitTable.at(0,0) - 3.1415 > -0.00001);
 
     //-- Check saving to a file
     std::cout << "\tTesting saving to a file..." << std::endl;
     for (int i = 0; i < emptyGaitTable.getNModules(); i++)
         for ( int j = 0; j < emptyGaitTable.getNParameters(); j++)
-            emptyGaitTable.set( i, j, i*emptyGaitTable.getNParameters()+j);
+            emptyGaitTable.setValue( i, j, i*emptyGaitTable.getNParameters()+j);
 
     emptyGaitTable.saveToFile( FILEPATH );
 

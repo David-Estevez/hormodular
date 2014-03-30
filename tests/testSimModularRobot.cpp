@@ -19,38 +19,22 @@
 int main(int argc, char * argv[] )
 {
     //-- Config data:
-    std::string scene_file;
-    if ( argc == 2 || argc == 3 )
-        scene_file = argv[1];
+    std::string config_file;
+    if ( argc == 2)
+        config_file = argv[1];
     else
-        //scene_file = "../../../../data/models/Unimod1.env.xml";
-        scene_file = "../../../../data/models/Minicube-II.env.xml";
-        //scene_file = "../../../../data/models/Cube5-I.env.xml";
-
-
-    //---------------------------------------------------------------------------------------------------
-    //-- Create robot:
-    //---------------------------------------------------------------------------------------------------
-    //-- Gait table:
-    std::string gait_table_file;
-    if ( argc == 3 )
-        gait_table_file = argv[2];
-    else
-        gait_table_file = "../../../../data/gait tables/gait_table_straight_3_modules_pyp.txt";
-    //std::string gait_table_file = "../../../../data/gait tables/test_gait_5.txt";
-
-
+        config_file = "../../data/robots/Test_robot.xml";
 
     //-- Create robot:
-    SimulatedModularRobot myRobot( scene_file, gait_table_file);
-    myRobot.setTimeStep( 2);
-    myRobot.setMaxRuntime( 10000);
+    SimulatedModularRobot myRobot(config_file);
+    myRobot.setTimeStep(2);
+    myRobot.setMaxRuntime(10000);
     myRobot.selectDistanceCalculationMethod( ModularRobot::START_END_POINTS );
     myRobot.showSimulationViewer();
 
     //-- Create variables to store simulation results:
-    std::vector< double > run_times;
-    std::vector< double > distances;
+    std::vector<double> run_times;
+    std::vector<double> distances;
 
 
     //-- Start simulation:

@@ -1,14 +1,22 @@
 #include "SimulatedModularRobot.h"
 
-SimulatedModularRobot::SimulatedModularRobot( std::string environment_file, std::string gait_table_file) : ModularRobot()
+SimulatedModularRobot::SimulatedModularRobot(std::string config_file) : ModularRobot()
 {
+    //-- Create a config parser and read the configuration parameters from file
+    if( configParser.parse(config_file) != 0 )
+    {
+        std::cerr<< "[Error] SimulatedModularRobot: Error parsing xml file. Exiting..."<<std::endl;
+        exit(-1);
+    }
+
     //-- Create simulation
-    this->simulation = new Simulation_OpenRAVE( environment_file, false);
+    this->simulation = new Simulation_OpenRAVE( configParser.getSimulationFile(), false);
 
     //-- Gather simulation objects
     this->openRAVE_robot = simulation->getRobot(0);
 
     //-- Get modules info from openRAVE robot:
+    //! \todo This could be done with configParser.getNumModules() instead
     int num_modules = openRAVE_robot->GetDOF();
 
     //-- Get vector with dof indices
@@ -26,6 +34,9 @@ SimulatedModularRobot::SimulatedModularRobot( std::string environment_file, std:
     for( int i = 0; i < num_modules; i++)
         sem_init( this->modules_semaphores+i, 0, 1);
 
+    //-- Create gait table files
+    std::string gait_table_shape_file = configParser.getGaitTableFolder()+"/gait_table_shape.txt";
+    std::string gait_table_limbs_file = configParser.getGaitTableFolder()+"/gait_table_limbs.txt";
 
     //-- Create modules:
     for( int i = 0; i< num_modules; i++)
@@ -37,7 +48,7 @@ SimulatedModularRobot::SimulatedModularRobot( std::string environment_file, std:
         temp_indices.push_back(dofindices[i]);
 
         //! \todo Change this to use 2 gait tables (different)
-        Module * temp_module = new SimulatedModule(1, gait_table_file, gait_table_file, pcontroller, temp_indices,
+        Module * temp_module = new SimulatedModule(1, gait_table_shape_file, gait_table_limbs_file, pcontroller, temp_indices,
                                                    &this->updateTime_semaphore, temp_semaphores);
         modules.push_back( temp_module );
     }

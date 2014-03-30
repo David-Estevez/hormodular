@@ -30,7 +30,7 @@
 class SimulatedModularRobot: public ModularRobot
 {
     public:
-        SimulatedModularRobot( std::string environment_file, std::string gait_table_file);
+        SimulatedModularRobot( std::string config_file);
         ~SimulatedModularRobot();
 
         void showSimulationViewer();

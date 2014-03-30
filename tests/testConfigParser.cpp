@@ -24,6 +24,9 @@ int main(void)
     std::cout << "\tChecking simulation file..." << std::endl;
     assert(testParser.getSimulationFile() == "../models/REPY-2.1/Kusanagi-2.env.xml");
 
+    std::cout << "\tChecking gait table output folder..." << std::endl;
+    assert(testParser.getGaitTableFolder() == "../gait tables");
+
     std::cout << "\tChecking number of Modules..." << std::endl;
     assert(testParser.getNumModules() == 2);
 

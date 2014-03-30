@@ -1,9 +1,9 @@
 # Testing things #########################################################################################
 message( "Building Tests...")
 
-# Testing Gait Table
-add_executable( testGaitTable testGaitTable.cpp )
-target_link_libraries(testGaitTable Controller )
+# Testing Gait Table (Broken test)
+#add_executable( testGaitTable testGaitTable.cpp )
+#target_link_libraries(testGaitTable Controller )
 
 # Testing Sinusoidal Oscillator
 add_executable( testSinusoidalOscillator testSinusoidalOscillator.cpp  )

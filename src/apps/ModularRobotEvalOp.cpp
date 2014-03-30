@@ -105,13 +105,13 @@ void ModularRobotEvalOp::genotypeToGaitTable(FloatingPoint::FloatingPoint *genot
     for (int i = 0; i < n_modules; i++ )
     {
         //-- Set amplitude
-        temp_table.set(i, 0, genotype->realValue[i*3] * 45 + 45);
+        temp_table.setValue(i, 0, genotype->realValue[i*3] * 45 + 45);
 
         //-- Set offset
-        temp_table.set(i, 1, genotype->realValue[i*3+1] * 90);
+        temp_table.setValue(i, 1, genotype->realValue[i*3+1] * 90);
 
         //-- Set phase
-        temp_table.set(i, 2, genotype->realValue[i*3+2] * 180 + 180);
+        temp_table.setValue(i, 2, genotype->realValue[i*3+2] * 180 + 180);
     }
 
     //-- Save the table to a file:

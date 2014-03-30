@@ -22,6 +22,7 @@
 #include <inttypes.h>
 
 #include "Module.h"
+#include "ConfigParser.h"
 
 class ModularRobot
 {
@@ -58,6 +59,9 @@ class ModularRobot
 
         //-- Modules
         std::vector<Module *> modules;
+
+        //-- Configuration
+        ConfigParser configParser;
 
         //-- Position / velocity variables
         virtual void calculatePos() = 0;

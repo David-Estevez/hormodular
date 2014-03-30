@@ -89,7 +89,7 @@ class Module
         static const int PHASE_LIMB = 4;
 
    protected:
-        Module(uint8_t num_servos, std::string base_gait_table_file, std::string other_gait_table_file);
+        Module(uint8_t num_servos, std::string gait_table_shape_file, std::string gait_table_limbs_file);
 
         //-- Servos
         Servo * servos;
@@ -124,10 +124,10 @@ class Module
 
         //-- Control table(s)
         std::string base_gait_table_file;
-        GaitTable * base_gait_table;
+        GaitTable * gait_table_shape;
 
         std::string other_gait_table_file; //! \todo Use this
-        GaitTable * other_gait_table;
+        GaitTable * gait_table_limbs;
 
         //-- Threads
         pthread_t oscillator_thread;

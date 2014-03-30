@@ -38,53 +38,30 @@
 class GaitTable
 {
 public:
+    GaitTable(const std::string file_path, const int num_parameters );
 
-    //! \brief Constructs a empty gait table
-    GaitTable( uint8_t n_modules, uint8_t n_parameters);
-    //! \brief Loads data from a file and creates a gait table
-    GaitTable(const std::string file_path  );
+    float at( int id, int parameter );
+    std::vector<float> getParameters( int id);
 
-    //! \brief Frees the memory
-    ~GaitTable();
+    int getNumParameters();
 
-    //! \brief Get element of the gait table
-    float at( uint8_t id, uint8_t parameter );
-    //! \brief Get all the parameter values of a certain id
-    float * getParameters( uint8_t id);
-    //! \brief Get number of modules
-    uint8_t getNModules();
-    //! \brief Get number of parameters
-    uint8_t getNParameters();
+    void setValue( int id, int parameter, float value);
+    int setRow(int id, std::vector<float> values);
 
-    //! \brief Change a value of the table
-    void set( uint8_t id, uint8_t parameter, float value);
+    int reload();
+
+private:
+    std::vector< std::vector<float> > data;
+    int num_parameters;
+    std::string file_path;
+
+    int lookForID(int id);
 
     //! \brief Loads a gait table from a file:
     int loadFromFile( const std::string file_path);
 
     //! \brief Saves the gait table to a octave file
     void saveToFile(const std::string file_path);
-
-private:
-    /*! \var data
-     *	\brief Stores the parameter values
-     *
-     *  Data in the table:
-     *
-     *  | id | param0 | param1 | ... | paramN |
-     *  |  0 |   X00  |   X01  | ... |   X0N  |
-     *  | ...|   ...  |   ...  | ... |   ...  |
-     *  |  m |   XM0  |   XM1  | ... |   XMN  |
-     *
-     *  And internally is stored like this:
-     *  | X00 | X01 | ... | X0N | X10 | X11 | ... | XM0 | XM1 | ... | XMN |
-     *
-     *  Therefore to access the element Xij:
-     *  element(i, j) = *(data + i * n_param + j)
-     */
-    float * data;
-    uint8_t n_modules;
-    uint8_t n_parameters;
 };
 
 #endif
