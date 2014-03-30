@@ -52,7 +52,7 @@ void ModularRobot::run()
     //-- As we don't have yet a method to determine the module
     //-- local id, we force them temporarily:
     std::vector< ModuleFunction > id_function = configParser.getFunctionIDs();
-    std::vector<int> id_shape = configParser.getShapeIDs();
+    std::vector<unsigned long> id_shape = configParser.getShapeIDs();
     std::vector<int> id_depth = configParser.getDepthIDs();
     std::vector<int> id_limbs = configParser.getLimbsIDs();
     std::vector<int> id_num_limbs = configParser.getNumLimbsIDs();

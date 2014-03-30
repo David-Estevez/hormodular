@@ -58,10 +58,10 @@ class Module
         //-- Set id manually (only for testing)
         void setFunctionID( ModuleFunction id_function);
         void setDepthID( int id_depth);
-        void setShapeID( int id_shape);
+        void setShapeID(unsigned long id_shape);
         void setNumLimbsID( int id_num_limbs);
         void setLimbID( int id_limb);
-        void setIDs( ModuleFunction id_function, int id_depth, int id_shape,
+        void setIDs(ModuleFunction id_function, int id_depth, unsigned long id_shape,
                      int id_num_limbs, int id_limb);
 
         //! \brief Returns the local time at the current module (for internal calculations)
@@ -101,7 +101,7 @@ class Module
         //-- Module ids
         ModuleFunction id_function;
         int id_depth;
-        int id_shape;
+        unsigned long id_shape;
         int id_num_limbs;
         int id_limb;
 

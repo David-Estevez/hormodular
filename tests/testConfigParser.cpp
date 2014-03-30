@@ -46,7 +46,7 @@ int main(void)
     assert(id_depth_vector.at(1) == -1);
 
     std::cout << "\t\tChecking shape ids..." << std::endl;
-    std::vector<int> id_shape_vector = testParser.getShapeIDs();
+    std::vector<unsigned long> id_shape_vector = testParser.getShapeIDs();
     assert(id_shape_vector.at(0) == 42);
     assert(id_shape_vector.at(1) == 66);
 

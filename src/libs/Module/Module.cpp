@@ -144,7 +144,7 @@ void Module::setDepthID(int id_depth)
     runController();
 }
 
-void Module::setShapeID(int id_shape)
+void Module::setShapeID(unsigned long id_shape)
 {
     pthread_mutex_lock(&id_shape_mutex);
     this->id_shape = id_shape;
@@ -171,7 +171,7 @@ void Module::setLimbID(int id_limb)
     runController();
 }
 
-void Module::setIDs(ModuleFunction id_function, int id_depth, int id_shape,
+void Module::setIDs(ModuleFunction id_function, int id_depth, unsigned long id_shape,
                     int id_num_limbs, int id_limb)
 {
     setFunctionID(id_function);
