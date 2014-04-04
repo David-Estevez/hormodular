@@ -13,12 +13,13 @@ class ModularRobot:
 		Data container for hormodular Modular Robot
 	"""
 	
-	def __init__(self, name , nModules, runTime, timeStep, simulationFile = '',  amplitudes = [], offsets = [],  phases = [], generation = 0, fitness = 0, problemId = '' ):
+	def __init__(self, name , nModules, runTime, timeStep, genSize, configFile = '',  amplitudes = [], offsets = [],  phases = [], generation = 0, fitness = 0, problemId = '' ):
 		self.name = name
 		self.nModules = nModules;
 		self.runTime = runTime;
 		self.timeStep = timeStep;
-		self.simulationFile = simulationFile
+		self.genSize = genSize;
+		self.configFile = configFile
 		
 		if not amplitudes:
 			self.amplitudes = [ 0 for j in range(0, nModules) ]
@@ -45,6 +46,7 @@ class ModularRobot:
 		description += '\tnModules: ' + str( self.nModules) + '\n'
 		description += '\tRun Time: ' + str( self.runTime ) + '\n'
 		description += '\tTime step: ' + str( self.timeStep) + '\n'
-		description += '\tSimulation File: ' + self.simulationFile + '\n}'
+		description += '\tGenome size: ' + str(self.genSize) + '\n'
+		description += '\tConfig File: ' + self.configFile + '\n}'
 		
 		return description

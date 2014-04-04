@@ -22,9 +22,9 @@ def getRobotDataFromFile( file):
 	"""
 	robotData = dict()
 	
-	stringTags = [ 'name', 'simulationfile']
+	stringTags = [ 'name', 'configFile']
 	floatTags = [ 'runtime', 'timestep']
-	intTags = [ 'nModules' ]
+	intTags = [ 'nModules', 'genSize' ]
 	
 	f = open( file, 'r')
 	
@@ -43,7 +43,7 @@ def getRobotDataFromFile( file):
 	f.close()
 	print 'Read parameters from file: ' + file
 
-	return ModularRobot( robotData['name'] , robotData['nModules'], robotData['runtime'], robotData['timestep'], robotData['simulationfile'])
+	return ModularRobot( robotData['name'] , robotData['nModules'], robotData['runtime'], robotData['timestep'], robotData['genSize'], robotData['configFile'])
 
 
 def getEvolutionConfigurationFromFile( file ):
@@ -241,8 +241,7 @@ def addRobotToRegistry( xmlfile, robot, dataFolder ):
 	addEntryToRegistry( xmlfile, 'robot.modules', robot.nModules )
 	addEntryToRegistry( xmlfile, 'robot.runtime', robot.runTime )
 	addEntryToRegistry( xmlfile, 'robot.timestep', robot.timeStep )
-	addEntryToRegistry( xmlfile, 'robot.simulationfile', robot.simulationFile )
-	addEntryToRegistry( xmlfile, 'robot.gaittablefile', dataFolder + '/gait_table.txt' )
+	addEntryToRegistry( xmlfile, 'robot.configfile', robot.configFile )
 	
 def setRobotDimensions( xmlfile, robot ):
 	"""
@@ -253,12 +252,12 @@ def setRobotDimensions( xmlfile, robot ):
 	# Set the correct genome size
 	for element in genotypeNode.getElementsByTagName('Entry'):
 		if element.getAttribute('key') == 'dimension':
-			if element.hasChildNodes:
+			if element.hasChildNodes():
 				# If xml parser considers that the value is a child entry
-				element.childNodes[0].data = unicode( str( robot.nModules*3))
+				element.childNodes[0].data = unicode( str( robot.genSize))
 			else:
 				#If xml parser considers that the value is part of the node data
-				element.data = unicode( str( robot.nModules))
+				element.data = unicode( str( robot.genSize))
 	
 def saveEvolutionFile( xmlfile, dataFolder ):
 	"""
@@ -274,6 +273,20 @@ def runEvolution( dataFolder ):
 		Runs the evolve binary with the configuration file created
 	"""
 	subprocess.call( [ './evolve-gaits', dataFolder + '/evolution_parameters.xml'])
+	
+def updateAndCopyRobotFile( xmlfile, dataFolder ):
+	"""
+		Edits xml gait table folder and copies this config file to the data folder
+	"""
+	xmlnode = xmlfile.getElementsByTagName('gaitTableFolder')[0]
+	
+	if xmlnode and xmlnode.hasChildNodes():
+		xmlnode.childNodes[0].data = dataFolder
+		
+	with open( dataFolder + '/robot_config.xml', 'w') as f:
+		f.write(xmlfile.toprettyxml() )
+		
+		
 	
 if __name__ == '__main__':
 	# Test things

@@ -3,3 +3,5 @@ runtime=20000
 timestep=2
 nModules=11
 simulationfile=../data/models/REPY-2.1/MultiDof-11-2.env.xml
+configFile=../data/robots/MultiDof-11-2.xml
+genSize=29
