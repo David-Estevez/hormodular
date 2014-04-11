@@ -19,8 +19,15 @@
 
 
 
-ModularRobot::ModularRobot()
+ModularRobot::ModularRobot(std::string config_file)
 {
+    //-- Create a config parser and read the configuration parameters from file
+    if( configParser.parse(config_file) != 0 )
+    {
+        std::cerr<< "[Error] ModularRobot: Error parsing xml file. Exiting..."<<std::endl;
+        exit(-1);
+    }
+
     //-- Default robot timestep:
     this->time_step_ms = 1;
     this->max_runtime_ms = 1000;
@@ -33,6 +40,19 @@ ModularRobot::ModularRobot()
     this->distance_travelled = 0;
     this->time_elapsed = 0;
 
+    //-- Create gait tables
+    std::string gait_table_shape_file = configParser.getGaitTableFolder()+"/gait_table_shape.txt";
+    std::string gait_table_limbs_file = configParser.getGaitTableFolder()+"/gait_table_limbs.txt";
+
+    gait_table_shape = new GaitTable(gait_table_shape_file, 3);
+    gait_table_limbs = new GaitTable(gait_table_limbs_file, 5);
+
+    //-- Create mutexes
+    gait_table_shape_mutex = new pthread_mutex_t;
+    gait_table_limbs_mutex = new pthread_mutex_t;
+    pthread_mutex_init(gait_table_shape_mutex, NULL);
+    pthread_mutex_init(gait_table_limbs_mutex, NULL);
+
 }
 
 ModularRobot::~ModularRobot()
@@ -42,6 +62,12 @@ ModularRobot::~ModularRobot()
     //std::cout << "[Debug] Just called -> ~ModularRobot(), " << modules.size() << " modules to destroy." << std::endl;
     for(int i = 0; i < (int) modules.size(); i++)
         delete modules.at( modules.size() - 1 - i);
+
+    //-- Free gaittables
+    delete gait_table_shape;
+    delete gait_table_limbs;
+    delete gait_table_shape_mutex;
+    delete gait_table_limbs_mutex;
 }
 
 void ModularRobot::run()
@@ -88,6 +114,11 @@ void ModularRobot::reset()
     //-- Reset individual modules
     for (int i = 0; i < (int) modules.size(); i++)
         modules[i]->reset();
+}
+
+ConfigParser ModularRobot::getConfigParser()
+{
+    return configParser;
 }
 
 void ModularRobot::setTimeStep(uint32_t time_step_ms)

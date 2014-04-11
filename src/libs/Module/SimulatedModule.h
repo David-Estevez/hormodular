@@ -20,6 +20,7 @@
 
 #include <openrave-core.h>
 #include <semaphore.h>
+#include <pthread.h>
 
 #include "SimulatedServo.h"
 
@@ -29,7 +30,8 @@ class SimulatedModule: public Module
 {
     public:
         SimulatedModule(uint8_t num_servos,
-                        std::string gait_table_shape_file, std::string gait_table_limbs_file,
+                        GaitTable *gait_table_shape, GaitTable *gait_table_limbs,
+                        pthread_mutex_t *gait_table_shape_mutex, pthread_mutex_t *gait_table_limbs_mutex,
                         OpenRAVE::ControllerBasePtr openRave_pcontroller,
                         std::vector<int> joint_ids,
                         sem_t * update_time_sem,

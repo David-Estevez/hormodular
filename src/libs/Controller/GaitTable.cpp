@@ -144,13 +144,13 @@ int GaitTable::loadFromFile( const std::string file_path)
         }
 
         //-- Just debug
-        std::cout << "[Debug] Data loaded from table: " << std::endl;
-        for (int i = 0; i < rows; i ++)
-        {
-            for (int j = 0; j < cols; j++)
-                std::cout << data[i][j] << " ";
-            std::cout << std::endl;
-        }
+//        std::cout << "[Debug] Data loaded from table: " << std::endl;
+//          for (int i = 0; i < rows; i ++)
+//          {
+//              for (int j = 0; j < cols; j++)
+//                  std::cout << data[i][j] << " ";
+//              std::cout << std::endl;
+//          }
 
     }
     else
@@ -204,9 +204,19 @@ int GaitTable::getNumParameters()
     return num_parameters;
 }
 
+std::vector<unsigned long> GaitTable::getIDs()
+{
+    std::vector<unsigned long> ids;
+
+    for (int i =0; i < (int) data.size(); i++)
+        ids.push_back(data[0][0]);
+
+    return ids;
+}
+
 //-- Set things
 //---------------------------------------------------------------------------------------
-void GaitTable::setValue(int id, int parameter, float value)
+void GaitTable::setValue(unsigned long id, int parameter, float value)
 {
     int tableRow = lookForID(id);
 
@@ -232,7 +242,7 @@ void GaitTable::setValue(int id, int parameter, float value)
     }
 }
 
-int GaitTable::setRow(int id, std::vector<float> values)
+int GaitTable::setRow(unsigned long id, std::vector<float> values)
 {
     if ( (int)values.size() != num_parameters )
     {
@@ -241,12 +251,11 @@ int GaitTable::setRow(int id, std::vector<float> values)
         return -1;
     }
 
-    int tableRow = lookForID(id);
+    unsigned long tableRow = lookForID(id);
 
-    if (tableRow == -1)
+    if (tableRow == (unsigned long)-1)
     {
         std::cout << "[GaitTable] ID: " << id << " was not found. Creating row for ID..." << std::endl;
-
         std::vector<float> newRow;
         newRow.push_back(id);
 
@@ -254,17 +263,15 @@ int GaitTable::setRow(int id, std::vector<float> values)
             newRow.push_back(values[i]);
 
         data.push_back(newRow);
-
-        saveToFile(file_path);
-        return 0;
     }
     else
     {
-        data[tableRow] = values;
-
-        saveToFile(file_path);
-        return 0;
+        for ( int i = 0; i < (int)values.size(); i++)
+            data[tableRow][i+1] = values[i];
     }
+
+    saveToFile(file_path);
+    return 0;
 }
 
 int GaitTable::reload()
@@ -272,10 +279,10 @@ int GaitTable::reload()
     return loadFromFile(file_path);
 }
 
-int GaitTable::lookForID(int id)
+int GaitTable::lookForID(unsigned long id)
 {
     for (int i = 0; i <(int) data.size(); i++)
-        if ( (int) data[i][0] == id )
+        if ( data[i][0] == id )
             return i;
 
     return -1;

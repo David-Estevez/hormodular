@@ -44,9 +44,10 @@ public:
     std::vector<float> getParameters( int id);
 
     int getNumParameters();
+    std::vector<unsigned long> getIDs();
 
-    void setValue( int id, int parameter, float value);
-    int setRow(int id, std::vector<float> values);
+    void setValue(unsigned long id, int parameter, float value);
+    int setRow(unsigned long id, std::vector<float> values);
 
     int reload();
 
@@ -55,7 +56,7 @@ private:
     int num_parameters;
     std::string file_path;
 
-    int lookForID(int id);
+    int lookForID(unsigned long id);
 
     //! \brief Loads a gait table from a file:
     int loadFromFile( const std::string file_path);

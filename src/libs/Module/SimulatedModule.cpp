@@ -18,11 +18,13 @@
 #include "SimulatedModule.h"
 
 SimulatedModule::SimulatedModule(uint8_t num_servos,
-                                  std::string gait_table_shape_file, std::string  gait_table_limbs_file,
+                                  GaitTable* gait_table_shape, GaitTable*  gait_table_limbs,
+                                  pthread_mutex_t *gait_table_shape_mutex, pthread_mutex_t *gait_table_limbs_mutex,
+
                                   OpenRAVE::ControllerBasePtr openRave_pcontroller,
                                   std::vector<int> joint_ids,
                                   sem_t * update_time_sem, std::vector<sem_t*> current_servo_sem)
-    : Module( num_servos, gait_table_shape_file, gait_table_limbs_file )
+    : Module( num_servos, gait_table_shape, gait_table_limbs, gait_table_shape_mutex, gait_table_limbs_mutex )
 {
     SimulatedServo * sim_servos = new SimulatedServo[num_servos];
 

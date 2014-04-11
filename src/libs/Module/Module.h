@@ -89,7 +89,8 @@ class Module
         static const int PHASE_LIMB = 4;
 
    protected:
-        Module(uint8_t num_servos, std::string gait_table_shape_file, std::string gait_table_limbs_file);
+        Module(uint8_t num_servos, GaitTable* gait_table_shape,  GaitTable* gait_table_limbs,
+               pthread_mutex_t* gait_table_shape_mutex, pthread_mutex_t* gait_table_limbs_mutex );
 
         //-- Servos
         Servo * servos;
@@ -123,11 +124,10 @@ class Module
         static const float OSCILLATOR_PERIOD = 2000;
 
         //-- Control table(s)
-        std::string base_gait_table_file;
         GaitTable * gait_table_shape;
-
-        std::string other_gait_table_file; //! \todo Use this
         GaitTable * gait_table_limbs;
+        pthread_mutex_t * gait_table_shape_mutex;
+        pthread_mutex_t * gait_table_limbs_mutex;
 
         //-- Threads
         pthread_t oscillator_thread;

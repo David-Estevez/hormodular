@@ -28,7 +28,7 @@ class SerialModule: public Module
 {
     public:
         SerialModule(uint8_t num_servos,
-                     std::string gait_table_file, std::string other_gait_table_file,
+                     GaitTable *gait_table_shape, GaitTable *gait_table_limbs, pthread_mutex_t *gait_table_shape_mutex, pthread_mutex_t *gait_table_limbs_mutex,
                      std::vector<int *> pjoint_values,
                      sem_t * update_time_sem,
                      std::vector<sem_t*> current_servo_sem, bool invertJoints);

@@ -21,18 +21,22 @@
 #include <utility>
 #include <inttypes.h>
 
+//#include "ModularRobotBase.h"
 #include "Module.h"
 #include "ConfigParser.h"
 
 class ModularRobot
 {
     public:
-        ModularRobot();
+        ModularRobot(std::string config_file);
         ~ModularRobot();
 
         //-- Robot interface:
-        void run();
-        void reset();
+        virtual void run();
+        virtual void reset();
+
+        //-- Configuration:
+        ConfigParser getConfigParser();
 
         //-- Timing
         void setTimeStep( uint32_t time_step_ms );
@@ -62,6 +66,12 @@ class ModularRobot
 
         //-- Configuration
         ConfigParser configParser;
+
+        //-- Control table(s)
+        GaitTable * gait_table_shape;
+        GaitTable * gait_table_limbs;
+        pthread_mutex_t * gait_table_shape_mutex;
+        pthread_mutex_t * gait_table_limbs_mutex;
 
         //-- Position / velocity variables
         virtual void calculatePos() = 0;

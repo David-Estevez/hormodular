@@ -7,7 +7,9 @@
 
 int main(void)
 {
-    static const std::string FILEPATH = "../../data/robots/Test_robot.xml";
+    //static const std::string FILEPATH = "../../data/robots/Test_robot.xml";
+    static const std::string FILEPATH = "../../data/robots/Test_robot2.xml";
+
     ConfigParser testParser = ConfigParser();
 
     std::cout << "Testing Config Parser:" << std::endl;
@@ -22,10 +24,10 @@ int main(void)
     assert(testParser.getRobotName() == "Test_robot");
 
     std::cout << "\tChecking simulation file..." << std::endl;
-    assert(testParser.getSimulationFile() == "../models/REPY-2.1/Kusanagi-2.env.xml");
+    assert(testParser.getSimulationFile() == "../../data/models/REPY-2.1/Kusanagi-2.env.xml");
 
     std::cout << "\tChecking gait table output folder..." << std::endl;
-    assert(testParser.getGaitTableFolder() == "../gait tables");
+    assert(testParser.getGaitTableFolder() == "../../data/gait tables/test");
 
     std::cout << "\tChecking number of Modules..." << std::endl;
     assert(testParser.getNumModules() == 2);

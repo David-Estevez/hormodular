@@ -20,7 +20,8 @@
 
 //-- Constructors & destructors
 //------------------------------------------------------------------------------
-Module::Module(uint8_t num_servos, std::string gait_table_shape_file, std::string gait_table_limbs_file)
+Module::Module(uint8_t num_servos, GaitTable* gait_table_shape,  GaitTable* gait_table_limbs,
+                       pthread_mutex_t* gait_table_shape_mutex, pthread_mutex_t* gait_table_limbs_mutex )
 {
 
     //-- Create servos:
@@ -28,19 +29,17 @@ Module::Module(uint8_t num_servos, std::string gait_table_shape_file, std::strin
     this->servos = NULL;
 
     //-- Set default values for variables:
-    this->base_gait_table_file = gait_table_shape_file;
-    this->other_gait_table_file = gait_table_limbs_file;
+    this->gait_table_shape = gait_table_shape;
+    this->gait_table_limbs = gait_table_limbs;
 
     this->oscillator = new SinusoidalOscillator( 0, 0, 0, OSCILLATOR_PERIOD);
 
-    this->gait_table_shape = new GaitTable(gait_table_shape_file, 3);
-    this->gait_table_limbs = new GaitTable(gait_table_limbs_file, 5);
 
     //-- ID initialization
     id_function = ModuleFunction_none;
     id_depth = 0;
-    id_shape = 0;
-    id_num_limbs = 0;
+    id_shape = -1;
+    id_num_limbs = -1;
     id_limb = 0;
 
     this->internal_time = 0;
@@ -53,13 +52,17 @@ Module::Module(uint8_t num_servos, std::string gait_table_shape_file, std::strin
     pthread_mutex_init( &id_limb_mutex, NULL);
     pthread_mutex_init( &oscillator_mutex, NULL);
 
+    //-- Gait tables
+    this->gait_table_limbs = gait_table_limbs;
+    this->gait_table_limbs_mutex = gait_table_limbs_mutex;
+    this->gait_table_shape = gait_table_shape;
+    this->gait_table_shape_mutex = gait_table_shape_mutex;
+
 }
 
 Module::~Module()
 {
     //-- Free memory:
-    delete gait_table_shape;
-    delete gait_table_limbs;
     delete oscillator;
 }
 
@@ -84,8 +87,8 @@ void Module::reset()
     //-- Reset controller
     id_function = ModuleFunction_none;
     id_depth = 0;
-    id_shape = 0;
-    id_num_limbs = 0;
+    id_shape = -1;
+    id_num_limbs = -1;
     id_limb = 0;
     this->adjust_time = 0; //! \todo make this random to test sync
     this->oscillator->setParameters(0,0,0, OSCILLATOR_PERIOD);
@@ -191,8 +194,13 @@ uint32_t Module::localtime()
 //----------------------------------------------------------------------------------
 void Module::loadGaitTable()
 {
+    pthread_mutex_lock(gait_table_shape_mutex);
     gait_table_shape->reload();
+    pthread_mutex_unlock(gait_table_shape_mutex);
+
+    pthread_mutex_lock(gait_table_limbs_mutex);
     gait_table_limbs->reload();
+    pthread_mutex_unlock(gait_table_limbs_mutex);
 }
 
 
@@ -200,60 +208,83 @@ void Module::loadGaitTable()
 //----------------------------------------------------------------------------------
 void Module::runController()
 {
-    float newAmplitude, newOffset, newPhase, newFrequency;
-    newAmplitude = newOffset = newPhase = newFrequency = 0;
 
-    //-- Lock the ids mutexes
-    pthread_mutex_lock( &id_function_mutex);
-    pthread_mutex_lock( &id_depth_mutex);
     pthread_mutex_lock( &id_shape_mutex);
     pthread_mutex_lock( &id_num_limbs_mutex);
-    pthread_mutex_lock( &id_limb_mutex);
+    bool valid_id = id_shape != -1 && id_num_limbs != -1;
+    pthread_mutex_unlock( &id_num_limbs_mutex);
+    pthread_mutex_unlock( &id_shape_mutex);
 
-    //-- Recalculate oscillator parameters according to the current state
-    //! \todo Calculate actual parameters
-    float baseAmplitude = gait_table_shape->at(id_shape, AMPLITUDE);
-    float baseOffset = gait_table_shape->at(id_shape, OFFSET);
-    float basePhase = gait_table_shape->at(id_shape, PHASE);
-
-    newFrequency = gait_table_limbs->at(id_num_limbs, FREQUENCY);
-    float alpha = gait_table_limbs->at(id_num_limbs, ALPHA);
-    float omega = gait_table_limbs->at(id_num_limbs, OMEGA);
-    float phi = gait_table_limbs->at(id_num_limbs, PHI);
-    float limbPhase = gait_table_limbs->at(id_num_limbs, PHASE_LIMB);
-
-    if (id_limb == ModuleFunction_limb)
+    if (valid_id)
     {
-        newAmplitude = baseAmplitude*pow(id_num_limbs, alpha);
-        newOffset = baseOffset*pow(id_num_limbs, omega);
-        newPhase = basePhase + phi*id_num_limbs + limbPhase*id_limb;
+        float newAmplitude, newOffset, newPhase, newFrequency;
+        newAmplitude = newOffset = newPhase = newFrequency = 0;
+
+        //-- Recalculate oscillator parameters according to the current state
+        //! \todo Calculate actual parameters
+        pthread_mutex_lock(gait_table_shape_mutex);
+        pthread_mutex_lock( &id_shape_mutex);
+
+        float baseAmplitude = gait_table_shape->at(id_shape, AMPLITUDE);
+        float baseOffset = gait_table_shape->at(id_shape, OFFSET);
+        float basePhase = gait_table_shape->at(id_shape, PHASE);
+
+        pthread_mutex_unlock(gait_table_shape_mutex);
+        pthread_mutex_unlock( &id_shape_mutex);
+
+
+        pthread_mutex_lock(gait_table_limbs_mutex);
+        pthread_mutex_lock( &id_num_limbs_mutex);
+
+        newFrequency = gait_table_limbs->at(id_num_limbs, FREQUENCY);
+        float alpha = gait_table_limbs->at(id_num_limbs, ALPHA);
+        float omega = gait_table_limbs->at(id_num_limbs, OMEGA);
+        float phi = gait_table_limbs->at(id_num_limbs, PHI);
+        float limbPhase = gait_table_limbs->at(id_num_limbs, PHASE_LIMB);
+
+        pthread_mutex_unlock(gait_table_limbs_mutex);
+        pthread_mutex_unlock( &id_num_limbs_mutex);
+
+
+        pthread_mutex_lock( &id_function_mutex);
+        if (id_limb == ModuleFunction_limb)
+        {
+            pthread_mutex_lock( &id_depth_mutex);
+            pthread_mutex_lock( &id_limb_mutex);
+
+            newAmplitude = baseAmplitude*pow(id_depth, alpha);
+            newOffset = baseOffset*pow(id_depth, omega);
+            newPhase = basePhase + phi*id_depth + limbPhase*id_limb;
+
+            pthread_mutex_unlock( &id_depth_mutex);
+            pthread_mutex_unlock( &id_limb_mutex);
+        }
+        else
+        {
+            newAmplitude = baseAmplitude;
+            newOffset = baseOffset;
+            newPhase = basePhase;
+        }
+        pthread_mutex_unlock( &id_function_mutex);
+
+
+        //-- Lock the oscillator mutex
+        pthread_mutex_lock(&oscillator_mutex);
+
+        //-- Set the new values on the oscillator
+        oscillator->setAmplitude(newAmplitude);
+        oscillator->setOffset(newOffset);
+        oscillator->setPhase(newPhase);
+        oscillator->setPeriod(1/newFrequency);
+
+        //-- Unlock the oscillator mutex
+        pthread_mutex_unlock(&oscillator_mutex);
     }
     else
     {
-        newAmplitude = baseAmplitude;
-        newOffset = baseOffset;
-        newPhase = basePhase;
+        std::cerr << "[Module] Error: id not initialized" << std::endl;
     }
-
-    //-- Unlock the ids mutexes
-    pthread_mutex_unlock( &id_function_mutex);
-    pthread_mutex_unlock( &id_depth_mutex);
     pthread_mutex_unlock( &id_shape_mutex);
-    pthread_mutex_unlock( &id_num_limbs_mutex);
-    pthread_mutex_unlock( &id_limb_mutex);
-
-    //-- Lock the oscillator mutex
-    pthread_mutex_lock(&oscillator_mutex);
-
-    //-- Set the new values on the oscillator
-    oscillator->setAmplitude(newAmplitude);
-    oscillator->setOffset(newOffset);
-    oscillator->setPhase(newPhase);
-    oscillator->setPeriod(1/newFrequency);
-
-    //-- Unlock the oscillator mutex
-    pthread_mutex_unlock(&oscillator_mutex);
-
 }
 
 

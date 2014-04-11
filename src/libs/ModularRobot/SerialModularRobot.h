@@ -29,7 +29,7 @@
 class SerialModularRobot : public ModularRobot
 {
     public:
-        SerialModularRobot( std::string port_name, int n_modules, std::string gait_table_file);
+        SerialModularRobot(std::string port_name, std::string config_file);
         ~SerialModularRobot();
 
         void reset();

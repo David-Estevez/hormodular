@@ -2,7 +2,8 @@
 
 
 
-SerialModularRobot::SerialModularRobot(std::string port_name, int n_modules, std::string gait_table_file)
+SerialModularRobot::SerialModularRobot(std::string port_name, std::string config_file)
+    : ModularRobot(config_file)
 {
     //-- Create serial port
     serial_port_name = port_name;
@@ -24,6 +25,8 @@ SerialModularRobot::SerialModularRobot(std::string port_name, int n_modules, std
         std::cerr << "Error communicating with the robot. Exiting..." << std::endl;
         exit(-1);
     }
+
+    int n_modules = configParser.getNumModules();
 
     //-- Create array to store the joint positions
     joint_position_array = new int[n_modules];
@@ -50,14 +53,18 @@ SerialModularRobot::SerialModularRobot(std::string port_name, int n_modules, std
         if ( false )
         {
             //! \todo Change this to use 2 gait tables (different)
-            temp_module = new SerialModule( 1, gait_table_file, gait_table_file, temp_joint_values,
-                                                   &updateTime_semaphore, temp_semaphores, false);
+            temp_module = new SerialModule( 1, gait_table_shape, gait_table_limbs,
+                                            gait_table_shape_mutex, gait_table_limbs_mutex,
+                                            temp_joint_values,
+                                            &updateTime_semaphore, temp_semaphores, false);
         }
         else
         {
             //! \todo Change this to use 2 gait tables (different)
-            temp_module = new SerialModule( 1, gait_table_file, gait_table_file, temp_joint_values,
-                                                       &updateTime_semaphore, temp_semaphores, true);
+            temp_module = new SerialModule( 1, gait_table_shape, gait_table_limbs,
+                                            gait_table_shape_mutex, gait_table_limbs_mutex,
+                                            temp_joint_values,
+                                            &updateTime_semaphore, temp_semaphores, true);
         }
         modules.push_back( temp_module );
     }

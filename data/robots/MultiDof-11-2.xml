@@ -1,57 +1,124 @@
 <ModularRobot name="MultiDof-11-2">
-	<simulationFile>../models/REPY-2.1/MultiDof-11-2.env.xml</simulationFile>
-	
+	<simulationFile>../data/models/REPY-2.1/MultiDof-11-2.env.xml</simulationFile>
+	<gaitTableFolder>../data/gait tables/test</gaitTableFolder>
 	<Module>
 		<Joint>0</Joint>
 		<IDs>
-			<Function></Function>
-			<Depth></Depth>
-			<Shape></Shape>
-			<NumLimbs></NumLimbs>
-			<LimbID></LimbID>
-		</IDs>
-		
-		<Connections>
-			<Left connectedTo="" connector="" orientation=""></left>
-			<Right connectedTo="" connector="" orientation=""></right>
-			<Front connectedTo="" connector="" orientation=""></front>
-			<Back connectedTo="" connector="" orientation=""></back>
-		</Connections>
+			<Function>Coxa</Function>
+			<Depth>-1</Depth>
+			<Shape>31466</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>-1</LimbID>
+		</IDs>	
 	</Module>	
 	
 	<Module>
-		<Joint>X</Joint>
+		<Joint>1</Joint>
 		<IDs>
-			<Function></Function>
-			<Depth></Depth>
-			<Shape></Shape>
-			<NumLimbs></NumLimbs>
-			<LimbID></LimbID>
+			<Function>Thorax</Function>
+			<Depth>-1</Depth>
+			<Shape>80628</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>-1</LimbID>
 		</IDs>
-		
-		<Connections>
-			<Left connectedTo="" connector="" orientation=""></left>
-			<Right connectedTo="" connector="" orientation=""></right>
-			<Front connectedTo="" connector="" orientation=""></front>
-			<Back connectedTo="" connector="" orientation=""></back>
-		</Connections>
 	</Module>	
 	
 	<Module>
-		<Joint>X</Joint>
+		<Joint>2</Joint>
 		<IDs>
-			<Function></Function>
-			<Depth></Depth>
-			<Shape></Shape>
-			<NumLimbs></NumLimbs>
-			<LimbID></LimbID>
+			<Function>Limb</Function>
+			<Depth>1</Depth>
+			<Shape>80339</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>0</LimbID>
 		</IDs>
-		
-		<Connections>
-			<Left connectedTo="" connector="" orientation=""></left>
-			<Right connectedTo="" connector="" orientation=""></right>
-			<Front connectedTo="" connector="" orientation=""></front>
-			<Back connectedTo="" connector="" orientation=""></back>
-		</Connections>
+	</Module>	
+	
+	<Module>
+		<Joint>3</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>1</Depth>
+			<Shape>80917</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>1</LimbID>
+		</IDs>
+	</Module>	
+	
+	<Module>
+		<Joint>4</Joint>
+		<IDs>
+			<Function>Coxa</Function>
+			<Depth>-1</Depth>
+			<Shape>30752</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>-1</LimbID>
+		</IDs>	
+	</Module>	
+	
+	<Module>
+		<Joint>5</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>1</Depth>
+			<Shape>82651</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>2</LimbID>
+		</IDs>
+	</Module>	
+	
+	<Module>
+		<Joint>6</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>1</Depth>
+			<Shape>83229</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>3</LimbID>
+		</IDs>
+	</Module>	
+	
+	<Module>
+		<Joint>7</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>80052</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>0</LimbID>
+		</IDs>		
+	</Module>	
+
+	<Module>
+		<Joint>8</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>80052</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>1</LimbID>
+		</IDs>
+	</Module>	
+	
+	<Module>
+		<Joint>9</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>80052</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>2</LimbID>
+		</IDs>
+	</Module>	
+	
+	<Module>
+		<Joint>10</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>80052</Shape>
+			<NumLimbs>4</NumLimbs>
+			<LimbID>3</LimbID>
+		</IDs>
 	</Module>	
 </ModularRobot>
