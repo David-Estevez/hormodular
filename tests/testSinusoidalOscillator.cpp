@@ -27,6 +27,7 @@ class SinusoidalOscillatorTest : public testing::Test
        virtual void TearDown()
        {
            delete oscillator;
+           oscillator = NULL;
        }
 };
 

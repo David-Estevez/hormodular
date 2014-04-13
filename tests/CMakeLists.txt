@@ -49,3 +49,9 @@ target_link_libraries(testRobotInterface ModularRobotInterface)
 add_executable( testSinusoidalOscillator testSinusoidalOscillator.cpp  )
 target_link_libraries(testSinusoidalOscillator gtest gtest_main)
 target_link_libraries(testSinusoidalOscillator Oscillator)
+
+# Testing Movement
+add_executable( testMovement testMovement.cpp  )
+target_link_libraries(testMovement gtest gtest_main)
+target_link_libraries(testMovement Oscillator ModularRobotInterface)
+

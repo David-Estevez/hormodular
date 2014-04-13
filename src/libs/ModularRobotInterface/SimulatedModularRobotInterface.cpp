@@ -10,11 +10,19 @@ hormodular::SimulatedModularRobotInterface::SimulatedModularRobotInterface(hormo
     simulation = new SimulationOpenRAVE( environment_file, false);
 
     controller = simulation->getRobot(0)->GetController();
+
+    calculatePos();
+    start_pos = current_pos;
+
 }
 
 bool hormodular::SimulatedModularRobotInterface::start()
 {
     simulation->start(step_ms, true);
+
+    calculatePos();
+    start_pos = current_pos;
+
     return true;
 }
 
@@ -36,12 +44,18 @@ bool hormodular::SimulatedModularRobotInterface::reset()
 {
     simulation->reset();
     controller = simulation->getRobot(0)->GetController();
+
+    calculatePos();
+    start_pos = current_pos;
+
     return true;
 }
 
 float hormodular::SimulatedModularRobotInterface::getTravelledDistance()
 {
-    return false;
+    calculatePos();
+    return sqrt( pow( current_pos.first - start_pos.first, 2) +
+                 pow( current_pos.second - start_pos.second, 2));
 }
 
 bool hormodular::SimulatedModularRobotInterface::sendJointValues(std::vector<float> joint_values, int step_ms)
@@ -92,4 +106,13 @@ std::vector<float> hormodular::SimulatedModularRobotInterface::getJointValues()
     }
 
     return joint_values;
+}
+
+void SimulatedModularRobotInterface::calculatePos()
+{
+    //-- Get current robot position
+    OpenRAVE::Vector robot_pos = simulation->getRobot(0)->GetCenterOfMass();
+
+    //-- Update current position stored:
+    current_pos = std::pair<float, float>( robot_pos.x, robot_pos.y );
 }

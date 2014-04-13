@@ -42,8 +42,15 @@ class SimulatedModularRobotInterface : public ModularRobotInterface
         SimulationOpenRAVE * simulation;
         std::string environment_file;
         OpenRAVE::ControllerBasePtr controller;
+
         int step_ms;
         double step_s;
+
+        //-- Position-related things:
+        void calculatePos();
+
+        std::pair<float, float> start_pos;
+        std::pair<float, float> current_pos;
 };
 
 }
