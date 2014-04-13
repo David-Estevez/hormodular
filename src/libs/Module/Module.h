@@ -34,6 +34,8 @@
 
 //#define DEBUG_MESSAGES
 
+using namespace hormodular;
+
 enum ModuleFunction { ModuleFunction_none = -1,
                       ModuleFunction_limb = 0,
                       ModuleFunction_thorax = 1,

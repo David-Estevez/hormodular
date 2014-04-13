@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <iostream>
 
+namespace hormodular {
 /*! \class Oscillator
  *  \brief Abstract class that serves as a base to create different oscillators
  */
@@ -35,8 +36,8 @@ class Oscillator
 {
 
    public:
-        void setPeriod( uint16_t period_ms);
-        uint16_t getPeriod( );
+        void setPeriod( int period_ms);
+        int getPeriod( );
 
         void setAmplitude( float amplitude);
         float getAmplitude();
@@ -54,23 +55,23 @@ class Oscillator
          * \param phase Phase of the oscillation [0, 360] degrees
          * \param period Period of the oscillation in ms. A value of 0 means "use the current value".
          */
-        void setParameters( uint8_t amplitude, uint8_t offset, float phase, uint16_t period_ms = 0);
+        void setParameters( float amplitude, float offset, float phase, int period_ms = 0);
 
         /*! \brief Calculate the position of the oscillator at time
          *
          *  \param time Time at which the oscillation is calculated
          *  \return Position of the oscillator at given time
          */
-        virtual float calculatePos( uint32_t time ) = 0;
+        virtual float calculatePos( unsigned long time ) = 0;
 
     protected:
         Oscillator();
-        Oscillator(float amplitude, float offset, float phase, uint16_t period_ms = 4000);
+        Oscillator(float amplitude, float offset, float phase, int period_ms = 4000);
 
-        uint16_t period_ms;
+        int period_ms;
         float amplitude;
         float offset;
         float phase;
 };
-
+}
 #endif

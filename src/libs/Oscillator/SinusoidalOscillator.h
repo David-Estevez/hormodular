@@ -31,6 +31,8 @@
 
 #include "Oscillator.h"
 
+namespace hormodular {
+
 /*! \class SinusoidalOscillator
  *  \brief Generate oscillations using a sine function
  */
@@ -38,12 +40,12 @@ class SinusoidalOscillator: public Oscillator
 {
     public:
         SinusoidalOscillator();
-        SinusoidalOscillator( uint8_t amplitude, uint8_t offset, float phase, uint16_t period_ms = 4000);
+        SinusoidalOscillator( float amplitude, float offset, float phase, int period_ms = 4000);
 
-        virtual float calculatePos( uint32_t time );
+        virtual float calculatePos( unsigned long time );
 
     private:
         float deg2rad( float angle_deg);
 };
-
+}
 #endif

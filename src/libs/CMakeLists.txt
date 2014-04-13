@@ -4,4 +4,5 @@
 #add_subdirectory(ModularRobot)
 add_subdirectory(ConfigParser)
 add_subdirectory(SimulationOpenRAVE)
+add_subdirectory(Oscillator)
 add_subdirectory(ModularRobotInterface)
