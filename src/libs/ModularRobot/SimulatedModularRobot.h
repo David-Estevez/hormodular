@@ -25,7 +25,7 @@
 
 #include "ModularRobot.h"
 #include "SimulatedModule.h"
-#include "SimulationOpenRAVE.h"
+#include "SimulationOpenRAVE.hpp"
 
 class SimulatedModularRobot: public ModularRobot
 {

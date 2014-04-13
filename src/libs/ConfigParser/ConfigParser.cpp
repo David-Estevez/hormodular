@@ -1,11 +1,11 @@
 #include "ConfigParser.h"
 
-ConfigParser::ConfigParser()
+hormodular::ConfigParser::ConfigParser()
 {
     clearData();
 }
 
-int ConfigParser::parse(const std::string &filepath)
+int hormodular::ConfigParser::parse(const std::string &filepath)
 {
     clearData();
 
@@ -108,62 +108,62 @@ int ConfigParser::parse(const std::string &filepath)
     return 0;
 }
 
-std::string ConfigParser::getRobotName()
+std::string hormodular::ConfigParser::getRobotName()
 {
     return robotName;
 }
 
-std::string ConfigParser::getSimulationFile()
+std::string hormodular::ConfigParser::getSimulationFile()
 {
     return simulationFile;
 }
 
-std::string ConfigParser::getGaitTableFolder()
+std::string hormodular::ConfigParser::getGaitTableFolder()
 {
     return gaitTableFolder;
 }
 
-int ConfigParser::getNumModules()
+int hormodular::ConfigParser::getNumModules()
 {
     return numModules;
 }
 
-int ConfigParser::getJointID(const int &module)
+int hormodular::ConfigParser::getJointID(const int &module)
 {
     return jointIDs.at(module);
 }
 
-std::vector<int> ConfigParser::getJointIDs()
+std::vector<int> hormodular::ConfigParser::getJointIDs()
 {
     return jointIDs;
 }
 
-std::vector<ModuleFunction> ConfigParser::getFunctionIDs()
+std::vector<ModuleFunction> hormodular::ConfigParser::getFunctionIDs()
 {
     return id_function_vector;
 }
 
-std::vector<int> ConfigParser::getDepthIDs()
+std::vector<int> hormodular::ConfigParser::getDepthIDs()
 {
     return id_depth_vector;
 }
 
-std::vector<unsigned long> ConfigParser::getShapeIDs()
+std::vector<unsigned long> hormodular::ConfigParser::getShapeIDs()
 {
     return id_shape_vector;
 }
 
-std::vector<int> ConfigParser::getNumLimbsIDs()
+std::vector<int> hormodular::ConfigParser::getNumLimbsIDs()
 {
     return id_num_limbs_vector;
 }
 
-std::vector<int> ConfigParser::getLimbsIDs()
+std::vector<int> hormodular::ConfigParser::getLimbsIDs()
 {
     return id_limbs_vector;
 }
 
-void ConfigParser::clearData()
+void hormodular::ConfigParser::clearData()
 {
     robotName = "";
     simulationFile = "";
@@ -177,9 +177,11 @@ void ConfigParser::clearData()
     id_limbs_vector.clear();
 }
 
-bool ConfigParser::removeBadCharacters(std::string& string)
+bool hormodular::ConfigParser::removeBadCharacters(std::string& string)
 {
     string.erase( std::remove( string.begin(), string.end(), '\n'), string.end());
     string.erase( std::remove( string.begin(), string.end(), '\t'), string.end());
     string.erase( std::remove( string.begin(), string.end(), '\r'), string.end());
+
+    return true;
 }

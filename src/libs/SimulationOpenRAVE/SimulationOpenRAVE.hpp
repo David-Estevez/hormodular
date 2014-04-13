@@ -29,11 +29,14 @@
 #include <vector>
 #include <string>
 
-class Simulation_OpenRAVE
+namespace hormodular {
+
+
+class SimulationOpenRAVE
 {
     public:
-        Simulation_OpenRAVE( std::string environment_file , bool show_simulation = true);
-        ~Simulation_OpenRAVE();
+        SimulationOpenRAVE( std::string environment_file , bool show_simulation = true);
+        ~SimulationOpenRAVE();
 
         void init(); //-- Loads the environment and sets everything needed
 
@@ -57,5 +60,6 @@ private:
         std::vector< OpenRAVE::RobotBasePtr > robots;
         bool show_simulation;
 };
+}
 
 #endif //-- SIMULATION_OPENRAVE_H

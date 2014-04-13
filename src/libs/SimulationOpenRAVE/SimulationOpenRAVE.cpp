@@ -18,9 +18,9 @@
 //-- Released under the GPL license (more info on LICENSE.txt file)
 //------------------------------------------------------------------------------------
 
-#include "SimulationOpenRAVE.h"
+#include "SimulationOpenRAVE.hpp"
 
-Simulation_OpenRAVE::Simulation_OpenRAVE(std::string environment_file, bool show_simulation)
+hormodular::SimulationOpenRAVE::SimulationOpenRAVE(std::string environment_file, bool show_simulation)
 {
     this->environment_file = environment_file;
 
@@ -33,23 +33,24 @@ Simulation_OpenRAVE::Simulation_OpenRAVE(std::string environment_file, bool show
     penv->StopSimulation();
 
     //-- Run the viewer on a different thread, and wait for it to be ready:
+    this->show_simulation = show_simulation;
+    pthviewer = NULL;
+
     if ( show_simulation )
         showViewer();
 
     //-- Init (load and setup everything)
     init();
-
-
-
 }
 
-Simulation_OpenRAVE::~Simulation_OpenRAVE()
+hormodular::SimulationOpenRAVE::~SimulationOpenRAVE()
 {
-    if (show_simulation)
+    if (show_simulation && pthviewer != NULL)
     {
         //-- Wait for the viewer to finish
         pthviewer->join();
         delete pthviewer;
+        pthviewer = NULL;
     }
 
     //-- Destroy the environment
@@ -58,7 +59,7 @@ Simulation_OpenRAVE::~Simulation_OpenRAVE()
 }
 
 
-void Simulation_OpenRAVE::init()
+void hormodular::SimulationOpenRAVE::init()
 {
     //-- Load the scene and wait for it to be ready:
     if ( !penv->Load( environment_file) )
@@ -101,53 +102,53 @@ void Simulation_OpenRAVE::init()
 
 
 
-OpenRAVE::EnvironmentBasePtr Simulation_OpenRAVE::getPenv() const
+OpenRAVE::EnvironmentBasePtr hormodular::SimulationOpenRAVE::getPenv() const
 {
     return penv;
 }
 
 
-std::vector<OpenRAVE::RobotBasePtr> Simulation_OpenRAVE::getRobots() const
+std::vector<OpenRAVE::RobotBasePtr> hormodular::SimulationOpenRAVE::getRobots() const
 {
     return robots;
 }
 
-OpenRAVE::RobotBasePtr Simulation_OpenRAVE::getRobot(int index) const
+OpenRAVE::RobotBasePtr hormodular::SimulationOpenRAVE::getRobot(int index) const
 {
     return robots[index];
 }
 
 
-void Simulation_OpenRAVE::showViewer()
+void hormodular::SimulationOpenRAVE::showViewer()
 {
     this->show_simulation = true;
-    pthviewer = new boost::thread(boost::bind(&Simulation_OpenRAVE::startViewer, this));
+    pthviewer = new boost::thread(boost::bind(&hormodular::SimulationOpenRAVE::startViewer, this));
     usleep(200000);
 }
 
-void Simulation_OpenRAVE::start( OpenRAVE::dReal step_period, bool real_time)
+void hormodular::SimulationOpenRAVE::start( OpenRAVE::dReal step_period, bool real_time)
 {
     penv->StartSimulation(step_period, real_time );
 }
 
-void Simulation_OpenRAVE::stop()
+void hormodular::SimulationOpenRAVE::stop()
 {
     penv->StopSimulation();
 }
 
-void Simulation_OpenRAVE::step(OpenRAVE::dReal step_period)
+void hormodular::SimulationOpenRAVE::step(OpenRAVE::dReal step_period)
 {
     penv->StepSimulation( step_period);
 }
 
-void Simulation_OpenRAVE::reset()
+void hormodular::SimulationOpenRAVE::reset()
 {
     penv->Reset();
 
     init();
 }
 
-void Simulation_OpenRAVE::startViewer()
+void hormodular::SimulationOpenRAVE::startViewer()
 {
         //-- Create the viewer and attach it to the environment
         pviewer = OpenRAVE::RaveCreateViewer(penv, "qtcoin");

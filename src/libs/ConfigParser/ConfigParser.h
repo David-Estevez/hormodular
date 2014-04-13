@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <tinyxml2.h>
 
+namespace hormodular {
 class ConfigParser
 {
     public:
@@ -60,7 +61,7 @@ class ConfigParser
         std::vector<int> id_limbs_vector;
 
 };
-
+}
 
 
 #endif // CONFIGPARSER_H

@@ -24,7 +24,7 @@
 #include <vector>
 
 #include "ModularRobot.h"
-#include "SimulationOpenRAVE.h"
+#include "SimulationOpenRAVE.hpp"
 
 class SimulatedModularRobotSingleThread: public ModularRobot
 {
