@@ -51,7 +51,14 @@ add_executable( testGaitTable testGaitTable.cpp )
 target_link_libraries(testGaitTable gtest gtest_main)
 target_link_libraries(testGaitTable GaitTable)
 
+# Testing Movement with GaitTable
+add_executable( testMovementWithGaitTable testMovementWithGaitTable.cpp  )
+target_link_libraries(testMovementWithGaitTable gtest gtest_main)
+target_link_libraries(testMovementWithGaitTable Oscillator ModularRobotInterface GaitTable)
+
 # Testing Configuration Parser:
 add_executable(testConfigParser testConfigParser.cpp)
 target_link_libraries(testConfigParser gtest gtest_main)
 target_link_libraries(testConfigParser ConfigParser)
+
+
