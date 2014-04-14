@@ -3,13 +3,6 @@ add_subdirectory(gtest-1.7.0)
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} )
 
-# Testing Gait Table (Broken test)
-#add_executable( testGaitTable testGaitTable.cpp )
-#target_link_libraries(testGaitTable Controller )
-
-# Testing Sinusoidal Oscillator
-#add_executable( testSinusoidalOscillator testSinusoidalOscillator.cpp  )
-#target_link_libraries(testSinusoidalOscillator Controller )
 
 # Testing Module (Broken)
 #add_executable( testModule testModule.cpp )
@@ -56,4 +49,9 @@ target_link_libraries(testMovement Oscillator ModularRobotInterface)
 # Testing GaitTable
 add_executable( testGaitTable testGaitTable.cpp )
 target_link_libraries(testGaitTable gtest gtest_main)
-target_link_libraries(testGaitTable  GaitTable)
+target_link_libraries(testGaitTable GaitTable)
+
+# Testing Configuration Parser:
+add_executable(testConfigParser testConfigParser.cpp)
+target_link_libraries(testConfigParser gtest gtest_main)
+target_link_libraries(testConfigParser ConfigParser)

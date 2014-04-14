@@ -1,66 +1,85 @@
-#include "ConfigParser.h"
-#include "Module.h"
-#include "assert.h"
+#include "gtest/gtest.h"
 #include <iostream>
 #include <string>
 #include <vector>
+#include "ConfigParser.h"
 
-int main(void)
+using namespace hormodular;
+
+class ConfigParserTest : public testing::Test
 {
-    //static const std::string FILEPATH = "../../data/robots/Test_robot.xml";
-    static const std::string FILEPATH = "../../data/robots/Test_robot2.xml";
+    public:
+        ConfigParser configParser;
 
-    ConfigParser testParser = ConfigParser();
+        static const std::string FILEPATH;
 
-    std::cout << "Testing Config Parser:" << std::endl;
-    std::cout << "--------------------------" << std::endl;
+        virtual void SetUp()
+        {
+            configParser.parse(FILEPATH);
+        }
+};
 
-    //--Read file
-    std::cout << "\tParsing file..." << std::endl;
-    testParser.parse(FILEPATH);
+//const std::string ConfigParserTest::FILEPATH = "../../data/test/Test_robot.xml";
+const std::string ConfigParserTest::FILEPATH = "../../data/test/Test_robot2.xml";
 
-    //-- Get the parameters
-    std::cout << "\tChecking robot name..." << std::endl;
-    assert(testParser.getRobotName() == "Test_robot");
+TEST_F( ConfigParserTest, robotNameIsOk)
+{
+    EXPECT_STREQ( "Test_robot", configParser.getRobotName().c_str() );
+}
 
-    std::cout << "\tChecking simulation file..." << std::endl;
-    assert(testParser.getSimulationFile() == "../../data/models/REPY-2.1/Kusanagi-2.env.xml");
 
-    std::cout << "\tChecking gait table output folder..." << std::endl;
-    assert(testParser.getGaitTableFolder() == "../../data/gait tables/test");
+TEST_F( ConfigParserTest, simulationFileIsOk)
+{
+    EXPECT_STREQ( "../../data/models/REPY-2.1/Kusanagi-2.env.xml", configParser.getSimulationFile().c_str() );
+}
 
-    std::cout << "\tChecking number of Modules..." << std::endl;
-    assert(testParser.getNumModules() == 2);
+TEST_F( ConfigParserTest, gaitTableFolderIsOk)
+{
+    EXPECT_STREQ( "../../data/gait tables/test", configParser.getGaitTableFolder().c_str() );
+}
 
-    std::cout << "\tChecking module data..." << std::endl;
-    std::cout << "\t\tChecking module id..." << std::endl;
-    assert(testParser.getJointID(0) == 0);
-    assert(testParser.getJointID(1) == 1);
-    
-    std::cout << "\t\tChecking IDs..." << std::endl;
-    std::vector< ModuleFunction > id_function_vector = testParser.getFunctionIDs();
-    assert(id_function_vector.at(0) == ModuleFunction_limb);
-    assert(id_function_vector.at(1) == ModuleFunction_coxa);
+TEST_F( ConfigParserTest, numberOfModulesIsOk)
+{
+    EXPECT_EQ(2, configParser.getNumModules());
+}
 
-    std::cout << "\t\tChecking depths..." << std::endl;
-    std::vector<int> id_depth_vector = testParser.getDepthIDs();
-    assert(id_depth_vector.at(0) == 0);
-    assert(id_depth_vector.at(1) == -1);
+TEST_F( ConfigParserTest, jointIDsAreOk)
+{
+    EXPECT_EQ( 0, configParser.getJointID(0));
+    EXPECT_EQ( 1, configParser.getJointID(1));
+}
 
-    std::cout << "\t\tChecking shape ids..." << std::endl;
-    std::vector<unsigned long> id_shape_vector = testParser.getShapeIDs();
-    assert(id_shape_vector.at(0) == 42);
-    assert(id_shape_vector.at(1) == 66);
+TEST_F( ConfigParserTest, functionIDsAreOk)
+{
+    std::vector<ModuleFunction> id_function_vector = configParser.getFunctionIDs();
+    EXPECT_EQ( ModuleFunction_limb, id_function_vector.at(0));
+    EXPECT_EQ( ModuleFunction_coxa, id_function_vector.at(1));
+}
 
-    std::cout << "\t\tChecking number of limbs..." << std::endl;
-    std::vector<int> id_num_limbs_vector = testParser.getNumLimbsIDs();
-    assert(id_num_limbs_vector.at(0) == 1);
-    assert(id_num_limbs_vector.at(1) == 1);
+TEST_F( ConfigParserTest, depthIDsAreOk)
+{
+    std::vector<int> id_depth_vector = configParser.getDepthIDs();
+    EXPECT_EQ( 0, id_depth_vector.at(0));
+    EXPECT_EQ(-1, id_depth_vector.at(1));
+}
 
-    std::cout << "\t\tChecking limb ids..." << std::endl;
-    std::vector<int> id_limbs_vector = testParser.getLimbsIDs();
-    assert(id_limbs_vector.at(0) == 0);
-    assert(id_limbs_vector.at(1) == -1);
+TEST_F( ConfigParserTest, shapeIDsAreOk)
+{
+    std::vector<unsigned long> id_shape_vector = configParser.getShapeIDs();
+    EXPECT_EQ(42, id_shape_vector.at(0));
+    EXPECT_EQ(66, id_shape_vector.at(1));
+}
 
-    std::cout <<"All tests were successful!" << std::endl;
+TEST_F( ConfigParserTest, numLimbsIDsAreOk)
+{
+    std::vector<int> id_num_limbs_vector = configParser.getNumLimbsIDs();
+    EXPECT_EQ(1, id_num_limbs_vector.at(0));
+    EXPECT_EQ(1, id_num_limbs_vector.at(1));
+}
+
+TEST_F( ConfigParserTest, limbIDsAreOk)
+{
+    std::vector<int> id_limbs_vector = configParser.getLimbsIDs();
+    EXPECT_EQ(0, id_limbs_vector.at(0));
+    EXPECT_EQ(-1, id_limbs_vector.at(1));
 }
