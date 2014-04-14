@@ -1,57 +1,61 @@
-#include "GaitTable.h"
-#include "assert.h"
+#include "gtest/gtest.h"
 #include <iostream>
 #include <string>
+#include "GaitTable.h"
 
-int main(void)
+
+using namespace hormodular;
+
+class GaitTableTest : public testing::Test
 {
-    static const uint8_t N_MODULES = 5;
-    static const uint8_t N_PARAM = 3;
-    static const std::string FILEPATH = "./test_gaittable_file.txt";
+    public:
+        GaitTable * gaitTable;
+        static const float parameters1[3];
+        static const float parameters2[3];
 
-    std::cout << "Testing Gait Table" << std::endl;
+        virtual void SetUp()
+        {
+            gaitTable = new GaitTable( "../../data/test/test_gait_table.txt");
+        }
 
-    //-- Testing gait table (empty)
-    //-------------------------------------------------------------------
-    std::cout << "\tTesting Gait Table (Empty)" << std::endl;
-    //-- Create table:
-    std::cout << "\tCreating empty table..." << std::endl;
-    GaitTable emptyGaitTable( N_MODULES, N_PARAM);
+        virtual void TearDown()
+        {
+            delete gaitTable;
+            gaitTable = NULL;
+        }
+};
 
-    //-- Check dimensions
-    std::cout << "\tChecking dimensions..." << std::endl;
-    assert( emptyGaitTable.getNModules() == N_MODULES);
-    assert( emptyGaitTable.getNParameters() == N_PARAM);
+const float GaitTableTest::parameters1[3] = { 60, 0, 0};
+const float GaitTableTest::parameters2[3] = { 60, 0, 120};
 
-    //-- Check contents
-    std::cout << "\tChecking contents..." << std::endl;
-    for (int i = 0; i < emptyGaitTable.getNModules(); i++)
-	for ( int j = 0; j < emptyGaitTable.getNParameters(); j++)
-	    assert( emptyGaitTable.at(i, j) == 0);
+TEST_F( GaitTableTest, createdGaitTableExists)
+{
+    EXPECT_TRUE( gaitTable != NULL );
+}
 
-    //-- Check table write / read
-    std::cout << "\tTesting write..." << std::endl;
-    emptyGaitTable.setValue(0, 0, 3.1415);
-    assert( emptyGaitTable.at(0,0) - 3.1415 < 0.00001 && emptyGaitTable.at(0,0) - 3.1415 > -0.00001);
+TEST_F( GaitTableTest, twoIDsLoaded)
+{
+    std::vector<unsigned long> IDs = gaitTable->getIDs();
 
-    //-- Check saving to a file
-    std::cout << "\tTesting saving to a file..." << std::endl;
-    for (int i = 0; i < emptyGaitTable.getNModules(); i++)
-        for ( int j = 0; j < emptyGaitTable.getNParameters(); j++)
-            emptyGaitTable.setValue( i, j, i*emptyGaitTable.getNParameters()+j);
+    EXPECT_EQ(2, IDs.size());
+    EXPECT_EQ(0, IDs[0]);
+    EXPECT_EQ(1, IDs[1]);
+    EXPECT_EQ(3, gaitTable->getNumParameters());
+}
 
-    emptyGaitTable.saveToFile( FILEPATH );
+TEST_F( GaitTableTest, selectByIDReturnsParametersCorrectly)
+{
+    std::vector<float> answer1, answer2;
 
-    //-- Checking creating a table from file:
-    std::cout << "\tTesting gait table creation from file"  << std::endl;
-    GaitTable fileGaitTable( FILEPATH );
+    answer1 = gaitTable->getParameters(0);
+    answer2 = gaitTable->getParameters(1);
 
-    for (int i = 0; i < fileGaitTable.getNModules(); i++)
-        for ( int j = 0; j < fileGaitTable.getNParameters(); j++)
-            assert( fileGaitTable.at(i, j) == i*emptyGaitTable.getNParameters()+j );
+    ASSERT_EQ(3, answer1.size());
+    ASSERT_EQ(3, answer2.size());
 
-    std::cout << "Gait Table test finished correctly!" << std::endl << std::endl;
+    for (int i = 0; i < 3; i++)
+        EXPECT_FLOAT_EQ( parameters1[i], answer1[i]);
 
-    return 0;
-
+    for (int i = 0; i < 3; i++)
+        EXPECT_FLOAT_EQ( parameters2[i], answer2[i]);
 }

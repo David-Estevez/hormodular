@@ -78,9 +78,11 @@ TEST_F( MovementTest, robotMovesIfWave)
     //-- Movement loop
     while( elapsed_time < max_time_ms )
     {
+        //-- Update joint values
         for ( int i = 0; i < (int) oscillators.size(); i++)
             joint_values[i] = oscillators[i]->calculatePos(elapsed_time);
 
+        //-- Send joint values
         robotInterface->sendJointValues(joint_values, step_ms);
 
         elapsed_time+=step_ms;

@@ -3,8 +3,6 @@ add_subdirectory(gtest-1.7.0)
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} )
 
-message( "Building Tests...")
-
 # Testing Gait Table (Broken test)
 #add_executable( testGaitTable testGaitTable.cpp )
 #target_link_libraries(testGaitTable Controller )
@@ -55,3 +53,7 @@ add_executable( testMovement testMovement.cpp  )
 target_link_libraries(testMovement gtest gtest_main)
 target_link_libraries(testMovement Oscillator ModularRobotInterface)
 
+# Testing GaitTable
+add_executable( testGaitTable testGaitTable.cpp )
+target_link_libraries(testGaitTable gtest gtest_main)
+target_link_libraries(testGaitTable  GaitTable)

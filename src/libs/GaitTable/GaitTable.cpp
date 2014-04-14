@@ -1,11 +1,8 @@
 #include "GaitTable.h"
 
 
-GaitTable::GaitTable(const std::string file_path, const int num_parameters )
+hormodular::GaitTable::GaitTable(const std::string file_path)
 {
-    //-- Set parameters:
-    this->num_parameters = num_parameters;
-
     //-- Check if the file exists
     this->file_path = file_path;
     std::ifstream file(file_path.c_str());
@@ -13,9 +10,13 @@ GaitTable::GaitTable(const std::string file_path, const int num_parameters )
     {
         loadFromFile(file_path);
     }
+    else
+    {
+        std::cerr << "[GaitTable] File \"" << file_path << "\" does not exist" << std::endl;
+    }
 }
 
-int GaitTable::loadFromFile( const std::string file_path)
+int hormodular::GaitTable::loadFromFile( const std::string file_path)
 {
     //! \TODO change this temporary code to something more permanent
 
@@ -26,7 +27,7 @@ int GaitTable::loadFromFile( const std::string file_path)
     char ch;                       //-- Current character read
     char number[BUFFER_SIZE];	   //-- Number stored as characters
 
-    std::vector<float> data_tmp;	   //-- Vector containing data
+    std::vector<double> data_tmp;	   //-- Vector containing data
 
 
     //-- Open the file
@@ -125,20 +126,19 @@ int GaitTable::loadFromFile( const std::string file_path)
         //-- Close the file:
         input_file.close();
 
-        //-- Check data
-        if ( num_parameters != cols -1 )
-        {
-            std::cerr<<"[GaitTable] Error: data on the file is not consistent with number of parameters."
-                    << std::endl;
-            return -1;
-        }
+        //-- Save data on table
+        num_parameters = cols-1;
 
         //-- Add the data to the table
         data.clear();
+        ids.clear();
+
         for (int i = 0; i < rows; i ++)
         {
+            ids.push_back( (unsigned long) data_tmp[i*cols]);
+
             std::vector<float> newRow;
-            for (int j = 0; j < cols; j++)
+            for (int j = 1; j < cols; j++)
                 newRow.push_back(data_tmp[i*cols+j]);
             data.push_back(newRow);
         }
@@ -147,7 +147,8 @@ int GaitTable::loadFromFile( const std::string file_path)
 //        std::cout << "[Debug] Data loaded from table: " << std::endl;
 //          for (int i = 0; i < rows; i ++)
 //          {
-//              for (int j = 0; j < cols; j++)
+//              std::cout << ids[i] << " ";
+//              for (int j = 0; j < cols-1; j++)
 //                  std::cout << data[i][j] << " ";
 //              std::cout << std::endl;
 //          }
@@ -170,127 +171,66 @@ int GaitTable::loadFromFile( const std::string file_path)
 //-- Get things
 //----------------------------------------------------------------------------------------
 //-- Get element of the gait table
-float GaitTable::at(int id, int parameter)
+float hormodular::GaitTable::at(int id, int parameter)
 {
     int tableRow = lookForID(id);
 
     if ( tableRow == -1)
     {
         std::cerr << "[GaitTable] Error: ID not found on gait table. Creating row..." << std::endl;
-        setValue(id, parameter, 0);
         return 0;
     }
 
-    return data[tableRow][parameter+1];
+    return data[tableRow][parameter];
 }
 
 //-- Get all parameters of a certain id
-std::vector<float> GaitTable::getParameters(int id)
+std::vector<float> hormodular::GaitTable::getParameters(int id)
 {
     int tableRow = lookForID(id);
 
     if ( tableRow == -1)
     {
         std::cerr << "[GaitTable] Error: ID not found on gait table. Creating row..." << std::endl;
-        setValue(id, 0, 0);
-        return this->getParameters(id);
+        return std::vector<float>();
     }
 
     return data[tableRow];
 }
 
-int GaitTable::getNumParameters()
+std::vector<float> hormodular::GaitTable::operator[](int id)
+{
+    return getParameters(id);
+}
+
+int hormodular::GaitTable::getNumParameters()
 {
     return num_parameters;
 }
 
-std::vector<unsigned long> GaitTable::getIDs()
+std::vector<unsigned long> hormodular::GaitTable::getIDs()
 {
-    std::vector<unsigned long> ids;
-
-    for (int i =0; i < (int) data.size(); i++)
-        ids.push_back(data[0][0]);
-
     return ids;
 }
 
-//-- Set things
-//---------------------------------------------------------------------------------------
-void GaitTable::setValue(unsigned long id, int parameter, float value)
-{
-    int tableRow = lookForID(id);
 
-    if (tableRow == -1)
-    {
-        std::cout << "[GaitTable] ID: " << id << " was not found. Creating row for ID..." << std::endl;
-        std::vector<float> newRow;
-        newRow.push_back(id);
-
-        for (int i=0; i<num_parameters; i++)
-            newRow.push_back(0);
-
-        newRow[parameter+1] = value;
-
-        data.push_back(newRow);
-
-        saveToFile(file_path);
-    }
-    else
-    {
-        data[tableRow][parameter+1] = value;
-        saveToFile(file_path);
-    }
-}
-
-int GaitTable::setRow(unsigned long id, std::vector<float> values)
-{
-    if ( (int)values.size() != num_parameters )
-    {
-        std::cerr << "[GaitTable] Error: size of input vector does not match number of parameters ("
-                  << values.size() << "!=" << num_parameters << std::endl;
-        return -1;
-    }
-
-    unsigned long tableRow = lookForID(id);
-
-    if (tableRow == (unsigned long)-1)
-    {
-        std::cout << "[GaitTable] ID: " << id << " was not found. Creating row for ID..." << std::endl;
-        std::vector<float> newRow;
-        newRow.push_back(id);
-
-        for (int i=0; i<(int)values.size(); i++)
-            newRow.push_back(values[i]);
-
-        data.push_back(newRow);
-    }
-    else
-    {
-        for ( int i = 0; i < (int)values.size(); i++)
-            data[tableRow][i+1] = values[i];
-    }
-
-    saveToFile(file_path);
-    return 0;
-}
-
-int GaitTable::reload()
+int hormodular::GaitTable::reload()
 {
     return loadFromFile(file_path);
 }
 
-int GaitTable::lookForID(unsigned long id)
+int hormodular::GaitTable::lookForID(unsigned long id)
 {
-    for (int i = 0; i <(int) data.size(); i++)
-        if ( data[i][0] == id )
-            return i;
+    for (int i = 0; i <(int) ids.size(); i++)
+        if ( ids[i] == id )
+           return i;
 
     return -1;
 }
 
 //-- Save file
 //---------------------------------------------------------------------------------------
-void GaitTable::saveToFile(const std::string file_path)
+void hormodular::GaitTable::saveToFile(const std::string file_path)
 {
     //-- Open file
     std::ofstream output_file( file_path.c_str() );
