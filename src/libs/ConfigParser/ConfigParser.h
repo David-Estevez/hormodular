@@ -44,6 +44,7 @@ class ConfigParser
         std::vector<unsigned long> getShapeIDs();
         std::vector<int> getNumLimbsIDs();
         std::vector<int> getLimbsIDs();
+        std::vector< std::vector<int> > getConnectorInfo(int moduleIndex);
 
     private:
         void clearData();
@@ -59,7 +60,7 @@ class ConfigParser
         std::vector<unsigned long> id_shape_vector;
         std::vector<int> id_num_limbs_vector;
         std::vector<int> id_limbs_vector;
-
+        std::vector< std::vector< std::vector<int> > > connector_info_vector;
 };
 }
 

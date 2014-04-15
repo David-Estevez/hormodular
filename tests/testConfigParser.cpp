@@ -83,3 +83,38 @@ TEST_F( ConfigParserTest, limbIDsAreOk)
     EXPECT_EQ(0, id_limbs_vector.at(0));
     EXPECT_EQ(-1, id_limbs_vector.at(1));
 }
+
+TEST_F( ConfigParserTest, connectorInfoIsOk)
+{
+    //-- Increase legibility
+    static const int FRONT = 0;
+    static const int LEFT = 1;
+    static const int BACK = 2;
+    static const int RIGHT = 3;
+
+    static const int CONNECTED_TO = 0;
+    static const int CONNECTOR = 1;
+    static const int ORIENTATION = 2;
+
+    //--Get info
+    std::vector< std::vector<int> > connector1info, connector2info;
+    connector1info = configParser.getConnectorInfo(0);
+    connector2info = configParser.getConnectorInfo(1);
+
+    //-- Check assertions
+    EXPECT_EQ(1, connector1info[FRONT][CONNECTED_TO]);
+    EXPECT_EQ(BACK, connector1info[FRONT][CONNECTOR]);
+    EXPECT_EQ(0, connector1info[FRONT][ORIENTATION]);
+
+    EXPECT_EQ(0, connector1info[RIGHT].size());
+    EXPECT_EQ(0, connector1info[BACK].size());
+    EXPECT_EQ(0, connector1info[LEFT].size());
+
+    EXPECT_EQ(0, connector2info[BACK][CONNECTED_TO]);
+    EXPECT_EQ(FRONT, connector2info[BACK][CONNECTOR]);
+    EXPECT_EQ(0, connector2info[BACK][ORIENTATION]);
+
+    EXPECT_EQ(0, connector2info[FRONT].size());
+    EXPECT_EQ(0, connector2info[RIGHT].size());
+    EXPECT_EQ(0, connector2info[LEFT].size());
+}

@@ -55,7 +55,7 @@
 		<Connections>
 			
 			
-			<front connectedTo="1" connector="Back" orientation="0"/>
+			<front connectedTo="1" connector="back" orientation="0"/>
 			
 		
 		</Connections>
@@ -108,7 +108,7 @@
 		<Connections>
 			
 			
-			<back connectedTo="0" connector="Front" orientation="0"/>
+			<back connectedTo="0" connector="front" orientation="0"/>
 			
 		
 		</Connections>

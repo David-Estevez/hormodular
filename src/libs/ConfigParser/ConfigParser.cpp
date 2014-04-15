@@ -85,6 +85,65 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
             id_shape_vector.push_back(atoi(idsElement->FirstChildElement("Shape")->GetText()));
             id_num_limbs_vector.push_back(atoi(idsElement->FirstChildElement("NumLimbs")->GetText()));
             id_limbs_vector.push_back(atoi(idsElement->FirstChildElement("LimbID")->GetText()));
+
+            //-- Get connector info
+            std::vector< std::vector<int> > connectorInfo;
+            std::vector<std::string> connectorTags;
+            connectorTags.push_back("front");
+            connectorTags.push_back("right");
+            connectorTags.push_back("back");
+            connectorTags.push_back("left");
+
+            tinyxml2::XMLElement* connectorElement = moduleNode->FirstChildElement("Connections");
+
+            for (int i = 0; i < (int) connectorTags.size(); i++)
+            {
+                tinyxml2::XMLElement* currentConnector = connectorElement->FirstChildElement(connectorTags[i].c_str());
+
+                if ( currentConnector )
+                {
+                    std::vector<int> currentConnectorInfo;
+
+                    //-- Get who is the module connected to this one
+                    currentConnectorInfo.push_back(atoi(currentConnector->Attribute("connectedTo")));
+
+                    //-- Get who is the connector connected to this one
+                    const char* connectorStr = currentConnector->Attribute("connector");
+                    std::string connectorStdStr = std::string(connectorStr);
+                    removeBadCharacters(connectorStdStr);
+
+                    if ( connectorStdStr.compare("front") == 0)
+                    {
+                        currentConnectorInfo.push_back(0);
+                    }
+                    else if ( connectorStdStr.compare("right") == 0)
+                    {
+                        currentConnectorInfo.push_back(1);
+                    }
+                    else if ( connectorStdStr.compare("back") == 0)
+                    {
+                        currentConnectorInfo.push_back(2);
+                    }
+                    else if ( connectorStdStr.compare("left") == 0)
+                    {
+                        currentConnectorInfo.push_back(3);
+                    }
+
+                    //-- Get what is the orientation of this connection
+                    currentConnectorInfo.push_back(atoi(currentConnector->Attribute("orientation")));
+
+                    //-- Add current connector data to the table
+                    connectorInfo.push_back(currentConnectorInfo);
+                }
+                else
+                {
+                    connectorInfo.push_back( std::vector<int>() );
+                }
+            }
+
+            connector_info_vector.push_back(connectorInfo);
+
+
         }
 
         //-- Get next element
@@ -161,6 +220,23 @@ std::vector<int> hormodular::ConfigParser::getNumLimbsIDs()
 std::vector<int> hormodular::ConfigParser::getLimbsIDs()
 {
     return id_limbs_vector;
+}
+
+std::vector<std::vector<int> > ConfigParser::getConnectorInfo(int moduleIndex)
+{
+    if ( moduleIndex < 0 || moduleIndex >= numModules )
+    {
+        std::vector< std::vector<int> > answer;
+        answer.push_back(std::vector<int>());
+        answer.push_back(std::vector<int>());
+        answer.push_back(std::vector<int>());
+        answer.push_back(std::vector<int>());
+
+        std::cerr << "[ConfigParser] Error: selected id (" << moduleIndex <<") does not exist." << std::endl;
+        return answer;
+    }
+
+    return connector_info_vector[moduleIndex];
 }
 
 void hormodular::ConfigParser::clearData()
