@@ -197,7 +197,7 @@ std::vector<int> hormodular::ConfigParser::getJointIDs()
     return jointIDs;
 }
 
-std::vector<ModuleFunction> hormodular::ConfigParser::getFunctionIDs()
+std::vector<hormodular::ModuleFunction> hormodular::ConfigParser::getFunctionIDs()
 {
     return id_function_vector;
 }
@@ -222,7 +222,7 @@ std::vector<int> hormodular::ConfigParser::getLimbsIDs()
     return id_limbs_vector;
 }
 
-std::vector<std::vector<int> > ConfigParser::getConnectorInfo(int moduleIndex)
+std::vector<std::vector<int> > hormodular::ConfigParser::getConnectorInfo(int moduleIndex)
 {
     if ( moduleIndex < 0 || moduleIndex >= numModules )
     {

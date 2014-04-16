@@ -108,7 +108,7 @@ std::vector<float> hormodular::SimulatedModularRobotInterface::getJointValues()
     return joint_values;
 }
 
-void SimulatedModularRobotInterface::calculatePos()
+void hormodular::SimulatedModularRobotInterface::calculatePos()
 {
     //-- Get current robot position
     OpenRAVE::Vector robot_pos = simulation->getRobot(0)->GetCenterOfMass();

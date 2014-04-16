@@ -18,7 +18,7 @@
 #ifndef CONFIGPARSER_H
 #define CONFIGPARSER_H
 
-#include "Module.h"
+#include <iostream>
 #include <string>
 #include <cstring>
 #include <vector>
@@ -26,6 +26,12 @@
 #include <tinyxml2.h>
 
 namespace hormodular {
+
+enum ModuleFunction { ModuleFunction_none = -1,
+                      ModuleFunction_limb = 0,
+                      ModuleFunction_thorax = 1,
+                      ModuleFunction_coxa = 2 };
+
 class ConfigParser
 {
     public:

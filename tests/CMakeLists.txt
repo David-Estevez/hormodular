@@ -26,10 +26,6 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} )
 #add_executable( testSerialCommSinusoidal testSerialCommSinusoidal.cpp )
 #target_link_libraries(testSerialCommSinusoidal serial )
 
-# Testing Configuration Parser:
-#add_executable(testConfigParser testConfigParser.cpp)
-#target_link_libraries(testConfigParser ConfigParser Module)
-
 # New.......................................
 # Test robot interface
 add_executable(testRobotInterface testRobotInterface.cpp)
@@ -61,4 +57,7 @@ add_executable(testConfigParser testConfigParser.cpp)
 target_link_libraries(testConfigParser gtest gtest_main)
 target_link_libraries(testConfigParser ConfigParser)
 
-
+# Testing Connections from ConfigParser
+add_executable(testConnectionsFromConfigParser testConnectionsFromConfigParser.cpp)
+target_link_libraries(testConnectionsFromConfigParser gtest gtest_main)
+target_link_libraries(testConnectionsFromConfigParser ConfigParser)
