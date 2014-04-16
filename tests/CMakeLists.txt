@@ -60,4 +60,4 @@ target_link_libraries(testConfigParser ConfigParser)
 # Testing Connections from ConfigParser
 add_executable(testConnectionsFromConfigParser testConnectionsFromConfigParser.cpp)
 target_link_libraries(testConnectionsFromConfigParser gtest gtest_main)
-target_link_libraries(testConnectionsFromConfigParser ConfigParser)
+target_link_libraries(testConnectionsFromConfigParser Module ConfigParser)
