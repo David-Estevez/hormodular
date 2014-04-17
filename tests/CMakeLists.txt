@@ -61,3 +61,8 @@ target_link_libraries(testConfigParser ConfigParser)
 add_executable(testConnectionsFromConfigParser testConnectionsFromConfigParser.cpp)
 target_link_libraries(testConnectionsFromConfigParser gtest gtest_main)
 target_link_libraries(testConnectionsFromConfigParser Module ConfigParser)
+
+# Testing ModularRobot
+add_executable(testModularRobot testModularRobot.cpp)
+target_link_libraries(testModularRobot gtest gtest_main)
+target_link_libraries(testModularRobot ModularRobot Module ConfigParser Oscillator ModularRobotInterface GaitTable )

@@ -29,7 +29,7 @@ TEST_F( ConnectionsFromConfigParserTest, connectionsLoadedOk)
 {
     //-- Create as many modules as needed
     for(int i = 0; i < configParser.getNumModules(); i++)
-        modules.push_back( new Module() );
+        modules.push_back( new Module(configParser) );
 
     //-- Attach the modules to the other modules
     for(int i = 0; i < (int) modules.size(); i++)

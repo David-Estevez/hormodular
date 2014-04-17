@@ -177,7 +177,7 @@ float hormodular::GaitTable::at(int id, int parameter)
 
     if ( tableRow == -1)
     {
-        std::cerr << "[GaitTable] Error: ID not found on gait table. Creating row..." << std::endl;
+        std::cerr << "[GaitTable] Error: ID not found on gait table." << std::endl;
         return 0;
     }
 
@@ -191,8 +191,13 @@ std::vector<float> hormodular::GaitTable::getParameters(int id)
 
     if ( tableRow == -1)
     {
-        std::cerr << "[GaitTable] Error: ID not found on gait table. Creating row..." << std::endl;
-        return std::vector<float>();
+        std::cerr << "[GaitTable] Error: ID not found on gait table." << std::endl;
+        std::vector<float> vector_of_zeroes;
+
+        for (int i = 0; i < num_parameters; i++)
+            vector_of_zeroes.push_back(0);
+
+        return vector_of_zeroes;
     }
 
     return data[tableRow];

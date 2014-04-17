@@ -18,16 +18,22 @@
 #ifndef MODULE_H
 #define MODULE_H
 
+#include <string>
+
 #include "Connector.hpp"
+#include "SinusoidalOscillator.h"
 #include "ConfigParser.h"
+#include "GaitTable.h"
 
 namespace hormodular {
 
 class Module
 {
     public:
-        Module();
+        Module( ConfigParser configParser);
         ~Module();
+
+        bool reset();
 
         bool attach( int localConnector, Connector* remoteConnector, int orientation = -1);
         Connector* getConnector(int localConnector);
@@ -35,11 +41,25 @@ class Module
         bool processHormones();
         bool sendHormones();
 
+        bool updateOscillatorParameters();
+        float calculateNextJointPos();
+
+        bool updateElapsedTime(int timeIncrement_ms);
+
         unsigned long getID();
+        float getCurrentJointPos();
 
     private:
+        ConfigParser configParser;
+
+        GaitTable * gaitTable;
         std::vector<Connector*> connectors;
+        Oscillator* oscillator;
+
         unsigned long id;
+        float currentJointPos;
+
+        unsigned long elapsedTime;
 };
 
 }

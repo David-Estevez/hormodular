@@ -95,7 +95,7 @@ TEST_F( MovementTestWithGaitTable, robotMovesIfWave)
         for( int i = 0; i < (int) ids.size(); i++)
         {
             std::vector<float> parameters = gaitTable->getParameters(ids[i]);
-            oscillators[i]->setParameters(parameters[0], parameters[1], parameters[0], 1000);
+            oscillators[i]->setParameters(parameters[0], parameters[1], parameters[2], 1000);
         }
 
         //-- Update joint values
