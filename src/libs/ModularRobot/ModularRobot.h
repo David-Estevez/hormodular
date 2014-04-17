@@ -18,7 +18,34 @@
 #ifndef MODULAR_ROBOT_H
 #define MODULAR_ROBOT_H
 
+#include "ConfigParser.h"
+#include "Module.hpp"
+#include "ModularRobotInterface.hpp"
+#include "ModularRobotInterfaceFactory.hpp"
+
 namespace hormodular {
 
+class ModularRobot
+{
+    public:
+        ModularRobot(ConfigParser configParser);
+        ~ModularRobot();
+
+        bool run(unsigned long runTime);
+        bool reset();
+
+        float getTravelledDistance();
+
+   private:
+        bool attachModules();
+
+        ConfigParser configParser;
+        std::vector<Module *> modules;
+        ModularRobotInterface * robotInterface;
+
+        unsigned long elapsed_time;
+        int step_ms;
+        std::vector<float> joint_values;
+};
 }
 #endif //-- MODULAR_ROBOT_H
