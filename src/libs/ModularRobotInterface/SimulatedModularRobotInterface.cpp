@@ -58,7 +58,7 @@ float hormodular::SimulatedModularRobotInterface::getTravelledDistance()
                  pow( current_pos.second - start_pos.second, 2));
 }
 
-bool hormodular::SimulatedModularRobotInterface::sendJointValues(std::vector<float> joint_values, int step_ms)
+bool hormodular::SimulatedModularRobotInterface::sendJointValues(std::vector<float> joint_values, float step_ms)
 {
     if (!controller)
     {
@@ -73,11 +73,12 @@ bool hormodular::SimulatedModularRobotInterface::sendJointValues(std::vector<flo
     for (int i = 0; i < (int) joint_values.size(); i++)
         is << joint_values[i] << " ";
 
+    //std::cout << "[Debug] Joint values sent:" << is.str() << std::endl;
     if (!controller->SendCommand(os,is) )
         return false;
 
     if ( step_ms > 0)
-        simulation->step(step_ms);
+        simulation->step(step_s);
 
     return true;
 }

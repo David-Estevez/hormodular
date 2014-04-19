@@ -33,7 +33,7 @@ class ModularRobotInterface
         virtual bool reset() = 0;
 
         virtual float getTravelledDistance() = 0;
-        virtual bool sendJointValues(std::vector<float> joint_values, int step_ms=0) = 0;
+        virtual bool sendJointValues(std::vector<float> joint_values, float step_ms=0) = 0;
         virtual std::vector<float> getJointValues() = 0;
 
 };

@@ -12,6 +12,7 @@ hormodular::Module::Module(ConfigParser configParser)
     //-- Create gait table
     //! \todo Use configParser for this:
     const std::string GAIT_TABLE_FILEPATH = "../../data/test/test_gait_table.txt";
+    //const std::string GAIT_TABLE_FILEPATH = "../data/test/test_gait_table.txt";
     gaitTable = new GaitTable(GAIT_TABLE_FILEPATH);
 
     reset();
@@ -51,7 +52,8 @@ bool hormodular::Module::attach(int localConnector, Connector *remoteConnector, 
 
     connectors[localConnector]->remoteConnector = remoteConnector;
 
-    std::cout << "[Module] Warning: ignoring orientation!" << std::endl;
+    //! \todo I should not take the orientation from the config file happily
+    connectors[localConnector]->localOrientation = orientation;
 
     return true;
 }
@@ -72,47 +74,48 @@ hormodular::Connector *hormodular::Module::getConnector(int localConnector)
 bool hormodular::Module::processHormones()
 {
    //! \todo parseHormones
-   //-- Classify incoming hormones by type
-    std::vector<Hormone> pingHormones;
-    std::vector<int> originConnector;
+
+    //-- Find local ID from "Ping" hormones
+    unsigned int tempID = 0;
 
     for (int i = 0; i < (int) connectors.size(); i++)
         if ( connectors[i] != NULL )
         {
-            for (int j = 0; j < (int) connectors[i]->inputBuffer.size(); i++)
+            bool foundPingHormone = false;
+            for (int j = 0; j < (int) connectors[i]->inputBuffer.size(); j++)
             {
                 if ( connectors[i]->inputBuffer[j].getType() == Hormone::PING_HORMONE )
                 {
-                    pingHormones.push_back(connectors[i]->inputBuffer[j]);
-                    originConnector.push_back(i);
+                    Hormone pingHormone = connectors[i]->inputBuffer[j];
+                    tempID += (pingHormone.getSourceConnector() + connectors[i]->localOrientation* 4) * pow(17, i);
+                    foundPingHormone = true;
                 }
             }
+            if (!foundPingHormone)
+                tempID += 16 * pow( 17, i);
 
             connectors[i]->inputBuffer.clear();
         }
-
-    //-- IF there are incoming hormones, process them
-    if( pingHormones.size() > 0 )
-    {
-        if ( originConnector[0] == 0 && pingHormones[0].getSourceConnector() == 2)
-        {
-            id = 0;
-        }
-        else if ( originConnector[0] == 2 && pingHormones[0].getSourceConnector() == 0)
-        {
-            id = 1;
-        }
         else
         {
-            id = (unsigned long) -1;
+            std::cerr << "[Module] Error ocurred when accesing connector " << i << ", conector doesn't exist."
+                         << std::endl;
+            return false;
         }
-    }
+
+        id = tempID;
 
     //-- Set ping hormones on the outputBuffer of the connectors
     for (int i = 0; i < (int) connectors.size(); i++)
         if ( connectors[i] != NULL )
         {
             connectors[i]->outputBuffer.push_back( Hormone( i, Hormone::PING_HORMONE ));
+        }
+        else
+        {
+            std::cerr << "[Module] Error ocurred when accesing connector " << i << ", conector doesn't exist."
+                         << std::endl;
+            return false;
         }
 
    return true;

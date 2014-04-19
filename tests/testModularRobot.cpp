@@ -3,10 +3,6 @@
 #include <string>
 #include <vector>
 #include "ConfigParser.h"
-#include "Module.hpp"
-#include "ModularRobotInterface.hpp"
-#include "ModularRobotInterfaceFactory.hpp"
-#include "GaitTable.h"
 #include "ModularRobot.h"
 
 using namespace hormodular;
@@ -45,5 +41,5 @@ TEST_F( ModularRobotTest, robotMovesUsingHormonesAndTable)
 
     float distance = modularRobot->getTravelledDistance();
     std::cout << "Distance travelled: " << distance << std::endl;
-    EXPECT_LT(600, distance );
+    EXPECT_LT(0.1, distance );
 }

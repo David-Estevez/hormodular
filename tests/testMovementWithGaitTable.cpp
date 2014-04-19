@@ -77,8 +77,8 @@ TEST_F( MovementTestWithGaitTable, robotMovesIfWave)
     std::vector<float> joint_values;
 
     std::vector<unsigned long> ids;
-    ids.push_back(0);
-    ids.push_back(1);
+    ids.push_back(83506);
+    ids.push_back(78896);
 
 
     //-- Initialize joint vector to 0
@@ -110,5 +110,5 @@ TEST_F( MovementTestWithGaitTable, robotMovesIfWave)
 
     float distance = robotInterface->getTravelledDistance();
     std::cout << "Distance travelled: " << distance << std::endl;
-    EXPECT_LT(0, distance );
+    EXPECT_LT(0.1, distance );
 }

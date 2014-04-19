@@ -76,6 +76,8 @@ bool hormodular::ModularRobot::run(unsigned long runTime)
                 modules[i]->updateElapsedTime(step_ms);
 
             elapsed_time+=step_ms;
+            //std::cout << "Run time: " << elapsed_time << std::endl;
+            //usleep( step_ms * 1000);
         }
 
         return true;

@@ -88,5 +88,7 @@ TEST_F( MovementTest, robotMovesIfWave)
         elapsed_time+=step_ms;
     }
 
-    EXPECT_LT(0, robotInterface->getTravelledDistance() );
+    float distance = robotInterface->getTravelledDistance();
+    std::cout << "Distance travelled: " << distance << std::endl;
+    EXPECT_LT(0.1, distance );
 }

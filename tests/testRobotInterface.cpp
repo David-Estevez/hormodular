@@ -34,14 +34,6 @@ TEST_F(RobotInterfaceTest,createdRobotInterfaceExists)
 
 TEST_F(RobotInterfaceTest,resetResetsRobotInterface)
 {
-//    robot->reset();
-
-//    EXPECT_EQ(0, robot->getTravelledDistance());
-
-//    int x, y;
-//    robot->getPos( x, y);
-//    EXPECT_EQ(0, x);
-//    EXPECT_EQ(0, y);
     int result = robotInterface->reset();
     EXPECT_TRUE(result);
 
@@ -56,8 +48,8 @@ TEST_F(RobotInterfaceTest, sendJointValuesSendsJointValues)
     robotInterface->reset();
 
     std::vector<float> joint_values_sent, joint_values_received;
-    joint_values_sent.push_back(15);
-    joint_values_sent.push_back(-15);
+    joint_values_sent.push_back(30);
+    joint_values_sent.push_back(-45);
 
     for(int i = 0; i < 5000; i ++)
     {
@@ -66,6 +58,6 @@ TEST_F(RobotInterfaceTest, sendJointValuesSendsJointValues)
     }
 
     joint_values_received = robotInterface->getJointValues();
-    EXPECT_NEAR(15, joint_values_received[0], 5);
-    EXPECT_NEAR(-15, joint_values_received[1], 5);
+    EXPECT_NEAR(30, joint_values_received[0], 5);
+    EXPECT_NEAR(-45, joint_values_received[1], 5);
 }

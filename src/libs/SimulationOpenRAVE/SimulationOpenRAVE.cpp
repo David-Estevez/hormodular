@@ -64,6 +64,8 @@ void hormodular::SimulationOpenRAVE::init()
     //-- Load the scene and wait for it to be ready:
     if ( !penv->Load( environment_file) )
     {
+        std::cerr<< "[SimulationOpenRAVE] Error: could not load environment file!" << std::endl;
+        std::cerr<< "Aborting program..." << std::endl;
         penv->Destroy();
         exit(-1);
     }
@@ -121,7 +123,7 @@ OpenRAVE::RobotBasePtr hormodular::SimulationOpenRAVE::getRobot(int index) const
 
 void hormodular::SimulationOpenRAVE::showViewer()
 {
-    this->show_simulation = true;
+    show_simulation = true;
     pthviewer = new boost::thread(boost::bind(&hormodular::SimulationOpenRAVE::startViewer, this));
     usleep(200000);
 }

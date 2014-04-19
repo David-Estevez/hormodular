@@ -66,8 +66,8 @@ TEST_F( ConnectionsFromConfigParserTest, connectionsLoadedOk)
             EXPECT_TRUE(modules[i]->sendHormones());
         }
 
-    EXPECT_EQ( 0, modules[0]->getID() );
-    EXPECT_EQ( 1, modules[1]->getID() );
+    EXPECT_EQ( 83506, modules[0]->getID() );
+    EXPECT_EQ( 78896, modules[1]->getID() );
 
 
     //-- End of Hormone communication

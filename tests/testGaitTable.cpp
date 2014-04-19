@@ -38,8 +38,8 @@ TEST_F( GaitTableTest, twoIDsLoaded)
     std::vector<unsigned long> IDs = gaitTable->getIDs();
 
     EXPECT_EQ(2, IDs.size());
-    EXPECT_EQ(0, IDs[0]);
-    EXPECT_EQ(1, IDs[1]);
+    EXPECT_EQ(83506, IDs[0]);
+    EXPECT_EQ(78896, IDs[1]);
     EXPECT_EQ(3, gaitTable->getNumParameters());
 }
 
@@ -47,8 +47,8 @@ TEST_F( GaitTableTest, selectByIDReturnsParametersCorrectly)
 {
     std::vector<float> answer1, answer2;
 
-    answer1 = gaitTable->getParameters(0);
-    answer2 = gaitTable->getParameters(1);
+    answer1 = gaitTable->getParameters(83506);
+    answer2 = gaitTable->getParameters(78896);
 
     ASSERT_EQ(3, answer1.size());
     ASSERT_EQ(3, answer2.size());

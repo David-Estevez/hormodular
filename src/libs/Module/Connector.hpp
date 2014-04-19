@@ -30,6 +30,7 @@ class Connector
         std::vector<Hormone> outputBuffer;
 
         Connector * remoteConnector;
+        int localOrientation;
 };
 
 }
