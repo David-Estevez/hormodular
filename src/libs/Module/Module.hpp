@@ -19,6 +19,7 @@
 #define MODULE_H
 
 #include <string>
+#include <sstream>
 
 #include "Connector.hpp"
 #include "SinusoidalOscillator.h"

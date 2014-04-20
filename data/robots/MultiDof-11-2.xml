@@ -45,7 +45,7 @@
 		</IDs>
 		
 		<Connections>
-			<front connectedTo="3" connector="back" orientation="3"/>
+			<front connectedTo="7" connector="back" orientation="3"/>
 			<back connectedTo="0" connector="right" orientation="1"/>
 		</Connections>
 	</Module>	

@@ -1,0 +1,116 @@
+<ModularRobot name="MultiDof-7-tripod">
+	<simulationFile>../../data/models/REPY-2.1/MultiDof-7-tripod.env.xml</simulationFile>
+	<gaitTableFolder>../data/gait tables/test</gaitTableFolder>
+	<Module>
+		<Joint>0</Joint>
+		<IDs>
+			<Function>Thorax</Function>
+			<Depth>-1</Depth>
+			<Shape>31466</Shape>
+			<NumLimbs>3</NumLimbs>
+			<LimbID>-1</LimbID>
+		</IDs>	
+		
+		<Connections>
+			<right connectedTo="2" connector="back" orientation="3"/>
+			<back connectedTo="1" connector="back" orientation="1"/>
+			<left connectedTo="3" connector="back" orientation="1"/>
+		</Connections>
+	</Module>	
+	
+	<Module>
+		<Joint>1</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>1</Depth>
+			<Shape>80628</Shape>
+			<NumLimbs>3</NumLimbs>
+			<LimbID>-1</LimbID>
+		</IDs>
+		
+		<Connections>
+			<front connectedTo="4" connector="back" orientation="3"/>
+			<back connectedTo="0" connector="back" orientation="1"/>
+		</Connections>
+	</Module>	
+	
+	<Module>
+		<Joint>2</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>1</Depth>
+			<Shape>80339</Shape>
+			<NumLimbs>3</NumLimbs>
+			<LimbID>0</LimbID>
+		</IDs>
+		
+		<Connections>
+			<front connectedTo="5" connector="back" orientation="3"/>
+			<back connectedTo="0" connector="right" orientation="1"/>
+		</Connections>
+	</Module>	
+	
+	<Module>
+		<Joint>3</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>1</Depth>
+			<Shape>80917</Shape>
+			<NumLimbs>3</NumLimbs>
+			<LimbID>1</LimbID>
+		</IDs>
+		
+		<Connections>
+			<front connectedTo="6" connector="back" orientation="3"/>
+			<back connectedTo="0" connector="left" orientation="1"/>
+		</Connections>
+	</Module>	
+	
+	<Module>
+		<Joint>4</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>80052</Shape>
+			<NumLimbs>3</NumLimbs>
+			<LimbID>-1</LimbID>
+		</IDs>	
+		
+		<Connections>
+			<back connectedTo="1" connector="front" orientation="1"/>
+		</Connections>
+	</Module>	
+	
+	
+	<Module>
+		<Joint>5</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>80052</Shape>
+			<NumLimbs>3</NumLimbs>
+			<LimbID>0</LimbID>
+		</IDs>
+		
+		<Connections>
+			<back connectedTo="2" connector="front" orientation="1"/>
+		</Connections>		
+	</Module>	
+
+	<Module>
+		<Joint>6</Joint>
+		<IDs>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>80052</Shape>
+			<NumLimbs>3</NumLimbs>
+			<LimbID>1</LimbID>
+		</IDs>
+		
+		<Connections>
+			<back connectedTo="3" connector="front" orientation="1"/>
+		</Connections>		
+	</Module>	
+	
+	
+</ModularRobot>

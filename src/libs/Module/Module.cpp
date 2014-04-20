@@ -36,7 +36,7 @@ hormodular::Module::~Module()
 bool hormodular::Module::reset()
 {
    id = (unsigned long) -1;
-   configurationId = 0;
+   configurationId = -1;
    currentJointPos = 0;
    elapsedTime = 0;
 
@@ -181,19 +181,55 @@ bool hormodular::Module::processHormones()
 
     //-- "Head" modules
     //-------------------------------------------------------------------------------------------------------
+    std::stringstream  configurationIdStr;
+    configurationIdStr << configurationId;
+
     if (headModule)
     {
         //-- Generate head hormones to tell the other modules who the hell are they
+        for (int i = 0; i < (int) activeConnectors.size(); i++)
+            activeConnectors[i]->outputBuffer.push_back( Hormone( activeConnectorsIndex[i],
+                                                                  Hormone::HEAD_HORMONE,
+                                                                  configurationIdStr.str()));
     }
     else
     {
+        std::vector<int> headHormoneReceivedConnectors;
+        std::vector<int> headHormoneNotReceivedConnectors;
+
         //-- If there is any head hormone
+        for (int i = 0; i < (int) activeConnectors.size(); i++)
+            for (int j = 0; j < (int) activeConnectors[i]->inputBuffer.size(); j++)
+                if ( activeConnectors[i]->inputBuffer[j].getType() == Hormone::HEAD_HORMONE )
+                {
+                    headHormoneReceivedConnectors.push_back(i);
+
+                    configurationId = atoi(activeConnectors[i]->inputBuffer[j].getData().c_str());
+                    break;
+                }
+                else
+                {
+                    headHormoneNotReceivedConnectors.push_back(i);
+                    break;
+                }
+
+        if( headHormoneReceivedConnectors.size() > 0 )
+            for (int i = 0; i < (int) headHormoneNotReceivedConnectors.size(); i++)
+            {
+                Connector * outputConnector = activeConnectors[headHormoneNotReceivedConnectors[i]];
+                outputConnector->outputBuffer.push_back( Hormone( activeConnectorsIndex[headHormoneNotReceivedConnectors[i]],
+                                                                   Hormone::HEAD_HORMONE,
+                                                                   configurationIdStr.str()));
+            }
+
     }
 
 
     //-- Clean input buffers
     for (int i = 0; i < (int) connectors.size(); i++)
         connectors[i]->inputBuffer.clear();
+
+    std::cout << "[Debug] Id: " << id << "-> " << configurationId << std::endl;
 
    return true;
 }
