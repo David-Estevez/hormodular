@@ -57,6 +57,8 @@ class Module
         Oscillator* oscillator;
 
         unsigned long id;
+        int configurationId;
+
         float currentJointPos;
 
         unsigned long elapsedTime;

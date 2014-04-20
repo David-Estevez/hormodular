@@ -30,8 +30,9 @@ class ModularRobotTest : public testing::Test
         }
 };
 
-//const std::string ConnectionsFromConfigParserTest::FILEPATH = "../../data/test/Test_robot.xml";
-const std::string ModularRobotTest::FILEPATH = "../../data/test/Test_robot2.xml";
+//const std::string ModularRobotTest::FILEPATH = "../../data/test/Test_robot.xml";
+//const std::string ModularRobotTest::FILEPATH = "../../data/test/Test_robot2.xml";
+const std::string ModularRobotTest::FILEPATH = "../../data/robots/MultiDof-11-2.xml";
 
 TEST_F( ModularRobotTest, robotMovesUsingHormonesAndTable)
 {

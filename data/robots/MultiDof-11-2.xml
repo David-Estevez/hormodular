@@ -1,5 +1,5 @@
 <ModularRobot name="MultiDof-11-2">
-	<simulationFile>../data/models/REPY-2.1/MultiDof-11-2.env.xml</simulationFile>
+	<simulationFile>../../data/models/REPY-2.1/MultiDof-11-2.env.xml</simulationFile>
 	<gaitTableFolder>../data/gait tables/test</gaitTableFolder>
 	<Module>
 		<Joint>0</Joint>
@@ -10,6 +10,12 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>	
+		
+		<Connections>
+			<right connectedTo="2" connector="back" orientation="3"/>
+			<back connectedTo="1" connector="back" orientation="1"/>
+			<left connectedTo="3" connector="back" orientation="1"/>
+		</Connections>
 	</Module>	
 	
 	<Module>
@@ -21,6 +27,11 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>
+		
+		<Connections>
+			<front connectedTo="4" connector="back" orientation="3"/>
+			<back connectedTo="0" connector="back" orientation="1"/>
+		</Connections>
 	</Module>	
 	
 	<Module>
@@ -32,6 +43,11 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>0</LimbID>
 		</IDs>
+		
+		<Connections>
+			<front connectedTo="3" connector="back" orientation="3"/>
+			<back connectedTo="0" connector="right" orientation="1"/>
+		</Connections>
 	</Module>	
 	
 	<Module>
@@ -43,6 +59,11 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>1</LimbID>
 		</IDs>
+		
+		<Connections>
+			<front connectedTo="8" connector="back" orientation="3"/>
+			<back connectedTo="0" connector="left" orientation="1"/>
+		</Connections>
 	</Module>	
 	
 	<Module>
@@ -54,6 +75,12 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>	
+		
+		<Connections>
+			<right connectedTo="5" connector="back" orientation="1"/>
+			<back connectedTo="1" connector="front" orientation="1"/>
+			<left connectedTo="6" connector="back" orientation="1"/>
+		</Connections>
 	</Module>	
 	
 	<Module>
@@ -65,6 +92,11 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>2</LimbID>
 		</IDs>
+		
+		<Connections>
+			<front connectedTo="9" connector="back" orientation="3"/>
+			<back connectedTo="4" connector="right" orientation="3"/>
+		</Connections>
 	</Module>	
 	
 	<Module>
@@ -76,6 +108,11 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>3</LimbID>
 		</IDs>
+		
+		<Connections>
+			<front connectedTo="10" connector="back" orientation="3"/>
+			<back connectedTo="4" connector="left" orientation="3"/>
+		</Connections>
 	</Module>	
 	
 	<Module>
@@ -86,7 +123,11 @@
 			<Shape>80052</Shape>
 			<NumLimbs>4</NumLimbs>
 			<LimbID>0</LimbID>
-		</IDs>		
+		</IDs>
+		
+		<Connections>
+			<back connectedTo="2" connector="front" orientation="1"/>
+		</Connections>		
 	</Module>	
 
 	<Module>
@@ -98,6 +139,10 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>1</LimbID>
 		</IDs>
+		
+		<Connections>
+			<back connectedTo="3" connector="front" orientation="1"/>
+		</Connections>		
 	</Module>	
 	
 	<Module>
@@ -109,6 +154,10 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>2</LimbID>
 		</IDs>
+		
+		<Connections>
+			<back connectedTo="5" connector="front" orientation="1"/>
+		</Connections>		
 	</Module>	
 	
 	<Module>
@@ -120,5 +169,9 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>3</LimbID>
 		</IDs>
+		
+		<Connections>
+			<back connectedTo="6" connector="front" orientation="1"/>
+		</Connections>		
 	</Module>	
 </ModularRobot>

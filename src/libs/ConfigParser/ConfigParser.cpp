@@ -66,25 +66,28 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
             //-- Get Auxiliar IDs
             tinyxml2::XMLElement* idsElement = moduleNode->FirstChildElement("IDs");
 
-            //-- Get Function ID
-            const char* functionStr = idsElement->FirstChildElement("Function")->GetText();
-            std::string functionStdStr = std::string(functionStr);
-            removeBadCharacters(functionStdStr);
+            if ( idsElement != NULL )
+            {
+                //-- Get Function ID
+                const char* functionStr = idsElement->FirstChildElement("Function")->GetText();
+                std::string functionStdStr = std::string(functionStr);
+                removeBadCharacters(functionStdStr);
 
-            if ( functionStdStr.compare("Limb") == 0)
-                id_function_vector.push_back(ModuleFunction_limb);
-            else if ( functionStdStr.compare("Coxa") == 0)
-                id_function_vector.push_back(ModuleFunction_coxa);
-            else if ( functionStdStr.compare("Thorax") == 0)
-                id_function_vector.push_back(ModuleFunction_thorax);
-            else
-                id_function_vector.push_back(ModuleFunction_none);
+                if ( functionStdStr.compare("Limb") == 0)
+                    id_function_vector.push_back(ModuleFunction_limb);
+                else if ( functionStdStr.compare("Coxa") == 0)
+                    id_function_vector.push_back(ModuleFunction_coxa);
+                else if ( functionStdStr.compare("Thorax") == 0)
+                    id_function_vector.push_back(ModuleFunction_thorax);
+                else
+                    id_function_vector.push_back(ModuleFunction_none);
 
-            //-- Get Remaining IDs
-            id_depth_vector.push_back(atoi(idsElement->FirstChildElement("Depth")->GetText()));
-            id_shape_vector.push_back(atoi(idsElement->FirstChildElement("Shape")->GetText()));
-            id_num_limbs_vector.push_back(atoi(idsElement->FirstChildElement("NumLimbs")->GetText()));
-            id_limbs_vector.push_back(atoi(idsElement->FirstChildElement("LimbID")->GetText()));
+                //-- Get Remaining IDs
+                id_depth_vector.push_back(atoi(idsElement->FirstChildElement("Depth")->GetText()));
+                id_shape_vector.push_back(atoi(idsElement->FirstChildElement("Shape")->GetText()));
+                id_num_limbs_vector.push_back(atoi(idsElement->FirstChildElement("NumLimbs")->GetText()));
+                id_limbs_vector.push_back(atoi(idsElement->FirstChildElement("LimbID")->GetText()));
+            }
 
             //-- Get connector info
             std::vector< std::vector<int> > connectorInfo;

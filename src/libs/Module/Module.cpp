@@ -36,6 +36,7 @@ hormodular::Module::~Module()
 bool hormodular::Module::reset()
 {
    id = (unsigned long) -1;
+   configurationId = 0;
    currentJointPos = 0;
    elapsedTime = 0;
 
@@ -73,7 +74,10 @@ hormodular::Connector *hormodular::Module::getConnector(int localConnector)
 
 bool hormodular::Module::processHormones()
 {
-   //! \todo parseHormones
+    //-- Ping Hormones processing & sending
+    //-----------------------------------------------------------------------------------------------------
+    std::vector<Connector *> activeConnectors;
+    std::vector<int> activeConnectorsIndex;
 
     //-- Find local ID from "Ping" hormones
     unsigned int tempID = 0;
@@ -82,19 +86,23 @@ bool hormodular::Module::processHormones()
         if ( connectors[i] != NULL )
         {
             bool foundPingHormone = false;
+
             for (int j = 0; j < (int) connectors[i]->inputBuffer.size(); j++)
             {
                 if ( connectors[i]->inputBuffer[j].getType() == Hormone::PING_HORMONE )
                 {
                     Hormone pingHormone = connectors[i]->inputBuffer[j];
                     tempID += (pingHormone.getSourceConnector() + connectors[i]->localOrientation* 4) * pow(17, i);
+
                     foundPingHormone = true;
+                    activeConnectorsIndex.push_back(i);
+                    activeConnectors.push_back(connectors[i]);
+
+                    break;
                 }
             }
             if (!foundPingHormone)
                 tempID += 16 * pow( 17, i);
-
-            connectors[i]->inputBuffer.clear();
         }
         else
         {
@@ -103,20 +111,89 @@ bool hormodular::Module::processHormones()
             return false;
         }
 
-        id = tempID;
+    id = tempID;
 
     //-- Set ping hormones on the outputBuffer of the connectors
     for (int i = 0; i < (int) connectors.size(); i++)
-        if ( connectors[i] != NULL )
-        {
             connectors[i]->outputBuffer.push_back( Hormone( i, Hormone::PING_HORMONE ));
-        }
-        else
+
+
+    //-- Leg hormones processing & sending
+    //-------------------------------------------------------------------------------------------------------
+    std::vector<int> legHormoneReceivedConnectors;
+    std::vector<int> legHormoneNotReceivedConnectors;
+    bool headModule = false;
+
+    for (int i = 0; i < (int) activeConnectors.size(); i++)
+        for (int j = 0; j < (int) activeConnectors[i]->inputBuffer.size(); j++)
+            if ( activeConnectors[i]->inputBuffer[j].getType() == Hormone::LEG_HORMONE )
+            {
+                legHormoneReceivedConnectors.push_back(i);
+                break;
+            }
+            else
+            {
+                legHormoneNotReceivedConnectors.push_back(i);
+                break;
+            }
+
+
+    //-- Set leg hormones on the outputBuffer of the connectors
+    if( activeConnectors.size() != 0 )
+    {
+        if ( activeConnectors.size() == 1)
         {
-            std::cerr << "[Module] Error ocurred when accesing connector " << i << ", conector doesn't exist."
-                         << std::endl;
-            return false;
+            //-- This case is for the 'leg' modules, that have to generate the leg hormone flux
+            activeConnectors[0]->outputBuffer.push_back( Hormone( activeConnectorsIndex[0], Hormone::LEG_HORMONE ));
         }
+        else if ( activeConnectors.size() == legHormoneReceivedConnectors.size() )
+        {
+            //-- If a module receives 'leg' hormones in all its active connectors, it is the head module
+            std::cout << "Hey, I'm the head module! (I am module with id: " << id << ")" << std::endl;
+            headModule = true;
+
+            if (legHormoneReceivedConnectors.size() == 2)
+            {
+                std::cout << "I'm MultiDof-11-2!" << std::endl;
+                configurationId = 0;
+            }
+            else if ( legHormoneReceivedConnectors.size() == 3 )
+            {
+                std::cout << "I'm MultiDof-7-Tripod!" << std::endl;
+                configurationId = 1;
+            }
+            else if ( legHormoneReceivedConnectors.size() == 4 )
+            {
+                std::cout << "I'm MultiDof-9-Quad!" << std::endl;
+                configurationId = 2;
+            }
+        }
+        else if ( legHormoneReceivedConnectors.size() > 0)
+        {
+            //-- Otherwise, relay the hormones in all the active connectors that didn't receive leg hormones
+            for (int i = 0; i < (int) legHormoneNotReceivedConnectors.size(); i++)
+                activeConnectors[legHormoneNotReceivedConnectors[i]]->outputBuffer.push_back(
+                            Hormone( activeConnectorsIndex[legHormoneNotReceivedConnectors[i]], Hormone::LEG_HORMONE ));
+
+        }
+    }
+
+
+    //-- "Head" modules
+    //-------------------------------------------------------------------------------------------------------
+    if (headModule)
+    {
+        //-- Generate head hormones to tell the other modules who the hell are they
+    }
+    else
+    {
+        //-- If there is any head hormone
+    }
+
+
+    //-- Clean input buffers
+    for (int i = 0; i < (int) connectors.size(); i++)
+        connectors[i]->inputBuffer.clear();
 
    return true;
 }

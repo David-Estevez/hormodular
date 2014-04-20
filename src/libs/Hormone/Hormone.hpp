@@ -33,6 +33,8 @@ class Hormone
         std::string getData();
 
         static const int PING_HORMONE = 0;
+        static const int LEG_HORMONE = 1;
+        static const int HEAD_HORMONE = 2;
 
    private:
         int type;
