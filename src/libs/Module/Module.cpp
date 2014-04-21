@@ -123,6 +123,7 @@ bool hormodular::Module::processHormones()
     std::vector<int> legHormoneReceivedConnectors;
     std::vector<int> legHormoneNotReceivedConnectors;
     bool headModule = false;
+    bool legModule = false;
 
     for (int i = 0; i < (int) activeConnectors.size(); i++)
         for (int j = 0; j < (int) activeConnectors[i]->inputBuffer.size(); j++)
@@ -144,6 +145,9 @@ bool hormodular::Module::processHormones()
         if ( activeConnectors.size() == 1)
         {
             //-- This case is for the 'leg' modules, that have to generate the leg hormone flux
+	    std::cout << "Hey, I'm a leg module! (I am module with id: " << id << ")" << std::endl;
+	    legModule = true;
+
             activeConnectors[0]->outputBuffer.push_back( Hormone( activeConnectorsIndex[0], Hormone::LEG_HORMONE ));
         }
         else if ( activeConnectors.size() == legHormoneReceivedConnectors.size() )
@@ -181,21 +185,26 @@ bool hormodular::Module::processHormones()
 
     //-- "Head" modules
     //-------------------------------------------------------------------------------------------------------
-    std::stringstream  configurationIdStr;
-    configurationIdStr << configurationId;
-
     if (headModule)
     {
         //-- Generate head hormones to tell the other modules who the hell are they
         for (int i = 0; i < (int) activeConnectors.size(); i++)
+        {
+            std::stringstream  configurationIdStr;
+            configurationIdStr << configurationId;
+            configurationIdStr << " " << activeConnectorsIndex[i];
+
             activeConnectors[i]->outputBuffer.push_back( Hormone( activeConnectorsIndex[i],
                                                                   Hormone::HEAD_HORMONE,
                                                                   configurationIdStr.str()));
+        }
     }
     else
     {
         std::vector<int> headHormoneReceivedConnectors;
         std::vector<int> headHormoneNotReceivedConnectors;
+        std::string hormoneData;
+        std::vector<std::string> splitHormoneData;
 
         //-- If there is any head hormone
         for (int i = 0; i < (int) activeConnectors.size(); i++)
@@ -204,7 +213,14 @@ bool hormodular::Module::processHormones()
                 {
                     headHormoneReceivedConnectors.push_back(i);
 
-                    configurationId = atoi(activeConnectors[i]->inputBuffer[j].getData().c_str());
+                    hormoneData = activeConnectors[i]->inputBuffer[j].getData();
+                    splitHormoneData = splitString(hormoneData);
+
+                    configurationId = atoi(splitHormoneData[0].c_str());
+
+                    if (legModule)
+                        id = 83521 + atoi(splitHormoneData[1].c_str());
+
                     break;
                 }
                 else
@@ -215,11 +231,19 @@ bool hormodular::Module::processHormones()
 
         if( headHormoneReceivedConnectors.size() > 0 )
             for (int i = 0; i < (int) headHormoneNotReceivedConnectors.size(); i++)
-            {
+            {                
+                if ( configurationId == 0 && ( id == 31466 || id == 30752) )
+                {
+                    std::stringstream  configurationIdStr;
+                    configurationIdStr << configurationId;
+                    configurationIdStr << " " << i + atoi(splitHormoneData[1].c_str());
+                    hormoneData = configurationIdStr.str();
+                }
+
                 Connector * outputConnector = activeConnectors[headHormoneNotReceivedConnectors[i]];
                 outputConnector->outputBuffer.push_back( Hormone( activeConnectorsIndex[headHormoneNotReceivedConnectors[i]],
-                                                                   Hormone::HEAD_HORMONE,
-                                                                   configurationIdStr.str()));
+                                                                  Hormone::HEAD_HORMONE,
+                                                                  hormoneData));
             }
 
     }
@@ -278,4 +302,16 @@ unsigned long hormodular::Module::getID()
 float hormodular::Module::getCurrentJointPos()
 {
     return currentJointPos;
+}
+
+std::vector<std::string> hormodular::Module::splitString(std::string stringToSplit)
+{
+    /*
+      This code has been copied from: http://stackoverflow.com/questions/236129/how-to-split-a-string-in-c
+      */
+    std::vector<std::string> tokens;
+    std::istringstream iss(stringToSplit);
+    std::copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(), std::back_inserter<std::vector<std::string> >(tokens));
+    return tokens;
+
 }

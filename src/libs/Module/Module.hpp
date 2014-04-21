@@ -20,6 +20,8 @@
 
 #include <string>
 #include <sstream>
+#include <algorithm>
+#include <iterator>
 
 #include "Connector.hpp"
 #include "SinusoidalOscillator.h"
@@ -63,6 +65,8 @@ class Module
         float currentJointPos;
 
         unsigned long elapsedTime;
+
+	std::vector<std::string> splitString(std::string stringToSplit);
 };
 
 }
