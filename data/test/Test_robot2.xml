@@ -11,6 +11,9 @@
 		../../data/gait tables/test
 	</gaitTableFolder>
 	
+	<frequencyTable>
+		../../data/gait tables/frequencies.txt
+	</frequencyTable>
 	
 	<Module>
 		

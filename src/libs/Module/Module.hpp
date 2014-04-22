@@ -52,10 +52,13 @@ class Module
         unsigned long getID();
         float getCurrentJointPos();
 
+
     private:
         ConfigParser configParser;
 
-        GaitTable * gaitTable;
+        std::vector<GaitTable *> gaitTables;
+        GaitTable * frequencyTable;
+
         std::vector<Connector*> connectors;
         Oscillator* oscillator;
 
@@ -70,5 +73,7 @@ class Module
 };
 
 }
+
+
 
 #endif //-- MODULE_H

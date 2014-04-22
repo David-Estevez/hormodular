@@ -7,7 +7,7 @@ hormodular::SimulatedModularRobotInterface::SimulatedModularRobotInterface(hormo
     step_s = step_ms / (double)1000;
 
     //!-- \todo Add options changeOption("option", "newValue"); to the inteface
-    simulation = new SimulationOpenRAVE( environment_file, false);
+    simulation = new SimulationOpenRAVE( environment_file, true);
 
     controller = simulation->getRobot(0)->GetController();
 

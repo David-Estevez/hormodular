@@ -42,6 +42,7 @@ class ConfigParser
         std::string getRobotName();
         std::string getSimulationFile();
         std::string getGaitTableFolder();
+        std::string getFrequencyTableFile();
         int getNumModules();
         int getJointID(const int& module);
         std::vector<int> getJointIDs();
@@ -59,6 +60,7 @@ class ConfigParser
         std::string robotName;
         std::string simulationFile;
         std::string gaitTableFolder;
+        std::string frequencyTableFile;
         int numModules;
         std::vector<int> jointIDs;
         std::vector<ModuleFunction> id_function_vector;

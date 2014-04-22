@@ -38,6 +38,12 @@ TEST_F( ConfigParserTest, gaitTableFolderIsOk)
     EXPECT_STREQ( "../../data/gait tables/test", configParser.getGaitTableFolder().c_str() );
 }
 
+
+TEST_F( ConfigParserTest, frequencyTableIsOk)
+{
+    EXPECT_STREQ( "../../data/gait tables/frequencies.txt", configParser.getFrequencyTableFile().c_str() );
+}
+
 TEST_F( ConfigParserTest, numberOfModulesIsOk)
 {
     EXPECT_EQ(2, configParser.getNumModules());

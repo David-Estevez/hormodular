@@ -32,8 +32,8 @@ class ModularRobotTest : public testing::Test
 
 //const std::string ModularRobotTest::FILEPATH = "../../data/test/Test_robot.xml";
 //const std::string ModularRobotTest::FILEPATH = "../../data/test/Test_robot2.xml";
-const std::string ModularRobotTest::FILEPATH = "../../data/robots/MultiDof-11-2.xml";
-//const std::string ModularRobotTest::FILEPATH = "../../data/robots/MultiDof-7-tripod.xml";
+//const std::string ModularRobotTest::FILEPATH = "../../data/robots/MultiDof-11-2.xml";
+const std::string ModularRobotTest::FILEPATH = "../../data/robots/MultiDof-7-tripod.xml";
 //const std::string ModularRobotTest::FILEPATH = "../../data/robots/MultiDof-9-quad.xml";
 
 TEST_F( ModularRobotTest, robotMovesUsingHormonesAndTable)

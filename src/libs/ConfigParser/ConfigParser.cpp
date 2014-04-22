@@ -49,6 +49,11 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
     gaitTableFolder = std::string(gaitTableFolderStr);
     removeBadCharacters(gaitTableFolder);
 
+    //-- Frequency table
+    const char * frequencyTableFileStr = modularRobotElement->FirstChildElement("frequencyTable")->GetText();
+    frequencyTableFile = std::string(frequencyTableFileStr);
+    removeBadCharacters(frequencyTableFile);
+
     //-- Get modules
     int auxNumModules = 0;
     tinyxml2::XMLNode* moduleNode = modularRobotElement->FirstChild();
@@ -185,6 +190,11 @@ std::string hormodular::ConfigParser::getGaitTableFolder()
     return gaitTableFolder;
 }
 
+std::string hormodular::ConfigParser::getFrequencyTableFile()
+{
+    return frequencyTableFile;
+}
+
 int hormodular::ConfigParser::getNumModules()
 {
     return numModules;
@@ -247,6 +257,7 @@ void hormodular::ConfigParser::clearData()
     robotName = "";
     simulationFile = "";
     gaitTableFolder = "";
+    frequencyTableFile = "";
     numModules = 0;
     jointIDs.clear();
     id_function_vector.clear();

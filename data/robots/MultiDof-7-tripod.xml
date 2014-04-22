@@ -1,6 +1,7 @@
 <ModularRobot name="MultiDof-7-tripod">
 	<simulationFile>../../data/models/REPY-2.1/MultiDof-7-tripod.env.xml</simulationFile>
-	<gaitTableFolder>../data/gait tables/test</gaitTableFolder>
+	<gaitTableFolder>../../data/gait tables/</gaitTableFolder>
+	<frequencyTable>../../data/gait tables/frequencies.txt</frequencyTable>
 	<Module>
 		<Joint>0</Joint>
 		<IDs>

@@ -11,9 +11,19 @@ hormodular::Module::Module(ConfigParser configParser)
 
     //-- Create gait table
     //! \todo Use configParser for this:
-    const std::string GAIT_TABLE_FILEPATH = "../../data/test/test_gait_table.txt";
+    //const std::string GAIT_TABLE_FILEPATH = "../../data/test/test_gait_table.txt";
     //const std::string GAIT_TABLE_FILEPATH = "../data/test/test_gait_table.txt";
-    gaitTable = new GaitTable(GAIT_TABLE_FILEPATH);
+    const std::string GAIT_TABLE_MULTIDOF_11 = "multidof-11-2-gaittable.txt";
+    const std::string GAIT_TABLE_MULTIDOF_7 = "multidof-7-tripod-gaittable.txt";
+    const std::string GAIT_TABLE_MULTIDOF_9 = "multidof-9-quad-gaittable.txt";
+
+
+    gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_11));
+    gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_7));
+    gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_9));
+
+    //-- Load frequency table:
+    frequencyTable = new GaitTable(configParser.getFrequencyTableFile());
 
     reset();
 }
@@ -29,14 +39,20 @@ hormodular::Module::~Module()
     delete oscillator;
     oscillator = NULL;
 
-    delete gaitTable;
-    gaitTable = NULL;
+    for(int i = 0; i < (int)gaitTables.size(); i++)
+    {
+        delete gaitTables[i];
+        gaitTables[i] = NULL;
+    }
+
+    delete frequencyTable;
+    frequencyTable = NULL;
 }
 
 bool hormodular::Module::reset()
 {
    id = (unsigned long) -1;
-   configurationId = -1;
+   configurationId = 0;
    currentJointPos = 0;
    elapsedTime = 0;
 
@@ -276,8 +292,9 @@ bool hormodular::Module::sendHormones()
 bool hormodular::Module::updateOscillatorParameters()
 {
     //! \todo Use a variable value for PERIOD of the oscillator
-    std::vector<float> parameters = gaitTable->getParameters(id);
-    oscillator->setParameters(parameters[0], parameters[1], parameters[2], 1000);
+    std::vector<float> parameters = gaitTables[configurationId]->getParameters(id);
+    int period = (int) ( 1000.0 / frequencyTable->getParameters(configurationId)[0]);
+    oscillator->setParameters(parameters[0], parameters[1], parameters[2], period);
 
     return true;
 }

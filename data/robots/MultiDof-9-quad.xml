@@ -1,18 +1,19 @@
-<ModularRobot name="MultiDof-11-2">
-	<simulationFile>../../data/models/REPY-2.1/MultiDof-11-2.env.xml</simulationFile>
+<ModularRobot name="MultiDof-9-quad">
+	<simulationFile>../../data/models/REPY-2.1/MultiDof-9-quad.env.xml</simulationFile>
 	<gaitTableFolder>../../data/gait tables/</gaitTableFolder>
 	<frequencyTable>../../data/gait tables/frequencies.txt</frequencyTable>
 	<Module>
 		<Joint>0</Joint>
 		<IDs>
-			<Function>Coxa</Function>
+			<Function>Thorax</Function>
 			<Depth>-1</Depth>
-			<Shape>31466</Shape>
+			<Shape>31464</Shape>
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>	
 		
 		<Connections>
+			<front connectedTo="7" connector="back" orientation="3"/>
 			<right connectedTo="2" connector="back" orientation="3"/>
 			<back connectedTo="1" connector="back" orientation="1"/>
 			<left connectedTo="3" connector="back" orientation="1"/>
@@ -22,8 +23,8 @@
 	<Module>
 		<Joint>1</Joint>
 		<IDs>
-			<Function>Thorax</Function>
-			<Depth>-1</Depth>
+			<Function>Limb</Function>
+			<Depth>1</Depth>
 			<Shape>80628</Shape>
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
@@ -46,7 +47,7 @@
 		</IDs>
 		
 		<Connections>
-			<front connectedTo="7" connector="back" orientation="3"/>
+			<front connectedTo="5" connector="back" orientation="3"/>
 			<back connectedTo="0" connector="right" orientation="1"/>
 		</Connections>
 	</Module>	
@@ -62,7 +63,7 @@
 		</IDs>
 		
 		<Connections>
-			<front connectedTo="8" connector="back" orientation="3"/>
+			<front connectedTo="6" connector="back" orientation="3"/>
 			<back connectedTo="0" connector="left" orientation="1"/>
 		</Connections>
 	</Module>	
@@ -70,54 +71,21 @@
 	<Module>
 		<Joint>4</Joint>
 		<IDs>
-			<Function>Coxa</Function>
-			<Depth>-1</Depth>
-			<Shape>30752</Shape>
+			<Function>Limb</Function>
+			<Depth>0</Depth>
+			<Shape>80052</Shape>
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>	
 		
 		<Connections>
-			<right connectedTo="5" connector="back" orientation="1"/>
 			<back connectedTo="1" connector="front" orientation="1"/>
-			<left connectedTo="6" connector="back" orientation="1"/>
 		</Connections>
 	</Module>	
+	
 	
 	<Module>
 		<Joint>5</Joint>
-		<IDs>
-			<Function>Limb</Function>
-			<Depth>1</Depth>
-			<Shape>82651</Shape>
-			<NumLimbs>4</NumLimbs>
-			<LimbID>2</LimbID>
-		</IDs>
-		
-		<Connections>
-			<front connectedTo="9" connector="back" orientation="3"/>
-			<back connectedTo="4" connector="right" orientation="3"/>
-		</Connections>
-	</Module>	
-	
-	<Module>
-		<Joint>6</Joint>
-		<IDs>
-			<Function>Limb</Function>
-			<Depth>1</Depth>
-			<Shape>83229</Shape>
-			<NumLimbs>4</NumLimbs>
-			<LimbID>3</LimbID>
-		</IDs>
-		
-		<Connections>
-			<front connectedTo="10" connector="back" orientation="3"/>
-			<back connectedTo="4" connector="left" orientation="3"/>
-		</Connections>
-	</Module>	
-	
-	<Module>
-		<Joint>7</Joint>
 		<IDs>
 			<Function>Limb</Function>
 			<Depth>0</Depth>
@@ -132,7 +100,7 @@
 	</Module>	
 
 	<Module>
-		<Joint>8</Joint>
+		<Joint>6</Joint>
 		<IDs>
 			<Function>Limb</Function>
 			<Depth>0</Depth>
@@ -147,32 +115,35 @@
 	</Module>	
 	
 	<Module>
-		<Joint>9</Joint>
+		<Joint>7</Joint>
 		<IDs>
 			<Function>Limb</Function>
-			<Depth>0</Depth>
-			<Shape>80052</Shape>
+			<Depth>1</Depth>
+			<Shape>80050</Shape>
 			<NumLimbs>4</NumLimbs>
-			<LimbID>2</LimbID>
+			<LimbID>1</LimbID>
 		</IDs>
 		
 		<Connections>
-			<back connectedTo="5" connector="front" orientation="1"/>
-		</Connections>		
+			<front connectedTo="8" connector="back" orientation="3"/>
+			<back connectedTo="0" connector="front" orientation="1"/>
+		</Connections>
 	</Module>	
 	
 	<Module>
-		<Joint>10</Joint>
+		<Joint>8</Joint>
 		<IDs>
 			<Function>Limb</Function>
 			<Depth>0</Depth>
 			<Shape>80052</Shape>
 			<NumLimbs>4</NumLimbs>
-			<LimbID>3</LimbID>
+			<LimbID>1</LimbID>
 		</IDs>
 		
 		<Connections>
-			<back connectedTo="6" connector="front" orientation="1"/>
+			<back connectedTo="7" connector="front" orientation="1"/>
 		</Connections>		
 	</Module>	
+	
+	
 </ModularRobot>

@@ -1,6 +1,7 @@
 <ModularRobot name="Test_robot">
 	<simulationFile>../../data/models/REPY-2.1/MultiDof-11-2.env.xml</simulationFile>
 	<gaitTableFolder>../../data/gait tables/test</gaitTableFolder>
+	<frequencyTable>../../data/gait tables/frequencies.txt</frequencyTable>
 	<Module>
 		<Joint>0</Joint>
 		<IDs>
