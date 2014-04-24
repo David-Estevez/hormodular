@@ -124,3 +124,19 @@ TEST_F( ConfigParserTest, connectorInfoIsOk)
     EXPECT_EQ(0, connector2info[RIGHT].size());
     EXPECT_EQ(0, connector2info[LEFT].size());
 }
+
+TEST_F( ConfigParserTest, orientationReadOk)
+{
+    //--Get info
+    std::vector<Orientation> orientations = configParser.getOrientations();
+
+    ASSERT_EQ(2, orientations.size());
+
+    EXPECT_EQ(0, orientations[0].getRoll());
+    EXPECT_EQ(0, orientations[0].getPitch());
+    EXPECT_EQ(0, orientations[0].getYaw());
+
+    EXPECT_EQ(0, orientations[1].getRoll());
+    EXPECT_EQ(0, orientations[1].getPitch());
+    EXPECT_EQ(0, orientations[1].getYaw());
+}

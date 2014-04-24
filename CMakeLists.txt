@@ -93,6 +93,7 @@ include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Module )
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/ModularRobot )
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/ModularRobotInterface )
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Hormone )
+include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Orientation )
 
 if( Boost_INCLUDE_DIRS )
   include_directories(${Boost_INCLUDE_DIRS})

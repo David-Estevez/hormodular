@@ -54,6 +54,22 @@
 		</IDs>
 		
 		
+		<Orientation>
+		
+			<Roll>
+				0
+			</Roll>
+			
+			<Pitch>
+				0
+			</Pitch>
+			
+			<Yaw>
+				0
+			</Yaw>
+		
+		</Orientation>
+		
 		
 		<Connections>
 			
@@ -107,6 +123,21 @@
 		</IDs>
 		
 		
+		<Orientation>
+		
+			<Roll>
+				120
+			</Roll>
+			
+			<Pitch>
+				120
+			</Pitch>
+			
+			<Yaw>
+				120
+			</Yaw>
+		
+		</Orientation>
 		
 		<Connections>
 			

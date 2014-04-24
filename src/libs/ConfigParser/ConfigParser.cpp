@@ -94,6 +94,14 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
                 id_limbs_vector.push_back(atoi(idsElement->FirstChildElement("LimbID")->GetText()));
             }
 
+            //-- Get orientation info
+            tinyxml2::XMLElement* orientationElement = moduleNode->FirstChildElement("Orientation");
+            Orientation orientation;
+            orientation.setRoll(atoi(orientationElement->FirstChildElement("Roll")->GetText()));
+            orientation.setPitch(atoi(orientationElement->FirstChildElement("Pitch")->GetText()));
+            orientation.setYaw(atoi(orientationElement->FirstChildElement("Yaw")->GetText()));
+            orientation_vector.push_back(orientation);
+
             //-- Get connector info
             std::vector< std::vector<int> > connectorInfo;
             std::vector<std::string> connectorTags;
@@ -252,6 +260,11 @@ std::vector<std::vector<int> > hormodular::ConfigParser::getConnectorInfo(int mo
     return connector_info_vector[moduleIndex];
 }
 
+std::vector<hormodular::Orientation> hormodular::ConfigParser::getOrientations()
+{
+    return orientation_vector;
+}
+
 void hormodular::ConfigParser::clearData()
 {
     robotName = "";
@@ -265,6 +278,7 @@ void hormodular::ConfigParser::clearData()
     id_depth_vector.clear();
     id_num_limbs_vector.clear();
     id_limbs_vector.clear();
+    orientation_vector.clear();
 }
 
 bool hormodular::ConfigParser::removeBadCharacters(std::string& string)
