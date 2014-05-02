@@ -1,7 +1,10 @@
 #include "Module.hpp"
 
-hormodular::Module::Module(ConfigParser configParser)
+hormodular::Module::Module(ConfigParser configParser, int index)
 {
+    //-- Store absolute id in the robot:
+    module_index = index;
+
     //-- Create connectors
     for(int i = 0; i < 4; i++)
         connectors.push_back(new Connector() );
@@ -24,6 +27,9 @@ hormodular::Module::Module(ConfigParser configParser)
 
     //-- Load frequency table:
     frequencyTable = new GaitTable(configParser.getFrequencyTableFile());
+
+    //-- Load orientation
+    orientation = configParser.getOrientations()[index];
 
     reset();
 }
@@ -108,7 +114,8 @@ bool hormodular::Module::processHormones()
                 if ( connectors[i]->inputBuffer[j].getType() == Hormone::PING_HORMONE )
                 {
                     Hormone pingHormone = connectors[i]->inputBuffer[j];
-                    tempID += (pingHormone.getSourceConnector() + connectors[i]->localOrientation* 4) * pow(17, i);
+
+                    tempID += (pingHormone.getSourceConnector() + Orientation::getRelativeOrientation(i, orientation, Orientation(pingHormone.getData()))* 4) * pow(17, i);
 
                     foundPingHormone = true;
                     activeConnectorsIndex.push_back(i);
@@ -131,7 +138,7 @@ bool hormodular::Module::processHormones()
 
     //-- Set ping hormones on the outputBuffer of the connectors
     for (int i = 0; i < (int) connectors.size(); i++)
-            connectors[i]->outputBuffer.push_back( Hormone( i, Hormone::PING_HORMONE ));
+            connectors[i]->outputBuffer.push_back( Hormone( i, Hormone::PING_HORMONE, orientation.str()));
 
 
     //-- Leg hormones processing & sending
@@ -291,7 +298,6 @@ bool hormodular::Module::sendHormones()
 
 bool hormodular::Module::updateOscillatorParameters()
 {
-    //! \todo Use a variable value for PERIOD of the oscillator
     std::vector<float> parameters = gaitTables[configurationId]->getParameters(id);
     int period = (int) ( 1000.0 / frequencyTable->getParameters(configurationId)[0]);
     oscillator->setParameters(parameters[0], parameters[1], parameters[2], period);
@@ -319,16 +325,4 @@ unsigned long hormodular::Module::getID()
 float hormodular::Module::getCurrentJointPos()
 {
     return currentJointPos;
-}
-
-std::vector<std::string> hormodular::Module::splitString(std::string stringToSplit)
-{
-    /*
-      This code has been copied from: http://stackoverflow.com/questions/236129/how-to-split-a-string-in-c
-      */
-    std::vector<std::string> tokens;
-    std::istringstream iss(stringToSplit);
-    std::copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(), std::back_inserter<std::vector<std::string> >(tokens));
-    return tokens;
-
 }

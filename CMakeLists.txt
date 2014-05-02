@@ -58,22 +58,10 @@ MARK_AS_ADVANCED(
   TINYXML2_INCLUDE_DIR
 )
 
-# For CV robot tracking:
-#FIND_PACKAGE( OpenCV REQUIRED )
-#MESSAGE("OpenCV_LIBS : ${OpenCV_LIBS}")
 
-
-
-# For the CV robot tracking
-# add_library(VisualTracker
-#   VisualTracker/VisualTracker.cpp
-#   VisualTracker/disjoint_sets2.cpp
-#   VisualTracker/comp_labeller_interface.cpp
-# )
-
-# add_library(camera_utils VisualTracker/camera_utils/camera_utils.cpp)
-
-# Google Test
+# Eigen3 -> algebra library
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include_directories(${EIGEN_INCLUDE_DIRS})
 
 
 # Set output dirs
@@ -94,6 +82,7 @@ include_directories( ${PROJECT_SOURCE_DIR}/src/libs/ModularRobot )
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/ModularRobotInterface )
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Hormone )
 include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Orientation )
+include_directories( ${PROJECT_SOURCE_DIR}/src/libs/Utils )
 
 if( Boost_INCLUDE_DIRS )
   include_directories(${Boost_INCLUDE_DIRS})
@@ -113,10 +102,6 @@ add_subdirectory(src)
 # Test programs are in tests folder
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/tests")
 add_subdirectory(tests)
-
-################################################################################
-### google test
-################################################################################
 
 
 

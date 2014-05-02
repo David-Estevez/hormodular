@@ -20,20 +20,20 @@
 
 #include <string>
 #include <sstream>
-#include <algorithm>
-#include <iterator>
 
 #include "Connector.hpp"
 #include "SinusoidalOscillator.h"
 #include "ConfigParser.h"
 #include "GaitTable.h"
+#include "Orientation.hpp"
+#include "Utils.hpp"
 
 namespace hormodular {
 
 class Module
 {
     public:
-        Module( ConfigParser configParser);
+        Module(ConfigParser configParser, int index);
         ~Module();
 
         bool reset();
@@ -55,21 +55,16 @@ class Module
 
     private:
         ConfigParser configParser;
-
         std::vector<GaitTable *> gaitTables;
         GaitTable * frequencyTable;
-
         std::vector<Connector*> connectors;
         Oscillator* oscillator;
-
+        int module_index;
         unsigned long id;
         int configurationId;
-
         float currentJointPos;
-
         unsigned long elapsedTime;
-
-	std::vector<std::string> splitString(std::string stringToSplit);
+        Orientation orientation;
 };
 
 }

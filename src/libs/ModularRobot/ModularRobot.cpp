@@ -25,7 +25,7 @@ hormodular::ModularRobot::ModularRobot(hormodular::ConfigParser configParser)
 
     //-- Create as many modules as needed
     for(int i = 0; i < configParser.getNumModules(); i++)
-        modules.push_back( new Module(configParser) );
+        modules.push_back( new Module(configParser, i) );
 
     //-- Create robot, simulated type
     robotInterface = createModularRobotInterface( "simulated", configParser);

@@ -29,7 +29,7 @@ TEST_F( ConnectionsFromConfigParserTest, connectionsLoadedOk)
 {
     //-- Create as many modules as needed
     for(int i = 0; i < configParser.getNumModules(); i++)
-        modules.push_back( new Module(configParser) );
+        modules.push_back( new Module(configParser, i) );
 
     //-- Attach the modules to the other modules
     for(int i = 0; i < (int) modules.size(); i++)
@@ -72,7 +72,6 @@ TEST_F( ConnectionsFromConfigParserTest, connectionsLoadedOk)
 
     //-- End of Hormone communication
     //------------------------------------------------------------------------------------
-
 
     //-- Destroy modules
     for(int i = 0; i < (int) modules.size(); i++)
