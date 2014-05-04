@@ -126,8 +126,8 @@
 
 		<Orientation>
 			<Roll>-90</Roll>
-			<Pitch>90</Pitch>
-			<Yaw>0</Yaw>
+			<Pitch>0</Pitch>
+			<Yaw>90</Yaw>
 		</Orientation>
 				
 		<Connections>
@@ -148,8 +148,8 @@
 
 		<Orientation>
 			<Roll>90</Roll>
-			<Pitch>-90</Pitch>
-			<Yaw>0</Yaw>
+			<Pitch>0</Pitch>
+			<Yaw>-90</Yaw>
 		</Orientation>
 				
 		<Connections>

@@ -79,13 +79,24 @@ TEST( TestOrientation, getRelativeOrientationOk)
     Orientation x1(  0, 90,   0);
     Orientation x2(-90,  0,  90);
     Orientation x3( 90,  0, -90);
-    Orientation x4(  0,  0,  0);
-    Orientation x5(-90,  0,  0);
-    Orientation x6( 90,  0,  0);
+    Orientation x4(  0,  0,   0);
+    Orientation x5(-90,  0,   0);
+    Orientation x6( 90,  0,   0);
+    Orientation x7(180, -90,   0);
+    Orientation x8(180,  0,   0);
+
+    Orientation x5_2( -90,   0,  90);
+    Orientation x6_2(  90,   0, -90);
+    Orientation x7_2( -90,   0,   0);
+    Orientation x8_2(  90,   0,   0);
+    Orientation x9_2( -90,   0,   0);
+    Orientation x10_2( 90,   0,   0);
+
 
     EXPECT_EQ(3, Orientation::getRelativeOrientation(1, x0, x2));
     EXPECT_EQ(1, Orientation::getRelativeOrientation(2, x0, x1));
     EXPECT_EQ(1, Orientation::getRelativeOrientation(3, x0, x3));
+    EXPECT_EQ(3, Orientation::getRelativeOrientation(0, x0, x7));
 
     EXPECT_EQ(3, Orientation::getRelativeOrientation(0, x1, x4));
     EXPECT_EQ(1, Orientation::getRelativeOrientation(2, x1, x0));
@@ -97,8 +108,22 @@ TEST( TestOrientation, getRelativeOrientationOk)
     EXPECT_EQ(1, Orientation::getRelativeOrientation(2, x3, x0));
 
     EXPECT_EQ(1, Orientation::getRelativeOrientation(2, x4, x1));
+    EXPECT_EQ(1, Orientation::getRelativeOrientation(1, x4, x5_2));
+    EXPECT_EQ(3, Orientation::getRelativeOrientation(3, x4, x6_2));
 
     EXPECT_EQ(1, Orientation::getRelativeOrientation(2, x5, x2));
 
     EXPECT_EQ(1, Orientation::getRelativeOrientation(2, x6, x3));
+
+    EXPECT_EQ(1, Orientation::getRelativeOrientation(2, x7, x0));
+    EXPECT_EQ(3, Orientation::getRelativeOrientation(0, x7, x8));
+
+    EXPECT_EQ(1, Orientation::getRelativeOrientation(2, x8, x7));
+
+    EXPECT_EQ(3, Orientation::getRelativeOrientation(0, x5_2, x9_2));
+    EXPECT_EQ(3, Orientation::getRelativeOrientation(2, x5_2, x4));
+
+    EXPECT_EQ(3, Orientation::getRelativeOrientation(0, x6_2, x10_2));
+    EXPECT_EQ(3, Orientation::getRelativeOrientation(2, x6_2, x4));
+
 }
