@@ -6,19 +6,26 @@
 
 using namespace hormodular;
 
-int main(void)
+int main(int argc, char* argv[])
 {
     ConfigParser configParser;
     ModularRobot * modularRobot;
 
-    static const std::string FILEPATH = "../data/test/Test_robot3.xml";;
-    static const unsigned long max_time_ms = 5000;
+    std::string filepath;
 
-    configParser.parse(FILEPATH);
+    if ( argc != 2)
+        filepath = "../data/tmp/newApproach-2014-5-4-1-53-00/MultiDof-7-tripod.xml";
+    else
+        filepath = argv[1];
+
+    static const unsigned long max_time_ms = 25000;
+
+    configParser.parse(filepath);
 
     modularRobot = new ModularRobot(configParser);
 
-    //modularRobot->reset();
+    modularRobot->setProperty("viewer", "enabled");
+    modularRobot->reset();
 
     modularRobot->run(max_time_ms);
 

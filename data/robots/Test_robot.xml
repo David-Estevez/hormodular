@@ -1,6 +1,7 @@
 <ModularRobot name="Test_robot">
 	<simulationFile>../../data/models/REPY-2.1/Kusanagi-2.env.xml</simulationFile>
 	<gaitTableFolder>../../data/gait tables/test</gaitTableFolder>
+	<frequencyTable>../../data/gait tables/frequencies.txt</frequencyTable>
 	<Module>
 		<Joint>0</Joint>
 		<IDs>
@@ -10,6 +11,12 @@
 			<NumLimbs>1</NumLimbs>
 			<LimbID>0</LimbID>
 		</IDs>
+		
+		<Orientation>
+			<Roll>0</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
 		
 		<Connections>
 			<front connectedTo="1" connector="Back" orientation="0"></front>
@@ -25,6 +32,12 @@
 			<NumLimbs>1</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>
+		
+		<Orientation>
+			<Roll>0</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
 		
 		<Connections>
 			<back connectedTo="0" connector="Front" orientation="0"></back>

@@ -15,7 +15,7 @@ class ModularRobotTest : public testing::Test
         ModularRobot * modularRobot;
 
         static const std::string FILEPATH;
-        static const unsigned long max_time_ms = 5000;
+        static const unsigned long max_time_ms = 25000;
 
         virtual void SetUp()
         {
@@ -44,5 +44,5 @@ TEST_F( ModularRobotTest, robotMovesUsingHormonesAndTable)
 
     float distance = modularRobot->getTravelledDistance();
     std::cout << "Distance travelled: " << distance << std::endl;
-    EXPECT_LT(0.1, distance );
+    EXPECT_LT(0.01, distance );
 }

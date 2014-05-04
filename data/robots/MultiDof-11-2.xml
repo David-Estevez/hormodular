@@ -11,7 +11,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>	
-		
+
+		<Orientation>
+			<Roll>0</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>180</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<right connectedTo="2" connector="back" orientation="3"/>
 			<back connectedTo="1" connector="back" orientation="1"/>
@@ -28,7 +34,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>0</Roll>
+			<Pitch>90</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<front connectedTo="4" connector="back" orientation="3"/>
 			<back connectedTo="0" connector="back" orientation="1"/>
@@ -44,7 +56,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>0</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>-90</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>90</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<front connectedTo="7" connector="back" orientation="3"/>
 			<back connectedTo="0" connector="right" orientation="1"/>
@@ -60,7 +78,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>1</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>90</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>-90</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<front connectedTo="8" connector="back" orientation="3"/>
 			<back connectedTo="0" connector="left" orientation="1"/>
@@ -76,7 +100,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>	
-		
+
+		<Orientation>
+			<Roll>0</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<right connectedTo="5" connector="back" orientation="1"/>
 			<back connectedTo="1" connector="front" orientation="1"/>
@@ -93,7 +123,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>2</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>-90</Roll>
+			<Pitch>90</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<front connectedTo="9" connector="back" orientation="3"/>
 			<back connectedTo="4" connector="right" orientation="3"/>
@@ -109,7 +145,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>3</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>90</Roll>
+			<Pitch>-90</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<front connectedTo="10" connector="back" orientation="3"/>
 			<back connectedTo="4" connector="left" orientation="3"/>
@@ -125,7 +167,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>0</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>-90</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<back connectedTo="2" connector="front" orientation="1"/>
 		</Connections>		
@@ -140,7 +188,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>1</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>90</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<back connectedTo="3" connector="front" orientation="1"/>
 		</Connections>		
@@ -155,7 +209,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>2</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>-90</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<back connectedTo="5" connector="front" orientation="1"/>
 		</Connections>		
@@ -170,7 +230,13 @@
 			<NumLimbs>4</NumLimbs>
 			<LimbID>3</LimbID>
 		</IDs>
-		
+
+		<Orientation>
+			<Roll>90</Roll>
+			<Pitch>0</Pitch>
+			<Yaw>0</Yaw>
+		</Orientation>
+				
 		<Connections>
 			<back connectedTo="6" connector="front" orientation="1"/>
 		</Connections>		

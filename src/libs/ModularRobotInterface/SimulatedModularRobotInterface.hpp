@@ -34,6 +34,8 @@ class SimulatedModularRobotInterface : public ModularRobotInterface
         virtual bool destroy();
         virtual bool reset();
 
+        virtual bool setProperty(std::string property, std::string value);
+
         virtual float getTravelledDistance();
         virtual bool sendJointValues(std::vector<float> joint_values, float step_ms=0);
         virtual std::vector<float> getJointValues();

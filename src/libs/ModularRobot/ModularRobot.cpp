@@ -67,6 +67,12 @@ bool hormodular::ModularRobot::run(unsigned long runTime)
             //-- Send joint values
             robotInterface->sendJointValues(joint_values, step_ms);
 
+//            //-- Debug: get joint values to check if it is ok
+//            std::vector<float> feedback = robotInterface->getJointValues();
+//            for (int i = 0; i < (int) feedback.size(); i++)
+//                std::cout << feedback[i] << " ";
+//            std::cout << std::endl;
+
             //-- Send hormones
             for(int i = 0; i < (int) modules.size(); i++)
                 modules[i]->sendHormones();
@@ -90,6 +96,7 @@ bool hormodular::ModularRobot::reset()
         return false;
 
     //-- Initialize joint vector to 0
+    joint_values.clear();
     for (int i = 0; i < (int) configParser.getNumModules(); i++)
         joint_values.push_back(0);
 
@@ -98,9 +105,31 @@ bool hormodular::ModularRobot::reset()
         return false;
 
     elapsed_time = 0;
-    step_ms = 1; //! \todo Get this from the configParser
+    step_ms = 1;
 
     return true;
+}
+
+bool hormodular::ModularRobot::setTimeStep(int step_ms)
+{
+    if (step_ms > 0)
+    {
+        this->step_ms = step_ms;
+        return true;
+    }
+    else
+    {
+        std::cerr << "[ModularRobot] Error: value for step_ms cannot be less or equal to 0." << std::endl;
+        return false;
+    }
+}
+
+bool hormodular::ModularRobot::setProperty(std::string property, std::string value)
+{
+    if ( property.compare("viewer") == 0)
+        return robotInterface->setProperty(property, value);
+
+    return false;
 }
 
 float hormodular::ModularRobot::getTravelledDistance()

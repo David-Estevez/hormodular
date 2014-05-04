@@ -34,6 +34,9 @@ class ModularRobot
         bool run(unsigned long runTime);
         bool reset();
 
+        bool setTimeStep(int step_ms);
+        bool setProperty(std::string property, std::string value);
+
         float getTravelledDistance();
 
    private:

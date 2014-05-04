@@ -168,7 +168,7 @@ bool hormodular::Module::processHormones()
         if ( activeConnectors.size() == 1)
         {
             //-- This case is for the 'leg' modules, that have to generate the leg hormone flux
-	    std::cout << "Hey, I'm a leg module! (I am module with id: " << id << ")" << std::endl;
+        //std::cout << "Hey, I'm a leg module! (I am module with id: " << id << ")" << std::endl;
 	    legModule = true;
 
             activeConnectors[0]->outputBuffer.push_back( Hormone( activeConnectorsIndex[0], Hormone::LEG_HORMONE ));
@@ -176,22 +176,22 @@ bool hormodular::Module::processHormones()
         else if ( activeConnectors.size() == legHormoneReceivedConnectors.size() )
         {
             //-- If a module receives 'leg' hormones in all its active connectors, it is the head module
-            std::cout << "Hey, I'm the head module! (I am module with id: " << id << ")" << std::endl;
+            //std::cout << "Hey, I'm the head module! (I am module with id: " << id << ")" << std::endl;
             headModule = true;
 
             if (legHormoneReceivedConnectors.size() == 2)
             {
-                std::cout << "I'm MultiDof-11-2!" << std::endl;
+                //std::cout << "I'm MultiDof-11-2!" << std::endl;
                 configurationId = 0;
             }
             else if ( legHormoneReceivedConnectors.size() == 3 )
             {
-                std::cout << "I'm MultiDof-7-Tripod!" << std::endl;
+                //std::cout << "I'm MultiDof-7-Tripod!" << std::endl;
                 configurationId = 1;
             }
             else if ( legHormoneReceivedConnectors.size() == 4 )
             {
-                std::cout << "I'm MultiDof-9-Quad!" << std::endl;
+                //std::cout << "I'm MultiDof-9-Quad!" << std::endl;
                 configurationId = 2;
             }
         }
@@ -276,7 +276,7 @@ bool hormodular::Module::processHormones()
     for (int i = 0; i < (int) connectors.size(); i++)
         connectors[i]->inputBuffer.clear();
 
-    std::cout << "[Debug] Id: " << id << "-> " << configurationId << std::endl;
+    //std::cout << "[Debug] Id: " << id << "-> " << configurationId << std::endl;
 
    return true;
 }

@@ -16,9 +16,12 @@
 //------------------------------------------------------------------------------
 
 #include <ecf/ECF.h>
-//#include "SimulatedModularRobot.h"
-#include "SimulatedModularRobotSingleThread.h"
-#include "GaitTable.h"
+#include "ConfigParser.h"
+#include "SinusoidalOscillator.h"
+#include "ModularRobotInterface.hpp"
+#include "ModularRobotInterfaceFactory.hpp"
+
+using namespace hormodular;
 
 class ModularRobotEvalOp : public EvaluateOp
 {
@@ -36,21 +39,24 @@ public:
         FitnessP evaluate(IndividualP individual);
 
  protected:
-        static const int MAX_AMPLITUDE = 60;
-        static const int MAX_OFFSET = 10;
-        static const int MAX_PHASE = 360;
-        static const float MAX_FREQUENCY = 1.5;
 
-        static const float MAX_AMP_0_5 = 0.5 * MAX_AMPLITUDE;
-        static const float MAX_PHA_0_5 = 0.5 * MAX_PHASE;
-        float MAX_FREQ_0_5;
+        /***** Constants to bound the oscillator values *****/
+        int max_offset;
+        float max_amp_0_5;
+        float max_pha_0_5;
+        float max_freq_0_5;
 
-        SimulatedModularRobotSingleThread * modularRobot;
+        /* Other needed stuff */
+        ConfigParser configParser;
+        std::vector<Oscillator *> oscillators;
+        ModularRobotInterface * robotInterface;
+        std::vector<float> joint_values;
+
         int n_modules;
         int max_runtime;
         int timestep;
         std::string config_file;
 
  private:
-        void genotypeToGaitTable(FloatingPoint::FloatingPoint* genotype);
+        void genotypeToRobot(FloatingPoint::FloatingPoint* genotype);
 };

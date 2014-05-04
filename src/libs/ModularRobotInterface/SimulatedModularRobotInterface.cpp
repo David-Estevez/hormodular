@@ -7,7 +7,7 @@ hormodular::SimulatedModularRobotInterface::SimulatedModularRobotInterface(hormo
     step_s = step_ms / (double)1000;
 
     //!-- \todo Add options changeOption("option", "newValue"); to the inteface
-    simulation = new SimulationOpenRAVE( environment_file, true);
+    simulation = new SimulationOpenRAVE( environment_file, false);
 
     controller = simulation->getRobot(0)->GetController();
 
@@ -49,6 +49,17 @@ bool hormodular::SimulatedModularRobotInterface::reset()
     start_pos = current_pos;
 
     return true;
+}
+
+bool hormodular::SimulatedModularRobotInterface::setProperty(std::string property, std::string value)
+{
+    if ( property.compare("viewer") == 0 && value.compare("enabled") == 0)
+    {
+        simulation->showViewer();
+        return true;
+    }
+
+    return false;
 }
 
 float hormodular::SimulatedModularRobotInterface::getTravelledDistance()
