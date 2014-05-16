@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
     else
         filepath = argv[1];
 
-    static const unsigned long max_time_ms = 25000;
+    static const unsigned long max_time_ms = 50000;
 
     configParser.parse(filepath);
 

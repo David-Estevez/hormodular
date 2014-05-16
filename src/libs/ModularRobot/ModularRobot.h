@@ -39,6 +39,8 @@ class ModularRobot
 
         float getTravelledDistance();
 
+        static const int COMMUNICATION_PERIOD_MS = 100;
+
    private:
         bool attachModules();
 

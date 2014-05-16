@@ -52,13 +52,16 @@ bool hormodular::ModularRobot::run(unsigned long runTime)
     //-- Movement loop
         while( elapsed_time < runTime )
         {
-            //-- Process incoming hormones
-            for(int i = 0; i < (int) modules.size(); i++)
-                modules[i]->processHormones();
+            if ( elapsed_time % COMMUNICATION_PERIOD_MS == 0)
+            {
+                //-- Process incoming hormones
+                for(int i = 0; i < (int) modules.size(); i++)
+                    modules[i]->processHormones();
 
-            //-- Get oscillator parameters from gait table:
-            for( int i = 0; i < (int) modules.size(); i++)
-                modules[i]->updateOscillatorParameters();
+                //-- Get oscillator parameters from gait table:
+                for( int i = 0; i < (int) modules.size(); i++)
+                    modules[i]->updateOscillatorParameters();
+            }
 
             //-- Update joint values
             for ( int i = 0; i < (int) modules.size(); i++)
@@ -73,9 +76,12 @@ bool hormodular::ModularRobot::run(unsigned long runTime)
 //                std::cout << feedback[i] << " ";
 //            std::cout << std::endl;
 
-            //-- Send hormones
-            for(int i = 0; i < (int) modules.size(); i++)
-                modules[i]->sendHormones();
+            if ( elapsed_time % COMMUNICATION_PERIOD_MS == 0)
+            {
+                //-- Send hormones
+                for(int i = 0; i < (int) modules.size(); i++)
+                    modules[i]->sendHormones();
+            }
 
             //-- Update time:
             for ( int i = 0; i < (int) modules.size(); i++)
@@ -84,6 +90,7 @@ bool hormodular::ModularRobot::run(unsigned long runTime)
             elapsed_time+=step_ms;
             //std::cout << "Run time: " << elapsed_time << std::endl;
             //usleep( step_ms * 1000);
+
         }
 
         return true;

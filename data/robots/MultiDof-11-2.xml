@@ -96,7 +96,7 @@
 		<IDs>
 			<Function>Coxa</Function>
 			<Depth>-1</Depth>
-			<Shape>30752</Shape>
+			<Shape>70056</Shape>
 			<NumLimbs>4</NumLimbs>
 			<LimbID>-1</LimbID>
 		</IDs>	
@@ -110,7 +110,7 @@
 		<Connections>
 			<right connectedTo="5" connector="back" orientation="1"/>
 			<back connectedTo="1" connector="front" orientation="1"/>
-			<left connectedTo="6" connector="back" orientation="1"/>
+			<left connectedTo="6" connector="back" orientation="3"/>
 		</Connections>
 	</Module>	
 	

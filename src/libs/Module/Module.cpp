@@ -168,8 +168,8 @@ bool hormodular::Module::processHormones()
         if ( activeConnectors.size() == 1)
         {
             //-- This case is for the 'leg' modules, that have to generate the leg hormone flux
-        //std::cout << "Hey, I'm a leg module! (I am module with id: " << id << ")" << std::endl;
-	    legModule = true;
+            //std::cout << "Hey, I'm a leg module! (I am module with id: " << id << ")" << std::endl;
+            legModule = true;
 
             activeConnectors[0]->outputBuffer.push_back( Hormone( activeConnectorsIndex[0], Hormone::LEG_HORMONE ));
         }
@@ -206,7 +206,7 @@ bool hormodular::Module::processHormones()
     }
 
 
-    //-- "Head" modules
+    //-- "Head" modules processing & sending
     //-------------------------------------------------------------------------------------------------------
     if (headModule)
     {
