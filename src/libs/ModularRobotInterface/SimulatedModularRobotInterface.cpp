@@ -89,7 +89,7 @@ bool hormodular::SimulatedModularRobotInterface::sendJointValues(std::vector<flo
         return false;
 
     if ( step_ms > 0)
-            simulation->step(step_ms / (double)1000);
+            simulation->step(step_ms / 1000);
 
 
     return true;

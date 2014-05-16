@@ -50,25 +50,27 @@ hormodular::ModularRobot::~ModularRobot()
 bool hormodular::ModularRobot::run(unsigned long runTime)
 {
     //-- Movement loop
-        while( elapsed_time < runTime )
+    unsigned long runTimeUs = 1000*runTime;
+
+    while( elapsed_time < runTimeUs )
+    {
+        if ( elapsed_time % (COMMUNICATION_PERIOD_MS*1000) == 0)
         {
-            if ( elapsed_time % COMMUNICATION_PERIOD_MS == 0)
-            {
-                //-- Process incoming hormones
-                for(int i = 0; i < (int) modules.size(); i++)
-                    modules[i]->processHormones();
+            //-- Process incoming hormones
+            for(int i = 0; i < (int) modules.size(); i++)
+                modules[i]->processHormones();
 
-                //-- Get oscillator parameters from gait table:
-                for( int i = 0; i < (int) modules.size(); i++)
-                    modules[i]->updateOscillatorParameters();
-            }
+            //-- Get oscillator parameters from gait table:
+            for( int i = 0; i < (int) modules.size(); i++)
+                modules[i]->updateOscillatorParameters();
+        }
 
-            //-- Update joint values
-            for ( int i = 0; i < (int) modules.size(); i++)
-                joint_values[i] = modules[i]->calculateNextJointPos();
+        //-- Update joint values
+        for ( int i = 0; i < (int) modules.size(); i++)
+            joint_values[i] = modules[i]->calculateNextJointPos();
 
-            //-- Send joint values
-            robotInterface->sendJointValues(joint_values, step_ms);
+        //-- Send joint values
+        robotInterface->sendJointValues(joint_values, step_ms);
 
 //            //-- Debug: get joint values to check if it is ok
 //            std::vector<float> feedback = robotInterface->getJointValues();
@@ -76,24 +78,24 @@ bool hormodular::ModularRobot::run(unsigned long runTime)
 //                std::cout << feedback[i] << " ";
 //            std::cout << std::endl;
 
-            if ( elapsed_time % COMMUNICATION_PERIOD_MS == 0)
-            {
-                //-- Send hormones
-                for(int i = 0; i < (int) modules.size(); i++)
-                    modules[i]->sendHormones();
-            }
-
-            //-- Update time:
-            for ( int i = 0; i < (int) modules.size(); i++)
-                modules[i]->updateElapsedTime(step_ms);
-
-            elapsed_time+=step_ms;
-            //std::cout << "Run time: " << elapsed_time << std::endl;
-            //usleep( step_ms * 1000);
-
+        if ( elapsed_time % (COMMUNICATION_PERIOD_MS*1000) == 0)
+        {
+            //-- Send hormones
+            for(int i = 0; i < (int) modules.size(); i++)
+                modules[i]->sendHormones();
         }
 
-        return true;
+        //-- Update time:
+        for ( int i = 0; i < (int) modules.size(); i++)
+            modules[i]->updateElapsedTime(step_ms);
+
+        elapsed_time+=(unsigned long)(step_ms*1000);
+        //std::cout << "Run time: " << elapsed_time << std::endl;
+        //usleep( step_ms * 1000);
+
+    }
+
+    return true;
 }
 
 bool hormodular::ModularRobot::reset()
@@ -112,12 +114,12 @@ bool hormodular::ModularRobot::reset()
         return false;
 
     elapsed_time = 0;
-    step_ms = 1;
+    step_ms = 0.25;
 
     return true;
 }
 
-bool hormodular::ModularRobot::setTimeStep(int step_ms)
+bool hormodular::ModularRobot::setTimeStep(float step_ms)
 {
     if (step_ms > 0)
     {

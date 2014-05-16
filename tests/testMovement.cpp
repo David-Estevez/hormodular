@@ -63,9 +63,10 @@ TEST_F( MovementTest, robotDoesNotMoveIfNotWave)
 TEST_F( MovementTest, robotMovesIfWave)
 {
     //-- Required variables
-    unsigned long elapsed_time = 0;
-    int step_ms = 1;
+    unsigned long elapsed_time = 0; //-- Should be in uS
+    float step_ms = 1;
     unsigned long max_time_ms = 5000;
+    unsigned long max_time_us = max_time_ms * 1000;
     std::vector<float> joint_values;
 
     //-- Initialize joint vector to 0
@@ -76,7 +77,7 @@ TEST_F( MovementTest, robotMovesIfWave)
     robotInterface->reset();
 
     //-- Movement loop
-    while( elapsed_time < max_time_ms )
+    while( elapsed_time < max_time_us )
     {
         //-- Update joint values
         for ( int i = 0; i < (int) oscillators.size(); i++)
@@ -85,7 +86,7 @@ TEST_F( MovementTest, robotMovesIfWave)
         //-- Send joint values
         robotInterface->sendJointValues(joint_values, step_ms);
 
-        elapsed_time+=step_ms;
+        elapsed_time+=(unsigned long) (step_ms*1000);
     }
 
     float distance = robotInterface->getTravelledDistance();

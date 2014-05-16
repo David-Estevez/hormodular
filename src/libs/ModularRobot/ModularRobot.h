@@ -34,7 +34,7 @@ class ModularRobot
         bool run(unsigned long runTime);
         bool reset();
 
-        bool setTimeStep(int step_ms);
+        bool setTimeStep(float step_ms);
         bool setProperty(std::string property, std::string value);
 
         float getTravelledDistance();
@@ -48,8 +48,8 @@ class ModularRobot
         std::vector<Module *> modules;
         ModularRobotInterface * robotInterface;
 
-        unsigned long elapsed_time;
-        int step_ms;
+        unsigned long elapsed_time; //-- This is expressed in us
+        float step_ms;
         std::vector<float> joint_values;
 };
 }

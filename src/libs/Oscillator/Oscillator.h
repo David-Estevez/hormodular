@@ -59,7 +59,7 @@ class Oscillator
 
         /*! \brief Calculate the position of the oscillator at time
          *
-         *  \param time Time at which the oscillation is calculated
+         *  \param time Time at which the oscillation is calculated (in uS)
          *  \return Position of the oscillator at given time
          */
         virtual float calculatePos( unsigned long time ) = 0;

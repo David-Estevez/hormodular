@@ -53,7 +53,7 @@ TEST_F(SinusoidalOscillatorTest, oscillatesCorrectly)
 
     for (int i = 0; i < 200; i++)
     {
-        EXPECT_FLOAT_EQ( sineReference[i], oscillator->calculatePos(currentTime));
+        EXPECT_FLOAT_EQ( sineReference[i], oscillator->calculatePos(currentTime*1000));
         currentTime += STEP;
     }
 }

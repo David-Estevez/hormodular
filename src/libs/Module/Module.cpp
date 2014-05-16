@@ -311,9 +311,9 @@ float hormodular::Module::calculateNextJointPos()
     return currentJointPos;
 }
 
-bool hormodular::Module::updateElapsedTime(int timeIncrement_ms)
+bool hormodular::Module::updateElapsedTime(float timeIncrement_ms)
 {
-    elapsedTime+=timeIncrement_ms;
+    elapsedTime+= (unsigned long) (timeIncrement_ms*1000);
     return true;
 }
 

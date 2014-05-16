@@ -6,7 +6,7 @@ hormodular::SinusoidalOscillator::SinusoidalOscillator(float amplitude, float of
 
 float hormodular::SinusoidalOscillator::calculatePos(unsigned long time)
 {
-   return amplitude*sin( 2*M_PI*time/period_ms + deg2rad(phase)) + offset;
+   return amplitude*sin( 2*M_PI*time/(period_ms*1000) + deg2rad(phase)) + offset;
 }
 
 float hormodular::SinusoidalOscillator::deg2rad(float angle_deg)

@@ -38,6 +38,7 @@ const std::string ModularRobotTest::FILEPATH = "../../data/robots/MultiDof-7-tri
 
 TEST_F( ModularRobotTest, robotMovesUsingHormonesAndTable)
 {
+    modularRobot->setProperty("viewer", "enabled"); //-- Comment this to disable viewer
     modularRobot->reset();
 
     modularRobot->run(max_time_ms);

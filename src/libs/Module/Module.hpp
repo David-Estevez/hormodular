@@ -47,7 +47,7 @@ class Module
         bool updateOscillatorParameters();
         float calculateNextJointPos();
 
-        bool updateElapsedTime(int timeIncrement_ms);
+        bool updateElapsedTime(float timeIncrement_ms);
 
         unsigned long getID();
         float getCurrentJointPos();
@@ -63,7 +63,7 @@ class Module
         unsigned long id;
         int configurationId;
         float currentJointPos;
-        unsigned long elapsedTime;
+        unsigned long elapsedTime; //-- This time is in uS
         Orientation orientation;
 };
 
