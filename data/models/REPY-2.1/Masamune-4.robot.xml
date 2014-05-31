@@ -1,0 +1,69 @@
+<!-- Masamune-4
+     Modular thing made from 4 REPY-2.1 modules -->
+
+<Robot name="Masamune-4">
+	<!-- Loading two modules from files -->
+    <Robot prefix="M1_" file="REPY-2.1.robot.xml"></Robot>
+    <Robot prefix="M2_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M2_Body</offsetfrom>
+		<translation>0 0.0826354 0</translation>
+ 	</Robot>
+ 	<Robot prefix="M3_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M3_Body</offsetfrom>
+		<rotationaxis>0 0 1 -90</rotationaxis>
+		<translation>0.0413177 0 0</translation>
+		<translation>0.0258177 0.01 0</translation>
+ 	</Robot>
+ 	 <Robot prefix="M4_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M4_Body</offsetfrom>
+		<rotationaxis>0 0 1 90</rotationaxis>
+		<translation>-0.0413177 0.0826354 0</translation>
+		<translation>-0.0258177 0.01 0</translation>
+ 	</Robot>
+
+	<!-- Redifine the second robot to add a dummy link to join both -->
+	<Robot name="M2_REPY-2.1">
+			<KinBody name="M2_REPY-2.1">
+				<Joint name="dummy1" type="hinge" enable="false">
+        			<Body>M1_Head</Body>
+       				<Body>M2_Body</Body>
+        			<axis>0 1 0</axis>
+       				<anchor>0 0.0413177 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>0 0</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+	
+	<!-- Redifine the third robot to add a dummy link to join both -->
+	<Robot name="M3_REPY-2.1">
+			<KinBody name="M2_REPY-2.1">
+				<Joint name="dummy2" type="hinge" enable="false">
+        			<Body>M1_Head</Body>
+       				<Body>M3_Body</Body>
+        			<axis>1 0 0</axis>
+       				<anchor>0.0258177 0.01 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>0 0</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+	
+	<!-- Redifine the forth robot to add a dummy link to join both -->
+	<Robot name="M4_REPY-2.1">
+			<KinBody name="M2_REPY-2.1">
+				<Joint name="dummy3" type="hinge" enable="false">
+        			<Body>M2_Head</Body>
+       				<Body>M4_Body</Body>
+        			<axis>-1 0 0</axis>
+       				<anchor>-0.0258177 0.0926354 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>0 0</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+
+</Robot>

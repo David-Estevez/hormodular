@@ -1,0 +1,115 @@
+<!-- QuadSym-6
+     Modular thing made from 6 REPY-2.1 modules -->
+
+<Robot name="QuadSym-6">
+	<!-- Loading two modules from files -->
+    <Robot prefix="M1_" file="REPY-2.1.robot.xml">
+    	<rotationaxis>1 0 0 180</rotationaxis>
+    </Robot>
+    <Robot prefix="M2_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M2_Body</offsetfrom>
+		<translation>0 0.0826354 0</translation>
+ 	</Robot>
+ 	<Robot prefix="M3_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M3_Body</offsetfrom>
+		<rotationaxis>0 0 1 -90</rotationaxis>
+		<translation>0.0413177 0 0</translation>
+		<translation>0.0258177 -0.01 0</translation>
+ 	</Robot>
+ 	
+ 	<Robot prefix="M4_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M4_Body</offsetfrom>
+		<rotationaxis>0 0 1 90</rotationaxis>
+		<translation>-0.0413177 0 0</translation>
+		<translation>-0.0258177 -0.01 0</translation>
+ 	</Robot>
+ 	
+ 	 <Robot prefix="M5_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M5_Body</offsetfrom>
+		<rotationaxis>0 0 1 90</rotationaxis>
+		<translation>-0.0413177 0.0826354 0</translation>
+		<translation>-0.0258177 0.01 0</translation>
+ 	</Robot>
+
+ 	 <Robot prefix="M6_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M6_Body</offsetfrom>
+		<rotationaxis>0 0 1 -90</rotationaxis>
+		<translation>0.0413177 0.0826354 0</translation>
+		<translation>0.0258177 0.01 0</translation>
+ 	</Robot>
+
+	<!-- Redefine the second robot to add a dummy link to join both -->
+	<Robot name="M2_REPY-2.1">
+			<KinBody name="M2_REPY-2.1">
+				<Joint name="dummy-1h-2b" type="hinge" enable="false">
+        			<Body>M1_Head</Body>
+       				<Body>M2_Body</Body>
+        			<axis>0 1 0</axis>
+       				<anchor>0 0.0413177 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>0 0</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+	
+	<!-- Redefine the third robot to add a dummy link to join both -->
+	<Robot name="M3_REPY-2.1">
+			<KinBody name="M3_REPY-2.1">
+				<Joint name="dummy-1h-3b" type="hinge" enable="false">
+        			<Body>M1_Head</Body>
+       				<Body>M3_Body</Body>
+        			<axis>1 0 0</axis>
+       				<anchor>0.0258177 -0.01 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>0 0</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+	
+		<!-- Redefine the third robot to add a dummy link to join both -->
+	<Robot name="M4_REPY-2.1">
+			<KinBody name="M4_REPY-2.1">
+				<Joint name="dummy-1h-4b" type="hinge" enable="false">
+        			<Body>M1_Head</Body>
+       				<Body>M4_Body</Body>
+        			<axis>-1 0 0</axis>
+       				<anchor>-0.0258177 -0.01 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>0 0</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+	
+	<!-- Redefine the forth robot to add a dummy link to join both -->
+	<Robot name="M5_REPY-2.1">
+			<KinBody name="M5_REPY-2.1">
+				<Joint name="dummy-2h-5b" type="hinge" enable="false">
+        			<Body>M2_Head</Body>
+       				<Body>M5_Body</Body>
+        			<axis>-1 0 0</axis>
+       				<anchor>-0.0258177 0.0926354 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>0 0</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+	
+	<Robot name="M6_REPY-2.1">
+			<KinBody name="M6_REPY-2.1">
+				<Joint name="dummy-2h-6b" type="hinge" enable="false">
+        			<Body>M2_Head</Body>
+       				<Body>M6_Body</Body>
+        			<axis>1 0 0</axis>
+       				<anchor>0.0258177 0.0926354 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>0 0</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+
+</Robot>
