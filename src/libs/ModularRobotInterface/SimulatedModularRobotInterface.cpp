@@ -6,7 +6,6 @@ hormodular::SimulatedModularRobotInterface::SimulatedModularRobotInterface(hormo
     step_ms = 1;    //!-- \todo Configure this somehow
     step_s = step_ms / (double)1000;
 
-    //!-- \todo Add options changeOption("option", "newValue"); to the inteface
     simulation = new SimulationOpenRAVE( environment_file, false);
 
     controller = simulation->getRobot(0)->GetController();
@@ -18,6 +17,7 @@ hormodular::SimulatedModularRobotInterface::SimulatedModularRobotInterface(hormo
 
 bool hormodular::SimulatedModularRobotInterface::start()
 {
+    //! \todo Check if this is ok or not
     simulation->start(step_ms, true);
 
     calculatePos();

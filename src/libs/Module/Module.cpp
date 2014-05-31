@@ -12,8 +12,8 @@ hormodular::Module::Module(ConfigParser configParser, int index)
     //-- Create sinusoidal oscillator
     oscillator = new SinusoidalOscillator();
 
-    //-- Create gait table
-    //! \todo Use configParser for this:
+    //-- Create gait tables
+    //! \todo Use configParser for this: (& update thesis later)
     //const std::string GAIT_TABLE_FILEPATH = "../../data/test/test_gait_table.txt";
     //const std::string GAIT_TABLE_FILEPATH = "../data/test/test_gait_table.txt";
     const std::string GAIT_TABLE_MULTIDOF_11 = "multidof-11-2-gaittable.txt";
@@ -21,7 +21,7 @@ hormodular::Module::Module(ConfigParser configParser, int index)
     const std::string GAIT_TABLE_MULTIDOF_9 = "multidof-9-quad-gaittable.txt";
 
 
-    gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_11));
+    gaitTables.push_back(new GaitTabl9e(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_11));
     gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_7));
     gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_9));
 
@@ -283,6 +283,7 @@ bool hormodular::Module::processHormones()
 
 bool hormodular::Module::sendHormones()
 {
+    //! \todo refactor this to be inside of the Connector class?????
     for(int i = 0; i < (int) connectors.size(); i++)
         if ( connectors[i]->remoteConnector != NULL )
             while(connectors[i]->outputBuffer.size() > 0)
