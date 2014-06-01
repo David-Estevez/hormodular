@@ -1,5 +1,3 @@
-#add_subdirectory(Servo)
-#add_subdirectory(Controller)
 add_subdirectory(ConfigParser)
 add_subdirectory(SimulationOpenRAVE)
 add_subdirectory(Oscillator)

@@ -17,6 +17,7 @@ target_link_libraries(evolve-gaits ConfigParser Oscillator ModularRobotInterface
 #set_target_properties(evaluate-gaits-serial PROPERTIES LINK_FLAGS "${ECF_LINK_FLAGS}")
 #target_link_libraries(evaluate-gaits-serial ModularRobot )
 
+# Quick program made to test everything
 add_executable( modular_robot_moves modular_robot_moves.cpp )
 set_target_properties(modular_robot_moves PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS}")
 set_target_properties(modular_robot_moves PROPERTIES LINK_FLAGS "${ECF_LINK_FLAGS}")

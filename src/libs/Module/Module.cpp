@@ -21,7 +21,7 @@ hormodular::Module::Module(ConfigParser configParser, int index)
     const std::string GAIT_TABLE_MULTIDOF_9 = "multidof-9-quad-gaittable.txt";
 
 
-    gaitTables.push_back(new GaitTabl9e(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_11));
+    gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_11));
     gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_7));
     gaitTables.push_back(new GaitTable(configParser.getGaitTableFolder() + GAIT_TABLE_MULTIDOF_9));
 
@@ -73,10 +73,11 @@ bool hormodular::Module::attach(int localConnector, Connector *remoteConnector, 
         return false;
     }
 
-    connectors[localConnector]->remoteConnector = remoteConnector;
+    connectors[localConnector]->connectTo(remoteConnector);
 
     //! \todo I should not take the orientation from the config file happily
-    connectors[localConnector]->localOrientation = orientation;
+    //! \todo I think this is already solved by using the Orientation class (no longer neeeded)
+    connectors[localConnector]->setLocalOrientation(orientation);
 
     return true;
 }
@@ -109,11 +110,11 @@ bool hormodular::Module::processHormones()
         {
             bool foundPingHormone = false;
 
-            for (int j = 0; j < (int) connectors[i]->inputBuffer.size(); j++)
+            for (int j = 0; j < (int) connectors[i]->getInputBuffer().size(); j++)
             {
-                if ( connectors[i]->inputBuffer[j].getType() == Hormone::PING_HORMONE )
+                if ( connectors[i]->getInputBuffer()[j].getType() == Hormone::PING_HORMONE )
                 {
-                    Hormone pingHormone = connectors[i]->inputBuffer[j];
+                    Hormone pingHormone = connectors[i]->getInputBuffer()[j];
 
                     tempID += (pingHormone.getSourceConnector() + Orientation::getRelativeOrientation(i, orientation, Orientation(pingHormone.getData()))* 4) * pow(17, i);
 
@@ -138,7 +139,7 @@ bool hormodular::Module::processHormones()
 
     //-- Set ping hormones on the outputBuffer of the connectors
     for (int i = 0; i < (int) connectors.size(); i++)
-            connectors[i]->outputBuffer.push_back( Hormone( i, Hormone::PING_HORMONE, orientation.str()));
+            connectors[i]->addOutputHormone( Hormone( i, Hormone::PING_HORMONE, orientation.str()));
 
 
     //-- Leg hormones processing & sending
@@ -149,8 +150,8 @@ bool hormodular::Module::processHormones()
     bool legModule = false;
 
     for (int i = 0; i < (int) activeConnectors.size(); i++)
-        for (int j = 0; j < (int) activeConnectors[i]->inputBuffer.size(); j++)
-            if ( activeConnectors[i]->inputBuffer[j].getType() == Hormone::LEG_HORMONE )
+        for (int j = 0; j < (int) activeConnectors[i]->getInputBuffer().size(); j++)
+            if ( activeConnectors[i]->getInputBuffer()[j].getType() == Hormone::LEG_HORMONE )
             {
                 legHormoneReceivedConnectors.push_back(i);
                 break;
@@ -171,7 +172,7 @@ bool hormodular::Module::processHormones()
             //std::cout << "Hey, I'm a leg module! (I am module with id: " << id << ")" << std::endl;
             legModule = true;
 
-            activeConnectors[0]->outputBuffer.push_back( Hormone( activeConnectorsIndex[0], Hormone::LEG_HORMONE ));
+            activeConnectors[0]->addOutputHormone( Hormone( activeConnectorsIndex[0], Hormone::LEG_HORMONE ));
         }
         else if ( activeConnectors.size() == legHormoneReceivedConnectors.size() )
         {
@@ -199,7 +200,7 @@ bool hormodular::Module::processHormones()
         {
             //-- Otherwise, relay the hormones in all the active connectors that didn't receive leg hormones
             for (int i = 0; i < (int) legHormoneNotReceivedConnectors.size(); i++)
-                activeConnectors[legHormoneNotReceivedConnectors[i]]->outputBuffer.push_back(
+                activeConnectors[legHormoneNotReceivedConnectors[i]]->addOutputHormone(
                             Hormone( activeConnectorsIndex[legHormoneNotReceivedConnectors[i]], Hormone::LEG_HORMONE ));
 
         }
@@ -217,9 +218,9 @@ bool hormodular::Module::processHormones()
             configurationIdStr << configurationId;
             configurationIdStr << " " << activeConnectorsIndex[i];
 
-            activeConnectors[i]->outputBuffer.push_back( Hormone( activeConnectorsIndex[i],
-                                                                  Hormone::HEAD_HORMONE,
-                                                                  configurationIdStr.str()));
+            activeConnectors[i]->addOutputHormone( Hormone( activeConnectorsIndex[i],
+                                                            Hormone::HEAD_HORMONE,
+                                                            configurationIdStr.str()));
         }
     }
     else
@@ -231,12 +232,12 @@ bool hormodular::Module::processHormones()
 
         //-- If there is any head hormone
         for (int i = 0; i < (int) activeConnectors.size(); i++)
-            for (int j = 0; j < (int) activeConnectors[i]->inputBuffer.size(); j++)
-                if ( activeConnectors[i]->inputBuffer[j].getType() == Hormone::HEAD_HORMONE )
+            for (int j = 0; j < (int) activeConnectors[i]->getInputBuffer().size(); j++)
+                if ( activeConnectors[i]->getInputBuffer()[j].getType() == Hormone::HEAD_HORMONE )
                 {
                     headHormoneReceivedConnectors.push_back(i);
 
-                    hormoneData = activeConnectors[i]->inputBuffer[j].getData();
+                    hormoneData = activeConnectors[i]->getInputBuffer()[j].getData();
                     splitHormoneData = splitString(hormoneData);
 
                     configurationId = atoi(splitHormoneData[0].c_str());
@@ -264,9 +265,9 @@ bool hormodular::Module::processHormones()
                 }
 
                 Connector * outputConnector = activeConnectors[headHormoneNotReceivedConnectors[i]];
-                outputConnector->outputBuffer.push_back( Hormone( activeConnectorsIndex[headHormoneNotReceivedConnectors[i]],
-                                                                  Hormone::HEAD_HORMONE,
-                                                                  hormoneData));
+                outputConnector->addOutputHormone( Hormone( activeConnectorsIndex[headHormoneNotReceivedConnectors[i]],
+                                                            Hormone::HEAD_HORMONE,
+                                                            hormoneData));
             }
 
     }
@@ -274,7 +275,7 @@ bool hormodular::Module::processHormones()
 
     //-- Clean input buffers
     for (int i = 0; i < (int) connectors.size(); i++)
-        connectors[i]->inputBuffer.clear();
+        connectors[i]->clearInputBuffer();
 
     //std::cout << "[Debug] Id: " << id << "-> " << configurationId << std::endl;
 
@@ -283,16 +284,8 @@ bool hormodular::Module::processHormones()
 
 bool hormodular::Module::sendHormones()
 {
-    //! \todo refactor this to be inside of the Connector class?????
     for(int i = 0; i < (int) connectors.size(); i++)
-        if ( connectors[i]->remoteConnector != NULL )
-            while(connectors[i]->outputBuffer.size() > 0)
-            {
-                connectors[i]->remoteConnector->inputBuffer.push_back( connectors[i]->outputBuffer.back());
-                connectors[i]->outputBuffer.pop_back();
-            }
-        else
-            connectors[i]->outputBuffer.clear();
+        connectors[i]->sendHormones();
 
     return true;
 }

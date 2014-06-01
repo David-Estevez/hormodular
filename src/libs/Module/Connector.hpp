@@ -26,11 +26,28 @@ namespace hormodular {
 class Connector
 {
     public:
+        Connector();
+
+        bool connectTo( Connector * remoteConnector);
+        bool sendHormones();
+
+        bool addOutputHormone(Hormone outputHormone);
+        bool clearInputBuffer();
+
+        int getLocalOrientation() const;
+        void setLocalOrientation(int localOrientation);
+
+        std::vector<Hormone> getInputBuffer();
+        Connector * getRemoteConnector();
+
+   private:
         std::vector<Hormone> inputBuffer;
         std::vector<Hormone> outputBuffer;
 
         Connector * remoteConnector;
         int localOrientation;
+
+        bool addInputHormone(Hormone inputHormone );
 };
 
 }

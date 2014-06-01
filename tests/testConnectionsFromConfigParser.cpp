@@ -53,8 +53,8 @@ TEST_F( ConnectionsFromConfigParserTest, connectionsLoadedOk)
     }
 
     //-- Check that they are attached correctly
-    EXPECT_EQ(modules[1]->getConnector(2), modules[0]->getConnector(0)->remoteConnector );
-    EXPECT_EQ(modules[0]->getConnector(0), modules[1]->getConnector(2)->remoteConnector );
+    EXPECT_EQ(modules[1]->getConnector(2), modules[0]->getConnector(0)->getRemoteConnector() );
+    EXPECT_EQ(modules[0]->getConnector(0), modules[1]->getConnector(2)->getRemoteConnector() );
 
     //------------------------------------------------------------------------------------
     //-- Hormone communication
