@@ -23,6 +23,7 @@
 
 #include "ModularRobotInterface.hpp"
 #include "SimulatedModularRobotInterface.hpp"
+#include "SerialModularRobotInterface.hpp"
 #include "ConfigParser.h"
 
 namespace hormodular {

@@ -1,6 +1,6 @@
 <ModularRobot name="Kusanagi-2">
 	<simulationFile>../models/REPY-2.1/Kusanagi-2.env.xml</simulationFile>
-	
+	<serialPort>/dev/ttyUSB0</serialPort>
 	<Module>
 		<Joint>0</Joint>
 		<IDs>

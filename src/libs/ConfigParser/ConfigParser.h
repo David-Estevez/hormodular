@@ -44,14 +44,15 @@ class ConfigParser
         std::string getSimulationFile();
         std::string getGaitTableFolder();
         std::string getFrequencyTableFile();
+        std::string getSerialPort();
         int getNumModules();
         int getJointID(const int& module);
         std::vector<int> getJointIDs();
-        std::vector<ModuleFunction> getFunctionIDs();
-        std::vector<int> getDepthIDs();
-        std::vector<unsigned long> getShapeIDs();
-        std::vector<int> getNumLimbsIDs();
-        std::vector<int> getLimbsIDs();
+        std::vector<ModuleFunction> getFunctionIDs(); //-- Deprecated
+        std::vector<int> getDepthIDs(); //-- Deprecated
+        std::vector<unsigned long> getShapeIDs(); //-- Deprecated
+        std::vector<int> getNumLimbsIDs(); //-- Deprecated
+        std::vector<int> getLimbsIDs(); //-- Deprecated
         std::vector< std::vector<int> > getConnectorInfo(int moduleIndex);
         std::vector<Orientation> getOrientations();
 
@@ -63,13 +64,14 @@ class ConfigParser
         std::string simulationFile;
         std::string gaitTableFolder;
         std::string frequencyTableFile;
+        std::string serialPort;
         int numModules;
         std::vector<int> jointIDs;
-        std::vector<ModuleFunction> id_function_vector;
-        std::vector<int> id_depth_vector;
-        std::vector<unsigned long> id_shape_vector;
-        std::vector<int> id_num_limbs_vector;
-        std::vector<int> id_limbs_vector;
+        std::vector<ModuleFunction> id_function_vector; //-- Deprecated
+        std::vector<int> id_depth_vector; //-- Deprecated
+        std::vector<unsigned long> id_shape_vector; //-- Deprecated
+        std::vector<int> id_num_limbs_vector; //-- Deprecated
+        std::vector<int> id_limbs_vector; //-- Deprecated
         std::vector< std::vector< std::vector<int> > > connector_info_vector;
         std::vector<Orientation> orientation_vector;
 };

@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//-- test_sin
+//-- testSerialCommSinusoidal
 //------------------------------------------------------------------------------
 //--
 //-- Outputs the position signal of a sinusoidal oscillator to the serial port
@@ -16,24 +16,29 @@
 //-- Released under the GPL license (more info on LICENSE.txt file)
 //------------------------------------------------------------------------------
 
+#include <string>
 #include <iostream>
 #include <SerialStream.h>
 #include <cmath>
+#include <gtest/gtest.h>
 
-int main(int argc, char * argv[] )
+
+
+class TestSerialCommunications: public testing::Test
 {
-    //-- Check the serial port specified
-    if (argc < 2)
-    {
-        std::cerr << "No serial port specified" << std::endl;
-        return -1;
-    }
+    public:
+        static const std::string PORT;
+};
 
-    std::cout << "Serial port: " << argv[1] << std::endl;
+const std::string TestSerialCommunications::PORT = std::string("/dev/ttyUSB0");
+
+TEST_F( TestSerialCommunications, RobotIsControlledBySerialPort)
+{
+    std::cout << "Serial port: " << PORT << std::endl;
     std::cout << "Opening... " << std::endl;
 
     //-- Create and open a serial port
-    SerialPort serialPort( argv[1] );
+    SerialPort serialPort(PORT);
     try
     {
         serialPort.Open( SerialPort::BAUD_57600, SerialPort::CHAR_SIZE_8,
@@ -42,20 +47,24 @@ int main(int argc, char * argv[] )
     }
     catch ( SerialPort::OpenFailed e )
     {
-        std::cerr << "Error opening the serial port \"" << argv[1] << "\"" << std::endl;
-        return -1;
+        std::cerr << "Error opening the serial port \"" << PORT << "\"" << std::endl;
     }
+
+    ASSERT_TRUE(serialPort.IsOpen());
 
     //-- Read welcome message to check if connected to the robot
     SerialPort::DataBuffer buffer;
+    bool timeout_flag = false;
     try {
         serialPort.Read( buffer, 11, 1500);
     }
     catch ( SerialPort::ReadTimeout e)
     {
         std::cout << "Timeout! Exiting..." << std::endl;
-        return -1;
+        timeout_flag = true;
     }
+
+    ASSERT_FALSE(timeout_flag);
 
     //-- Check if connected
     std::string welcomeMessage = "[Debug] Ok!";
@@ -69,6 +78,8 @@ int main(int argc, char * argv[] )
 
     if ( ! diff_flag )
         std::cout << "Connected! " << std::endl;
+
+    ASSERT_FALSE( diff_flag);
 
     //-- Send the sinusoidal waveform data to the robot
     for (int i = 0; i < 200000; i+=20)
@@ -89,5 +100,4 @@ int main(int argc, char * argv[] )
 
     //-- Close serial port and exit
     serialPort.Close();
-    return 0;
 }

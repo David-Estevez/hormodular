@@ -15,6 +15,10 @@
 		../../data/gait tables/frequencies.txt
 	</frequencyTable>
 	
+	<serialPort>
+		/dev/ttyUSB0
+	</serialPort>
+	
 	<Module>
 		
 		

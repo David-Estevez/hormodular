@@ -54,6 +54,11 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
     frequencyTableFile = std::string(frequencyTableFileStr);
     removeBadCharacters(frequencyTableFile);
 
+    //-- Serial Port
+    const char * serialPortStr = modularRobotElement->FirstChildElement("serialPort")->GetText();
+    serialPort = std::string(serialPortStr);
+    removeBadCharacters(serialPort);
+
     //-- Get modules
     int auxNumModules = 0;
     tinyxml2::XMLNode* moduleNode = modularRobotElement->FirstChild();
@@ -201,6 +206,11 @@ std::string hormodular::ConfigParser::getGaitTableFolder()
 std::string hormodular::ConfigParser::getFrequencyTableFile()
 {
     return frequencyTableFile;
+}
+
+std::string hormodular::ConfigParser::getSerialPort()
+{
+    return serialPort;
 }
 
 int hormodular::ConfigParser::getNumModules()

@@ -44,6 +44,12 @@ TEST_F( ConfigParserTest, frequencyTableIsOk)
     EXPECT_STREQ( "../../data/gait tables/frequencies.txt", configParser.getFrequencyTableFile().c_str() );
 }
 
+TEST_F( ConfigParserTest, serialPortIsOk)
+{
+    EXPECT_STREQ( "/dev/ttyUSB0", configParser.getSerialPort().c_str() );
+}
+
+
 TEST_F( ConfigParserTest, numberOfModulesIsOk)
 {
     EXPECT_EQ(2, configParser.getNumModules());

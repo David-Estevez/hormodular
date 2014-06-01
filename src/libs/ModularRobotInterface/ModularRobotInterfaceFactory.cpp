@@ -4,6 +4,8 @@ hormodular::ModularRobotInterface *hormodular::createModularRobotInterface(std::
 {
     if ( type == "simulated")
         return (ModularRobotInterface*) new SimulatedModularRobotInterface(configParser);
+    else if (type == "serial")
+        return (ModularRobotInterface*) new SerialModularRobotInterface(configParser);
     else
     {
         std::cerr << "[Error][ModularRobotInterface] Could not create robot with type: \"" << type << "\"" << std::endl;

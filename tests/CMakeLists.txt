@@ -22,10 +22,6 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} )
 #add_executable( testSimModularRobotSingleThread testSimModularRobotSingleThread.cpp )
 #target_link_libraries(testSimModularRobotSingleThread ModularRobot )
 
-# Testing Communication with ModularRobot:
-#add_executable( testSerialCommSinusoidal testSerialCommSinusoidal.cpp )
-#target_link_libraries(testSerialCommSinusoidal serial )
-
 # New.......................................
 # Test robot interface
 add_executable(testRobotInterface testRobotInterface.cpp)
@@ -71,3 +67,13 @@ target_link_libraries(testModularRobot ModularRobot Module ConfigParser Oscillat
 add_executable(testOrientation testOrientation.cpp)
 target_link_libraries(testOrientation gtest gtest_main)
 target_link_libraries(testOrientation Orientation)
+
+# Testing Communication with ModularRobot:
+add_executable( testSerialCommSinusoidal testSerialCommSinusoidal.cpp )
+target_link_libraries(testSerialCommSinusoidal gtest gtest_main)
+target_link_libraries(testSerialCommSinusoidal serial )
+
+# Test robot serial interface
+add_executable(testSerialModularRobotInterface testSerialModularRobotInterface.cpp)
+target_link_libraries(testSerialModularRobotInterface gtest gtest_main)
+target_link_libraries(testSerialModularRobotInterface ModularRobotInterface)

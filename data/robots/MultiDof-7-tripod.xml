@@ -2,6 +2,7 @@
 	<simulationFile>../../data/models/REPY-2.1/MultiDof-7-tripod.env.xml</simulationFile>
 	<gaitTableFolder>../../data/gait tables/</gaitTableFolder>
 	<frequencyTable>../../data/gait tables/frequencies.txt</frequencyTable>
+	<serialPort>/dev/ttyUSB0</serialPort>
 	<Module>
 		<Joint>0</Joint>
 		<IDs>
