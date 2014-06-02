@@ -22,7 +22,7 @@ bool hormodular::SerialModularRobotInterface::start()
 bool hormodular::SerialModularRobotInterface::stop()
 {
     //-- Close serial port
-    if ( serialPort->IsOpen() )
+    if ( serialPort && serialPort->IsOpen() )
         serialPort->Close();
 
     return true;
@@ -31,7 +31,7 @@ bool hormodular::SerialModularRobotInterface::stop()
 bool hormodular::SerialModularRobotInterface::destroy()
 {
     //-- Close serial port
-    if ( serialPort->IsOpen() )
+    if ( serialPort && serialPort->IsOpen() )
         serialPort->Close();
 
     delete serialPort;
@@ -157,7 +157,7 @@ bool hormodular::SerialModularRobotInterface::checkConnection()
 
 bool hormodular::SerialModularRobotInterface::toggleLED()
 {
-    if ( serialPort->IsOpen() )
+    if ( serialPort && serialPort->IsOpen() )
     {
         SerialPort::DataBuffer outputBuff;
         outputBuff.push_back(0x5F); //-- 0x5F -> Toggle LED
@@ -175,10 +175,19 @@ bool hormodular::SerialModularRobotInterface::toggleLED()
 
 bool hormodular::SerialModularRobotInterface::sendJointValuesSerial(std::vector<float> joint_values)
 {
-    if ( serialPort->IsOpen() )
+    if ( serialPort && serialPort->IsOpen() )
     {
         if ( joint_values.size() <= 8)
         {
+            //-- Convert joint position to servo values [0-180]
+            for (int i = 0; i < joint_values.size(); i++)
+            {
+                joint_values[i]+=90;
+                if (joint_values[i] < 0) joint_values[i] = 0;
+                if (joint_values[i] > 180) joint_values[i] = 180;
+            }
+
+
             SerialPort::DataBuffer outputBuff;
             outputBuff.push_back(0x50); //-- 0x50 -> Set pos to all joints
 

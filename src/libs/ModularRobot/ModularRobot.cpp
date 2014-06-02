@@ -19,7 +19,7 @@
 
 
 
-hormodular::ModularRobot::ModularRobot(hormodular::ConfigParser configParser)
+hormodular::ModularRobot::ModularRobot(hormodular::ConfigParser configParser, std::string robotInterfaceType)
 {
     this->configParser = configParser;
 
@@ -28,7 +28,9 @@ hormodular::ModularRobot::ModularRobot(hormodular::ConfigParser configParser)
         modules.push_back( new Module(configParser, i) );
 
     //-- Create robot, simulated type
-    robotInterface = createModularRobotInterface( "simulated", configParser);
+    robotInterface = createModularRobotInterface( robotInterfaceType, configParser);
+
+    step_ms = 0.25;
 
     reset();
 }
@@ -70,6 +72,7 @@ bool hormodular::ModularRobot::run(unsigned long runTime)
             joint_values[i] = modules[i]->calculateNextJointPos();
 
         //-- Send joint values
+//        robotInterface->setProperty("LED", "toggle");
         robotInterface->sendJointValues(joint_values, step_ms);
 
 //            //-- Debug: get joint values to check if it is ok
@@ -114,7 +117,6 @@ bool hormodular::ModularRobot::reset()
         return false;
 
     elapsed_time = 0;
-    step_ms = 0.25;
 
     return true;
 }

@@ -1,41 +1,40 @@
-#include <openrave-core.h>
-#include <boost/thread/thread.hpp>
-#include <boost/bind.hpp>
-
 #include <iostream>
 #include <string>
-#include <inttypes.h>
-#include <semaphore.h>
-#include <pthread.h>
 
-#include "SerialModularRobot.h"
+#include "ModularRobot.h"
 
-//#define DEBUG_MESSAGES
 
 int main(int argc, char * argv[] )
 {
     //-- Extract data from arguments
-    std::string serial_port, gait_table_file;
-    int n_modules, run_time;
+    std::string config_file;
+    int run_time, step_time;
 
-    if ( argc == 5 )
+    if ( argc == 3 )
     {
-        n_modules = atoi( argv[1]);
-        serial_port = argv[2];
-        gait_table_file = argv[3];
-        run_time = atoi (argv[4] );
+        config_file = argv[1];
+        run_time = atoi (argv[2] );
+        step_time = 2;
+    }
+    else if ( argc == 4)
+    {
+        config_file = argv[1];
+        run_time = atoi (argv[2] );
+        step_time = atoi(argv[3]);
     }
     else
     {
-        std::cout << "Usage: evaluate-gaits-serial [number of modules] [serial port] [gait table file] [run time(ms)]" << std::endl;
+        std::cout << "Usage: evaluate-gaits-serial (config file) (run time(ms)) [simulation step(ms)=2ms]" << std::endl;
         exit(-1);
     }
 
-    //-- Create robot:
-    SerialModularRobot myRobot(  serial_port, n_modules, gait_table_file);
-    myRobot.setTimeStep( 25);
-    myRobot.setMaxRuntime( run_time );
+    //-- Load configuration on a ConfigParser
+    hormodular::ConfigParser configParser;
+    configParser.parse(config_file);
 
+    //-- Create robot:
+    hormodular::ModularRobot myRobot(configParser, "serial");
+    myRobot.setTimeStep(step_time);
 
     std::cout << "Evaluate-Gaits (serial version)" << std::endl
               << "------------------------------------" << std::endl;
@@ -43,12 +42,13 @@ int main(int argc, char * argv[] )
     //-- Reset robot:
     myRobot.reset();
 
+
     //-- Testing timing:
     struct timeval starttime, endtime;
     gettimeofday( &starttime, NULL);
 
     //-- Run controller
-    myRobot.run();
+    myRobot.run(run_time);
 
     //-- Get actual elapsed time:
     gettimeofday(&endtime, NULL);
@@ -62,7 +62,7 @@ int main(int argc, char * argv[] )
     }
 
     //-- Report distance travelled:
-    std::cout << "Robot time elapsed: " << (int) myRobot.getTimeElapsed() << std::endl;
+    std::cout << "Robot time elapsed: " << (int) run_time << std::endl;
     std::cout << "Real time elapsed: " << sec_diff << "s " << usec_diff << "us " << std::endl;
     std::cout << std::endl;
 

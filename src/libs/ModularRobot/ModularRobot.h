@@ -28,7 +28,7 @@ namespace hormodular {
 class ModularRobot
 {
     public:
-        ModularRobot(ConfigParser configParser);
+        ModularRobot(ConfigParser configParser, std::string robotInterfaceType="simulated");
         ~ModularRobot();
 
         bool run(unsigned long runTime);
