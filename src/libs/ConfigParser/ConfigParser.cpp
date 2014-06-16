@@ -20,13 +20,13 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
     {
         std::cerr << "[Error] ConfigParser: error opening \"" << filepath.c_str()
                   << "\", xml file could not be opened!" << std::endl;
-        return -1;
+        return FILE_NOT_OPENED;
     }
     else if ( xmldoc.ErrorID() != tinyxml2::XML_SUCCESS )
     {
         std::cerr << "[Error] ConfigParser: Some error occurred with the xml file. Error code: "
                      << xmldoc.ErrorID() << std::endl;
-        return -2;
+        return FILE_XML_ERROR;
     }
 
     //-- Extract data for the robot
@@ -35,27 +35,51 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
     if ( !modularRobotElement )
     {
         std::cerr << "[Error] Error extracting tag \"ModularRobot\"" << std::endl;
-        return -3;
+        return TAG_NOT_FOUND;
     }
     robotName = std::string( modularRobotElement->Attribute("name") );
 
     //-- Simulation file
-    const char * simulationFileStr = modularRobotElement->FirstChildElement("simulationFile")->GetText();
+    tinyxml2::XMLElement* simulationFileElement = modularRobotElement->FirstChildElement("simulationFile");
+    if ( !simulationFileElement )
+    {
+        std::cerr << "[Error] Error extracting tag \"gaitTableFolder\"" << std::endl;
+        return TAG_NOT_FOUND;
+    }
+    const char * simulationFileStr = simulationFileElement->GetText();
     simulationFile = std::string(simulationFileStr);
     removeBadCharacters(simulationFile);
 
     //-- Gait table folder
-    const char * gaitTableFolderStr = modularRobotElement->FirstChildElement("gaitTableFolder")->GetText();
+    tinyxml2::XMLElement* gaitTableFolderElement = modularRobotElement->FirstChildElement("gaitTableFolder");
+    if ( !gaitTableFolderElement )
+    {
+        std::cerr << "[Error] Error extracting tag \"gaitTableFolder\"" << std::endl;
+        return TAG_NOT_FOUND;
+    }
+    const char * gaitTableFolderStr = gaitTableFolderElement->GetText();
     gaitTableFolder = std::string(gaitTableFolderStr);
     removeBadCharacters(gaitTableFolder);
 
     //-- Frequency table
-    const char * frequencyTableFileStr = modularRobotElement->FirstChildElement("frequencyTable")->GetText();
+    tinyxml2::XMLElement* frequencyTableElement = modularRobotElement->FirstChildElement("frequencyTable");
+    if ( !frequencyTableElement )
+    {
+        std::cerr << "[Error] Error extracting tag \"frequencyTable\"" << std::endl;
+        return TAG_NOT_FOUND;
+    }
+    const char * frequencyTableFileStr = frequencyTableElement->GetText();
     frequencyTableFile = std::string(frequencyTableFileStr);
     removeBadCharacters(frequencyTableFile);
 
     //-- Serial Port
-    const char * serialPortStr = modularRobotElement->FirstChildElement("serialPort")->GetText();
+    tinyxml2::XMLElement* serialPortElement = modularRobotElement->FirstChildElement("serialPort");
+    if ( !serialPortElement )
+    {
+        std::cerr << "[Error] Error extracting tag \"serialPort\"" << std::endl;
+        return TAG_NOT_FOUND;
+    }
+    const char * serialPortStr = serialPortElement->GetText();
     serialPort = std::string(serialPortStr);
     removeBadCharacters(serialPort);
 

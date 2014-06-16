@@ -32,7 +32,11 @@ int main(int argc, char * argv[] )
 
     //-- Load configuration on a ConfigParser
     hormodular::ConfigParser configParser;
-    configParser.parse(config_file);
+    if ( configParser.parse(config_file) != 0)
+    {
+        std::cerr << "[Evaluate] Error: error parsing xml config file!" << std::endl;
+        return false;
+    }
 
     //-- Create robot:
     hormodular::ModularRobot myRobot(configParser);

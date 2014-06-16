@@ -92,7 +92,11 @@ bool ModularRobotEvalOp::initialize(StateP state)
     //-- Create and configure the robot parts
     //---------------------------------------------------------------------------------------
     //-- Read test data
-    configParser.parse(config_file);
+    if ( configParser.parse(config_file) != 0)
+    {
+        std::cerr << "[Evolve] Error: error parsing xml config file!" << std::endl;
+        return false;
+    }
 
     if ( configParser.getNumModules() != n_modules )
     {

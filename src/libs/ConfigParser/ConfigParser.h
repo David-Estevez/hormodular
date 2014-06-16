@@ -56,6 +56,11 @@ class ConfigParser
         std::vector< std::vector<int> > getConnectorInfo(int moduleIndex);
         std::vector<Orientation> getOrientations();
 
+        //-- Error constants
+        static const int FILE_NOT_OPENED = -1;
+        static const int FILE_XML_ERROR = -2;
+        static const int TAG_NOT_FOUND = -3;
+
     private:
         void clearData();
         bool removeBadCharacters(std::string& string);
