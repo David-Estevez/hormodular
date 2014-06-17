@@ -24,7 +24,7 @@ void ModularRobotEvalOp::registerParameters(StateP state)
 {
     state->getRegistry()->registerEntry("robot.modules", (voidP) (new uint(1)), ECF::UINT, "Number of modules" );
     state->getRegistry()->registerEntry("robot.runtime", (voidP) (new uint(10000)), ECF::UINT, "Max robot runtime (ms)" );
-    state->getRegistry()->registerEntry("robot.timestep", (voidP) (new uint(1)), ECF::UINT, "Time step (ms)" );
+    state->getRegistry()->registerEntry("robot.timestep", (voidP) (new float(1.0)), ECF::FLOAT, "Time step (ms)" );
     state->getRegistry()->registerEntry("robot.configfile", (voidP) (new std::string()), ECF::STRING, "Robot description file");
 
     state->getRegistry()->registerEntry("osc.maxamplitude", (voidP) (new uint(90)), ECF::UINT, "Max amplitude of oscillators");
@@ -53,19 +53,22 @@ bool ModularRobotEvalOp::initialize(StateP state)
     //-- Number of modules:
     voidP sptr = state->getRegistry()->getEntry("robot.modules");
     n_modules = *((uint*) sptr.get() );
+    std::cout << "[Evolve] Info: Loaded \"robot.modules\"="<< n_modules << std::endl;
 
     //-- Max runtime:
     sptr = state->getRegistry()->getEntry("robot.runtime");
-    max_runtime = *((uint*) sptr.get() );
+    max_runtime =(unsigned long) *((uint*) sptr.get() );
+    std::cout << "[Evolve] Info: Loaded \"robot.runtime\"="<< max_runtime << std::endl;
 
     //-- Time step:
     sptr = state->getRegistry()->getEntry("robot.timestep");
-    timestep = *((uint*) sptr.get() );
+    timestep = *((float*) sptr.get() );
+    std::cout << "[Evolve] Info: Loaded \"robot.timestep\"="<< timestep << std::endl;
 
     //-- Gait table file:
     sptr = state->getRegistry()->getEntry("robot.configfile");
     config_file = *((std::string*) sptr.get() );
-
+    std::cout << "[Evolve] Info: Loaded \"robot.configfile\"="<< config_file << std::endl;
 
     //-- Get the oscillator parameters from the registry:
     //---------------------------------------------------------------------------------------
@@ -73,21 +76,24 @@ bool ModularRobotEvalOp::initialize(StateP state)
     sptr = state->getRegistry()->getEntry("osc.maxamplitude");
     int max_amplitude = *((uint*) sptr.get());
     max_amp_0_5 = max_amplitude / 2.0;
+    std::cout << "[Evolve] Info: Loaded \"osc.maxamplitude\"="<< max_amplitude << std::endl;
 
     //-- Max offset:
     sptr = state->getRegistry()->getEntry("osc.maxoffset");
     max_offset = *((uint*) sptr.get());
+    std::cout << "[Evolve] Info: Loaded \"osc.maxoffset\"="<< max_offset << std::endl;
 
     //-- Max phase:
     sptr = state->getRegistry()->getEntry("osc.maxphase");
     int max_phase = *((uint*) sptr.get());
     max_pha_0_5 = max_phase / 2.0;
+    std::cout << "[Evolve] Info: Loaded \"osc.maxphase\"="<< max_phase << std::endl;
 
     //-- Max frequency:
     sptr = state->getRegistry()->getEntry("osc.maxfrequency");
     float max_frequency = *((float*) sptr.get());
     max_freq_0_5 = max_frequency / 2.0;
-
+    std::cout << "[Evolve] Info: Loaded \"osc.maxfrequency\"="<< max_frequency << std::endl;
 
     //-- Create and configure the robot parts
     //---------------------------------------------------------------------------------------
@@ -140,12 +146,13 @@ FitnessP ModularRobotEvalOp::evaluate(IndividualP individual)
     std::cout << "[Evolve] Run!" << std::endl;
 
     //-- Here you put the main loop
-    unsigned long elapsed_time = 0;
+    unsigned long elapsed_time = 0; //-- Should be in uS
+    unsigned long max_time_us = max_runtime*1000;
     joint_values.clear();
     for (int i = 0; i < (int) n_modules; i++)
         joint_values.push_back(0);
 
-    while( elapsed_time < max_runtime )
+    while( elapsed_time < max_time_us )
     {
         //-- Update joint values
         for ( int i = 0; i < (int) oscillators.size(); i++)
@@ -154,7 +161,9 @@ FitnessP ModularRobotEvalOp::evaluate(IndividualP individual)
         //-- Send joint values
         robotInterface->sendJointValues(joint_values, timestep);
 
-        elapsed_time+=timestep;
+        elapsed_time+=(unsigned long) (timestep*1000);
+
+        //std::cout << "[Evolve] Time: " << elapsed_time << "us" << std::endl;
     }
 
     //-- Select the fitness value (distance travelled in m)

@@ -53,8 +53,8 @@ public:
         std::vector<float> joint_values;
 
         int n_modules;
-        int max_runtime;
-        int timestep;
+        unsigned long max_runtime;
+        float timestep;
         std::string config_file;
 
  private:
