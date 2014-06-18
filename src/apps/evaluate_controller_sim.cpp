@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <string>
 
@@ -25,7 +26,7 @@ int main(int argc, char * argv[] )
     }
     else
     {
-        std::cout << "Usage: evaluate-gaits-serial (config file) (run time(ms)) [simulation step(ms)=2ms]" << std::endl;
+        std::cout << "Usage: evaluate-gaits-sim (config file) (run time(ms)) [simulation step(ms)=2ms]" << std::endl;
         exit(-1);
     }
 
@@ -38,15 +39,16 @@ int main(int argc, char * argv[] )
     }
 
     //-- Create robot:
-    hormodular::ModularRobot myRobot(configParser, "serial");
+    hormodular::ModularRobot myRobot(configParser);
     myRobot.setTimeStep(step_time);
+    myRobot.setProperty("viewer", "enabled");
 
-    std::cout << "Evaluate-Gaits (serial version)" << std::endl
+
+    std::cout << "Evaluate-Gaits (simulated version)" << std::endl
               << "------------------------------------" << std::endl;
 
     //-- Reset robot:
     myRobot.reset();
-
 
     //-- Testing timing:
     struct timeval starttime, endtime;
@@ -67,6 +69,7 @@ int main(int argc, char * argv[] )
     }
 
     //-- Report distance travelled:
+    std::cout << "Distance travelled: " << myRobot.getTravelledDistance() << std::endl;
     std::cout << "Robot time elapsed: " << (int) run_time << std::endl;
     std::cout << "Real time elapsed: " << sec_diff << "s " << usec_diff << "us " << std::endl;
     std::cout << std::endl;
