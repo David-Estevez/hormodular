@@ -53,6 +53,10 @@ class SimulatedModularRobotInterface : public ModularRobotInterface
 
         std::pair<float, float> start_pos;
         std::pair<float, float> current_pos;
+
+        //-- Tracking position
+        std::vector<OpenRAVE::Vector> pos;
+
 };
 
 }

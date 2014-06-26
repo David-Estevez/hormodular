@@ -65,6 +65,17 @@ bool hormodular::SimulatedModularRobotInterface::setProperty(std::string propert
 float hormodular::SimulatedModularRobotInterface::getTravelledDistance()
 {
     calculatePos();
+
+    //-- Position tracking
+    std::ofstream ofile("./positions.txt");
+
+    if ( ofile.is_open() )
+    {
+        for (int i = 0; i < pos.size(); i++)
+            ofile << pos[i].x << " " <<pos[i].y << std::endl;
+        ofile.close();
+    }
+
     return sqrt( pow( current_pos.first - start_pos.first, 2) +
                  pow( current_pos.second - start_pos.second, 2));
 }
@@ -90,6 +101,10 @@ bool hormodular::SimulatedModularRobotInterface::sendJointValues(std::vector<flo
 
     if ( step_ms > 0)
             simulation->step(step_ms / 1000);
+
+    //-- Get current robot position
+    OpenRAVE::Vector robot_pos = simulation->getRobot(0)->GetCenterOfMass();
+    pos.push_back(robot_pos);
 
 
     return true;
