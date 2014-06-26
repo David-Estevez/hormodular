@@ -30,6 +30,7 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
     }
 
     //-- Extract data for the robot
+    //---------------------------------------------------------------------------------------------------
     //-- Robot name:
     tinyxml2::XMLElement* modularRobotElement = xmldoc.FirstChildElement("ModularRobot");
     if ( !modularRobotElement )
@@ -72,8 +73,19 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
     frequencyTableFile = std::string(frequencyTableFileStr);
     removeBadCharacters(frequencyTableFile);
 
+    //-- Extract hardware configuration
+    //---------------------------------------------------------------------------------------------------
+    //-- Hardware element:
+    //-- Robot name:
+    tinyxml2::XMLElement* hardwareElement = modularRobotElement->FirstChildElement("Hardware");
+    if ( !hardwareElement )
+    {
+        std::cerr << "[Error] Error extracting tag \"Hardware\"" << std::endl;
+        return TAG_NOT_FOUND;
+    }
+
     //-- Serial Port
-    tinyxml2::XMLElement* serialPortElement = modularRobotElement->FirstChildElement("serialPort");
+    tinyxml2::XMLElement* serialPortElement = hardwareElement->FirstChildElement("serialPort");
     if ( !serialPortElement )
     {
         std::cerr << "[Error] Error extracting tag \"serialPort\"" << std::endl;
@@ -83,7 +95,45 @@ int hormodular::ConfigParser::parse(const std::string &filepath)
     serialPort = std::string(serialPortStr);
     removeBadCharacters(serialPort);
 
+    //-- Master board configuration
+    tinyxml2::XMLElement* masterJointsElement = hardwareElement->FirstChildElement("master");
+    if ( !masterJointsElement )
+    {
+        std::cerr << "[Error] Error extracting tag \"master\"" << std::endl;
+        return TAG_NOT_FOUND;
+    }
+    const char * masterJointsStr = masterJointsElement->GetText();
+    std::stringstream masterJointsSStream;
+    masterJointsSStream << masterJointsStr;
+
+    int jointValue;
+    while ( masterJointsSStream >> jointValue)
+    {
+        masterJoints.push_back(jointValue);
+    }
+
+
+    //-- Slave board configuration
+    tinyxml2::XMLElement* slaveJointsElement = hardwareElement->FirstChildElement("slave");
+    if ( slaveJointsElement )
+    {
+        const char * slaveJointsStr = slaveJointsElement->GetText();
+        std::stringstream slaveJointsSStream;
+        slaveJointsSStream << slaveJointsStr;
+
+        while ( slaveJointsSStream >> jointValue)
+        {
+            slaveJoints.push_back(jointValue);
+        }
+    }
+    else
+    {
+
+        std::cerr << "[Warning] Tag \"slave\" not found" << std::endl;
+    }
+
     //-- Get modules
+    //---------------------------------------------------------------------------------------------------
     int auxNumModules = 0;
     tinyxml2::XMLNode* moduleNode = modularRobotElement->FirstChild();
 
@@ -235,6 +285,16 @@ std::string hormodular::ConfigParser::getFrequencyTableFile()
 std::string hormodular::ConfigParser::getSerialPort()
 {
     return serialPort;
+}
+
+std::vector<int> hormodular::ConfigParser::getMasterJoints()
+{
+    return masterJoints;
+}
+
+std::vector<int> hormodular::ConfigParser::getSlaveJoints()
+{
+    return slaveJoints;
 }
 
 int hormodular::ConfigParser::getNumModules()

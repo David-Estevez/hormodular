@@ -11,13 +11,28 @@
 		../../data/gait tables/test
 	</gaitTableFolder>
 	
+	
 	<frequencyTable>
 		../../data/gait tables/frequencies.txt
 	</frequencyTable>
 	
-	<serialPort>
-		/dev/ttyUSB0
-	</serialPort>
+	
+	<Hardware>
+	
+		<serialPort>
+			/dev/ttyUSB0
+		</serialPort>
+		
+		<master>
+			0
+		</master>
+		
+		<slave>
+			1
+		</slave>
+		
+	</Hardware>
+	
 	
 	<Module>
 		

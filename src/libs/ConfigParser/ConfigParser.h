@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <cstring>
 #include <vector>
 #include <algorithm>
@@ -40,11 +41,18 @@ class ConfigParser
 
         int parse(const std::string& filepath);
 
+        //-- General data
         std::string getRobotName();
         std::string getSimulationFile();
         std::string getGaitTableFolder();
         std::string getFrequencyTableFile();
+
+        //-- Hardware configuration
         std::string getSerialPort();
+        std::vector<int> getMasterJoints();
+        std::vector<int> getSlaveJoints();
+
+        //-- Module configuration
         int getNumModules();
         int getJointID(const int& module);
         std::vector<int> getJointIDs();
@@ -65,11 +73,18 @@ class ConfigParser
         void clearData();
         bool removeBadCharacters(std::string& string);
 
+        //-- General data
         std::string robotName;
         std::string simulationFile;
         std::string gaitTableFolder;
         std::string frequencyTableFile;
+
+        //-- Hardware configuration
         std::string serialPort;
+        std::vector<int> masterJoints;
+        std::vector<int> slaveJoints;
+
+        //-- Module configuration
         int numModules;
         std::vector<int> jointIDs;
         std::vector<ModuleFunction> id_function_vector; //-- Deprecated
