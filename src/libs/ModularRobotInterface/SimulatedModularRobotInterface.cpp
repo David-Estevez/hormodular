@@ -1,3 +1,20 @@
+//------------------------------------------------------------------------------
+//-- SimulatedModularRobotInterface
+//------------------------------------------------------------------------------
+//--
+//-- Interface to the simulated robot
+//--
+//------------------------------------------------------------------------------
+//--
+//-- This file belongs to the Hormodular project
+//-- (https://github.com/David-Estevez/hormodular.git)
+//--
+//------------------------------------------------------------------------------
+//-- Author: David Estevez-Fernandez
+//--
+//-- Released under the GPL license (more info on LICENSE.txt file)
+//------------------------------------------------------------------------------
+
 #include "SimulatedModularRobotInterface.hpp"
 
 hormodular::SimulatedModularRobotInterface::SimulatedModularRobotInterface(hormodular::ConfigParser configParser)

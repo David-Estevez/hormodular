@@ -2,7 +2,7 @@
 //-- Hormone
 //------------------------------------------------------------------------------
 //--
-//-- Bio-inspired data package used for intermodular comunication
+//-- Bio-inspired data container used for intermodular comunication
 //--
 //------------------------------------------------------------------------------
 //--
@@ -15,6 +15,12 @@
 //-- Released under the GPL license (more info on LICENSE.txt file)
 //------------------------------------------------------------------------------
 
+/*! \file Hormone.hpp
+ *  \brief Bio-inspired data container used for intermodular comunication
+ *
+ * \author David Estévez Fernández ( http://github.com/David-Estevez )
+ */
+
 #ifndef HORMONE_H
 #define HORMONE_H
 
@@ -22,6 +28,10 @@
 
 namespace hormodular {
 
+/*!
+ *  \class Hormone
+ *  \brief Bio-inspired data container used for intermodular comunication
+ */
 class Hormone
 {
     public:
@@ -32,6 +42,7 @@ class Hormone
         int getSourceConnector();
         std::string getData();
 
+        //-- Allowed values for type
         static const int PING_HORMONE = 0;
         static const int LEG_HORMONE = 1;
         static const int HEAD_HORMONE = 2;

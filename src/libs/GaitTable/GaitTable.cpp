@@ -1,3 +1,21 @@
+//------------------------------------------------------------------------------
+//-- Gait Table
+//------------------------------------------------------------------------------
+//--
+//-- A gait table that contains all the parameters needed for robot locomotion.
+//--
+//------------------------------------------------------------------------------
+//--
+//-- This file belongs to the Hormodular project
+//-- (https://github.com/David-Estevez/hormodular.git)
+//--
+//------------------------------------------------------------------------------
+//-- Author: David Estevez-Fernandez
+//--
+//-- Released under the GPL license (more info on LICENSE.txt file)
+//------------------------------------------------------------------------------
+
+
 #include "GaitTable.h"
 
 
@@ -18,7 +36,7 @@ hormodular::GaitTable::GaitTable(const std::string file_path)
 
 int hormodular::GaitTable::loadFromFile( const std::string file_path)
 {
-    //! \TODO change this temporary code to something more permanent
+    //! \todo change this temporary code to something more permanent
 
     //--Variables to store:
     int rows = 0, cols = 0;               //-- Matrix dimensions

@@ -1,3 +1,19 @@
+//------------------------------------------------------------------------------
+//-- evaluate-controller-sim
+//------------------------------------------------------------------------------
+//--
+//-- Evaluates the hormone controller on the simulated robot
+//--
+//------------------------------------------------------------------------------
+//--
+//-- This file belongs to the Hormodular project
+//-- (https://github.com/David-Estevez/hormodular.git)
+//--
+//------------------------------------------------------------------------------
+//-- Author: David Estevez-Fernandez
+//--
+//-- Released under the GPL license (more info on LICENSE.txt file)
+//------------------------------------------------------------------------------
 
 #include <iostream>
 #include <string>

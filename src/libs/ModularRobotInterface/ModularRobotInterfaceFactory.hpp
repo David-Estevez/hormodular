@@ -16,6 +16,13 @@
 //-- Released under the GPL license (more info on LICENSE.txt file)
 //------------------------------------------------------------------------------
 
+/*! \file ModularRobotInterfaceFactory.hpp
+ *  \brief Creates different modular robot interfaces that follow the
+ *   ModularRobotInterface interface
+ *
+ * \author David Estévez Fernández ( http://github.com/David-Estevez )
+ */
+
 #ifndef MODULAR_ROBOT_INTERFACE_FACTORY_H
 #define MODULAR_ROBOT_INTERFACE_FACTORY_H
 
@@ -28,6 +35,13 @@
 
 namespace hormodular {
 
+/*!
+ * \brief Creates different modular robot interfaces that follow the ModularRobotInterface interface
+ * \param type Type of ModularRobotInterface to be created. Currently, only "simulated" or "serial"
+ * are supported.
+ * \param configParser ConfigParser containing the ModularRobotInterface configuration.
+ * \return Pointer to the new ModularRobotInterface created.
+ */
 ModularRobotInterface * createModularRobotInterface( std::string type, ConfigParser configParser);
 
 }

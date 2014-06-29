@@ -23,22 +23,27 @@
 
 using namespace hormodular;
 
+
+/*!
+ *  \class ModularRobotEvalOp
+ *  \brief Function evaluator (objective function) for the Modular Robot
+ */
 class ModularRobotEvalOp : public EvaluateOp
 {
-public:
+    public:
 
         ~ModularRobotEvalOp();
 
-        //! Loads custom-made registry entries to the ECF
+        //! \brief Loads custom-made registry entries to the ECF
         bool initialize(StateP state);
 
-        //! This adds the custom-made registry entries to the ECF
+        //! \brief This adds the custom-made registry entries to the ECF
         void registerParameters( StateP state);
 
-        //! Objective function
+        //!\brief Objective function
         FitnessP evaluate(IndividualP individual);
 
- protected:
+    protected:
 
         /***** Constants to bound the oscillator values *****/
         int max_offset;
@@ -57,6 +62,7 @@ public:
         float timestep;
         std::string config_file;
 
- private:
+    private:
+        //! \brief Extract the oscillator parameters encoded in the genotype and set them in the oscillators
         void genotypeToRobot(FloatingPoint::FloatingPoint* genotype);
 };

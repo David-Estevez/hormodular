@@ -1,3 +1,20 @@
+//------------------------------------------------------------------------------
+//-- evaluate-gaits-sim
+//------------------------------------------------------------------------------
+//--
+//-- Evaluates the gaits resulting from a given set of oscillator parameters
+//-- stored in a gait table on the simulated robot
+//--
+//------------------------------------------------------------------------------
+//--
+//-- This file belongs to the Hormodular project
+//-- (https://github.com/David-Estevez/hormodular.git)
+//--
+//------------------------------------------------------------------------------
+//-- Author: David Estevez-Fernandez
+//--
+//-- Released under the GPL license (more info on LICENSE.txt file)
+//------------------------------------------------------------------------------
 
 #include <iostream>
 #include <string>

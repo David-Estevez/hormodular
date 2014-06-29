@@ -27,6 +27,12 @@
 namespace hormodular
 {
 
+/*!
+ * \brief Splits a string into multiple strings using the space character as separator
+ *
+ * This code has been copied from: http://stackoverflow.com/questions/236129/how-to-split-a-string-in-c
+ *
+ */
 std::vector<std::string> splitString(std::string stringToSplit);
 
 }

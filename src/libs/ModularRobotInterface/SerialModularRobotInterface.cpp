@@ -1,12 +1,29 @@
+//------------------------------------------------------------------------------
+//-- SerialModularRobotInterface
+//------------------------------------------------------------------------------
+//--
+//-- Interface to the modular robot via serial port
+//--
+//------------------------------------------------------------------------------
+//--
+//-- This file belongs to the Hormodular project
+//-- (https://github.com/David-Estevez/hormodular.git)
+//--
+//------------------------------------------------------------------------------
+//-- Author: David Estevez-Fernandez
+//--
+//-- Released under the GPL license (more info on LICENSE.txt file)
+//------------------------------------------------------------------------------
+
 #include "SerialModularRobotInterface.hpp"
 
 
 hormodular::SerialModularRobotInterface::SerialModularRobotInterface(hormodular::ConfigParser configParser)
 {
     port_name = configParser.getSerialPort();
-    n_modules = configParser.getNumModules();
+    num_modules = configParser.getNumModules();
 
-    for (int i = 0; i < n_modules; i++)
+    for (int i = 0; i < num_modules; i++)
     {
         joint_values.push_back(0);
     }
@@ -45,7 +62,7 @@ bool hormodular::SerialModularRobotInterface::reset()
     if (stop())
     {
         joint_values.clear();
-        for (int i = 0; i < n_modules; i++)
+        for (int i = 0; i < num_modules; i++)
             joint_values.push_back(0);
 
         return start();
@@ -80,7 +97,7 @@ float hormodular::SerialModularRobotInterface::getTravelledDistance()
 bool hormodular::SerialModularRobotInterface::sendJointValues(std::vector<float> joint_values, float step_ms)
 {
     //-- Check number of input values:
-    if (joint_values.size() != n_modules)
+    if (joint_values.size() != num_modules)
     {
         std::cerr << "[SerialModRobInteface] Error: input joint values size differs with number of modules in robot"
                      << std::endl;
@@ -88,7 +105,7 @@ bool hormodular::SerialModularRobotInterface::sendJointValues(std::vector<float>
     }
 
     //-- Save joint values
-    for (int i = 0; i < n_modules; i++)
+    for (int i = 0; i < num_modules; i++)
         this->joint_values[i] = joint_values[i];
 
     //-- Send actual values:

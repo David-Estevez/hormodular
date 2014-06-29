@@ -19,7 +19,6 @@
  *  \brief Abstract class that serves as a base to create different oscillators
  *
  * \author David Estévez Fernández ( http://github.com/David-Estevez )
- * \date Nov 27th, 2013
  */
 
 #ifndef OSCILLATOR_H
@@ -29,7 +28,9 @@
 #include <iostream>
 
 namespace hormodular {
-/*! \class Oscillator
+
+/*!
+ *  \class Oscillator
  *  \brief Abstract class that serves as a base to create different oscillators
  */
 class Oscillator
@@ -53,7 +54,7 @@ class Oscillator
          * \param amplitude Amplitude of the oscillation, [0,90] degrees
          * \param offset Offset of the oscillation, [-90,90] degrees
          * \param phase Phase of the oscillation [0, 360] degrees
-         * \param period Period of the oscillation in ms. A value of 0 means "use the current value".
+         * \param period_ms Period of the oscillation in ms. A value of 0 means "use the current value".
          */
         void setParameters( float amplitude, float offset, float phase, int period_ms = 0);
 

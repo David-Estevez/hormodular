@@ -1,3 +1,20 @@
+//------------------------------------------------------------------------------
+//-- Module
+//------------------------------------------------------------------------------
+//--
+//-- Base class for different types of modules for modular robotics
+//--
+//------------------------------------------------------------------------------
+//--
+//-- This file belongs to the Hormodular project
+//-- (https://github.com/David-Estevez/hormodular.git)
+//--
+//------------------------------------------------------------------------------
+//-- Author: David Estevez-Fernandez
+//--
+//-- Released under the GPL license (more info on LICENSE.txt file)
+//------------------------------------------------------------------------------
+
 #include "Module.hpp"
 
 hormodular::Module::Module(ConfigParser configParser, int index)
@@ -13,7 +30,7 @@ hormodular::Module::Module(ConfigParser configParser, int index)
     oscillator = new SinusoidalOscillator();
 
     //-- Create gait tables
-    //! \todo Use configParser for this: (& update thesis later)
+    //! \todo Use configParser for this:
     //const std::string GAIT_TABLE_FILEPATH = "../../data/test/test_gait_table.txt";
     //const std::string GAIT_TABLE_FILEPATH = "../data/test/test_gait_table.txt";
     const std::string GAIT_TABLE_MULTIDOF_11 = "multidof-11-2-gaittable.txt";
