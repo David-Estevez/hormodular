@@ -19,7 +19,6 @@
  *  \brief Generate oscillations using a sine function
  *
  * \author David Estévez Fernández ( http://github.com/David-Estevez )
- * \date Nov 27th, 2013
  */
 
 #ifndef SINUSOIDAL_OSCILLATOR_H

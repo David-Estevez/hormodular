@@ -1,3 +1,20 @@
+//------------------------------------------------------------------------------
+//-- Utils
+//------------------------------------------------------------------------------
+//--
+//-- Useful functions for the hormodular project
+//--
+//------------------------------------------------------------------------------
+//--
+//-- This file belongs to the Hormodular project
+//-- (https://github.com/David-Estevez/hormodular.git)
+//--
+//------------------------------------------------------------------------------
+//-- Author: David Estevez-Fernandez
+//--
+//-- Released under the GPL license (more info on LICENSE.txt file)
+//------------------------------------------------------------------------------
+
 #include "Utils.hpp"
 
 std::vector<std::string> hormodular::splitString(std::string stringToSplit)
