@@ -44,8 +44,11 @@ class SerialModularRobotInterface : public ModularRobotInterface
         virtual std::vector<float> getJointValues();
 
    private:
+        //-- Hardware configuration related things
         std::string port_name;
         SerialPort* serialPort;
+        std::vector<int> masterJoints;
+        std::vector<int> slaveJoints;
 
         int step_ms;
 

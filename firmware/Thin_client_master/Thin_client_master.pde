@@ -11,11 +11,11 @@
 #include <Wire.h>
 
 //-- Definitions of configuration parameters
-#define N_SERVOS 8
+#define N_SERVOS 4
 #define BAUD_RATE 57600
 
-static const uint8_t pin_map[N_SERVOS] = { 8, 9, 10, 11, A0, A1, A2, A3 };
-static const uint8_t initial_pos[N_SERVOS] = { 90, 90, 90, 90, 90, 90, 90, 90};
+static const uint8_t pin_map[N_SERVOS] = { 8, 9, 10, 11};
+static const uint8_t initial_pos[N_SERVOS] = { 90, 90, 90, 90};
 
 #define LED_PIN 13
 #define SLAVE_DIR 2
@@ -117,9 +117,20 @@ void sendMessageHandler()
 {
   //-- Send the remaining part of the message
   uint8_t mess_size = readNext();
+
+    
+  if ( Serial.available() == 4 )
+  {
+    digitalWrite(LED_PIN, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED_PIN, LOW);    
+  }
+  
   Wire.beginTransmission(SLAVE_DIR);
   
-  for (int i = 0; i < mess_size; i++)
+  for (uint8_t i = 0; i < mess_size; i++)
   {
     Wire.send(readNext());
   }

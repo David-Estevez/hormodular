@@ -6,6 +6,16 @@ hormodular::SerialModularRobotInterface::SerialModularRobotInterface(hormodular:
     port_name = configParser.getSerialPort();
     n_modules = configParser.getNumModules();
 
+    //-- Check configuration parameters & save them:
+    masterJoints = configParser.getMasterJoints();
+    slaveJoints = configParser.getSlaveJoints();
+
+    if ( n_modules != masterJoints.size() + slaveJoints.size() )
+    {
+        std::cerr << "[SerialModRobInterface] Error: hardware configuration loaded is invalid." << std::endl;
+        return;
+    }
+
     for (int i = 0; i < n_modules; i++)
     {
         joint_values.push_back(0);
@@ -159,6 +169,15 @@ bool hormodular::SerialModularRobotInterface::toggleLED()
 {
     if ( serialPort && serialPort->IsOpen() )
     {
+        //-- Generate slave joints command
+        if ( slaveJoints.size() != 0)
+        {
+            SerialPort::DataBuffer outputBuff;
+            outputBuff.push_back(0x52); //-- 0x52 -> Send command to slave board
+            outputBuff.push_back(1); //-- Command size:
+            outputBuff.push_back(0x5F); //-- 0x5F -> Toggle LED
+        }
+
         SerialPort::DataBuffer outputBuff;
         outputBuff.push_back(0x5F); //-- 0x5F -> Toggle LED
         serialPort->Write( outputBuff );
@@ -177,47 +196,54 @@ bool hormodular::SerialModularRobotInterface::sendJointValuesSerial(std::vector<
 {
     if ( serialPort && serialPort->IsOpen() )
     {
-        if ( joint_values.size() <= 8)
+        //-- Convert joint position to servo values [0-180]
+        for (int i = 0; i < joint_values.size(); i++)
         {
-            //-- Convert joint position to servo values [0-180]
-            for (int i = 0; i < joint_values.size(); i++)
-            {
-                joint_values[i]+=90;
-                if (joint_values[i] < 0) joint_values[i] = 0;
-                if (joint_values[i] > 180) joint_values[i] = 180;
-            }
+            joint_values[i]+=90;
+            if (joint_values[i] < 0) joint_values[i] = 0;
+            if (joint_values[i] > 180) joint_values[i] = 180;
+        }
 
-
+        //-- Generate slave joints command
+        if ( slaveJoints.size() != 0)
+        {
             SerialPort::DataBuffer outputBuff;
+            outputBuff.push_back(0x52); //-- 0x52 -> Send command to slave board
+            outputBuff.push_back(slaveJoints.size() + 1); //-- Command size:
             outputBuff.push_back(0x50); //-- 0x50 -> Set pos to all joints
 
-            for (int i = 0; i < joint_values.size(); i++)
-                outputBuff.push_back( (char)( (int) (joint_values[i])));
+            for (int i = 0; i < slaveJoints.size(); i++)
+                outputBuff.push_back( (char)( (int) (joint_values[slaveJoints[i]])));
 
             serialPort->Write( outputBuff );
 
-            return true;
+            for(int i = 0; i < outputBuff.size(); i++)
+                std::cout << (int) outputBuff[i] << " ";
+            std::cout << std::endl;
         }
-        else
-        {
-            //-- Temporal solution to more than 8 modules configurations
-            std::cerr << "[SerialModRobInterface] Error: more than 8 joints are not supported by "
-                      << "the current architecture. Sending just 8 values..." << std::endl;
 
-            SerialPort::DataBuffer outputBuff;
-            outputBuff.push_back(0x50); //-- 0x50 -> Set pos to all joints
+        //-- Generate master joints command
+//        SerialPort::DataBuffer outputBuff;
+//        outputBuff.push_back(0x50); //-- 0x50 -> Set pos to all joints
 
-            for (int i = 0; i < 8; i++)
-                outputBuff.push_back( (char)( (int) (joint_values[i])));
+//        for (int i = 0; i < masterJoints.size(); i++)
+//            outputBuff.push_back( (char)( (int) (joint_values[masterJoints[i]])));
 
-            serialPort->Write( outputBuff );
+//        serialPort->Write( outputBuff );
 
-            return false;
-        }
+//        for(int i = 0; i < outputBuff.size(); i++)
+//            std::cout << (int) outputBuff[i] << " ";
+//        std::cout << std::endl;
+
+
+
+
+        return true;
+
     }
     else
     {
-        std::cerr << "Robot could not send joints (because it is not connected)"
+        std::cerr << "[Error] Robot could not send joints (because it is not connected)"
                      << std::endl;
         return false;
     }

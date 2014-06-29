@@ -55,7 +55,7 @@ TEST_F(SerialModularRobotInterfaceTest, sendJointValuesSendsJointValues)
 
     for(int i = 0; i < 5000; i ++)
     {
-        bool result = robotInterface->sendJointValues(joint_values_sent, 1);
+        bool result = robotInterface->sendJointValues(joint_values_sent, 20);
         EXPECT_TRUE(result);
     }
 
