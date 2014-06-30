@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classhormodular_1_1Orientation_a172bc8bf42af5257e9211bb47aa9e3f1.html#a172bc8bf42af5257e9211bb47aa9e3f1" title="hormodular::Orientation::setPitch" alt="" coords="327,5,612,35"/>
+<area shape="rect" id="node5" href="$classhormodular_1_1Orientation_aec0d656ef5ac662e1cc6aa4392274166.html#aec0d656ef5ac662e1cc6aa4392274166" title="hormodular::Orientation::setRoll" alt="" coords="331,59,608,88"/>
+<area shape="rect" id="node7" href="$classhormodular_1_1Orientation_a2ef6a5b2bf5e526560a72c6d10a6b545.html#a2ef6a5b2bf5e526560a72c6d10a6b545" title="hormodular::Orientation::setYaw" alt="" coords="335,112,604,141"/>
+</map>

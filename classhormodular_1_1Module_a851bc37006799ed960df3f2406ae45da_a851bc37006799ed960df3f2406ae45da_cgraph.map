@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classhormodular_1_1ConfigParser_af516e8febac2928854372aa955ef90ad.html#af516e8febac2928854372aa955ef90ad" title="hormodular::ConfigParser::getFrequencyTableFile" alt="" coords="287,5,684,35"/>
+<area shape="rect" id="node5" href="$classhormodular_1_1ConfigParser_acf5fd7cbc572dada221991d11ee472e5.html#acf5fd7cbc572dada221991d11ee472e5" title="hormodular::ConfigParser::getGaitTableFolder" alt="" coords="299,59,672,88"/>
+<area shape="rect" id="node7" href="$classhormodular_1_1ConfigParser_adf0dc6e1577c74ffb6d6ee115ad27282.html#adf0dc6e1577c74ffb6d6ee115ad27282" title="hormodular::ConfigParser::getOrientations" alt="" coords="311,112,660,141"/>
+<area shape="rect" id="node9" href="$classhormodular_1_1Module_a9dbfd5dbed055e58d15e1c59175269e0.html#a9dbfd5dbed055e58d15e1c59175269e0" title="Resets the module to its initial state." alt="" coords="375,165,596,195"/>
+</map>

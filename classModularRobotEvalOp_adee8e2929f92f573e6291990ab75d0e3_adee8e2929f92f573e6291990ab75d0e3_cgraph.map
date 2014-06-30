@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classhormodular_1_1ConfigParser_ad8a45a954fbf98464f96fa8f535f74b3.html#ad8a45a954fbf98464f96fa8f535f74b3" title="hormodular::ConfigParser::getNumModules" alt="" coords="323,5,656,35"/>
+<area shape="rect" id="node5" href="$classhormodular_1_1ConfigParser_a0cb881dbebf8f11cca978b2caeadda57.html#a0cb881dbebf8f11cca978b2caeadda57" title="Parses the specified file." alt="" coords="355,59,624,88"/>
+<area shape="rect" id="node13" href="$classhormodular_1_1ModularRobotInterface_a305c20227a6c47c730e7a56fae78fe9b.html#a305c20227a6c47c730e7a56fae78fe9b" title="Resets the robot interface." alt="" coords="319,112,660,141"/>
+<area shape="rect" id="node7" href="$classhormodular_1_1Orientation_a172bc8bf42af5257e9211bb47aa9e3f1.html#a172bc8bf42af5257e9211bb47aa9e3f1" title="hormodular::Orientation::setPitch" alt="" coords="711,5,996,35"/>
+<area shape="rect" id="node9" href="$classhormodular_1_1Orientation_aec0d656ef5ac662e1cc6aa4392274166.html#aec0d656ef5ac662e1cc6aa4392274166" title="hormodular::Orientation::setRoll" alt="" coords="715,59,992,88"/>
+<area shape="rect" id="node11" href="$classhormodular_1_1Orientation_a2ef6a5b2bf5e526560a72c6d10a6b545.html#a2ef6a5b2bf5e526560a72c6d10a6b545" title="hormodular::Orientation::setYaw" alt="" coords="719,112,988,141"/>
+</map>

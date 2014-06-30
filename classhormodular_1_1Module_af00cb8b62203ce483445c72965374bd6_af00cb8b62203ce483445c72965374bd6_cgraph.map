@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classhormodular_1_1Connector_a1e4f7011500f7783ba8645ac992f95f5.html#a1e4f7011500f7783ba8645ac992f95f5" title="Adds a Hormone to the output buffer." alt="" coords="391,5,724,35"/>
+<area shape="rect" id="node5" href="$classhormodular_1_1Hormone_a95dd7fb58eb4e6a1b080dee87581424b.html#a95dd7fb58eb4e6a1b080dee87581424b" title="hormodular::Hormone::getData" alt="" coords="435,59,680,88"/>
+<area shape="rect" id="node7" href="$classhormodular_1_1Orientation_adfcecb4f8ecd96d717517cb902442186.html#adfcecb4f8ecd96d717517cb902442186" title="Returns the relative orientaion between two orientations, encoded as a number between 0 and 3..." alt="" coords="359,112,756,141"/>
+<area shape="rect" id="node15" href="$classhormodular_1_1Hormone_acf815e812a6154bfa0185216d84bbf66.html#acf815e812a6154bfa0185216d84bbf66" title="hormodular::Hormone::getSourceConnector" alt="" coords="391,165,724,195"/>
+<area shape="rect" id="node9" href="$classhormodular_1_1Orientation_a2179a6362542434ee9cbeccc7e8d9dd2.html#a2179a6362542434ee9cbeccc7e8d9dd2" title="hormodular::Orientation::getPitch" alt="" coords="807,59,1092,88"/>
+<area shape="rect" id="node11" href="$classhormodular_1_1Orientation_aafa778f1cb47893c8a82495968cb7012.html#aafa778f1cb47893c8a82495968cb7012" title="hormodular::Orientation::getRoll" alt="" coords="811,112,1088,141"/>
+<area shape="rect" id="node13" href="$classhormodular_1_1Orientation_a30fd8337009f1c2248e143ad51ab1c35.html#a30fd8337009f1c2248e143ad51ab1c35" title="hormodular::Orientation::getYaw" alt="" coords="815,165,1084,195"/>
+</map>

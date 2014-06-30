@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classhormodular_1_1Orientation.html" title="3D vector representing the orientation of a module" alt="" coords="5,144,235,541"/>
+<area shape="rect" id="node4" href="$classhormodular_1_1GaitTable.html" title="A gait table to store all the parameters needed of robot locomotion." alt="" coords="259,196,448,489"/>
+<area shape="rect" id="node6" href="$classhormodular_1_1Oscillator.html" title="Abstract class that serves as a base to create different oscillators." alt="" coords="472,179,669,507"/>
+<area shape="rect" id="node8" href="$classhormodular_1_1ConfigParser.html" title="Parses a XML configuration file and stores the configuration options." alt="" coords="693,5,915,680"/>
+</map>

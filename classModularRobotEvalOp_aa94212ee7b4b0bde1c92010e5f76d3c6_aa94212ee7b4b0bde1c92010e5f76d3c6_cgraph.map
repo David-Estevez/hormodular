@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classModularRobotEvalOp_a2be582d7726d17be190f797122054645.html#a2be582d7726d17be190f797122054645" title="Extract the oscillator parameters encoded in the genotype and set them in the oscillators." alt="" coords="383,5,684,35"/>
+<area shape="rect" id="node5" href="$classhormodular_1_1ModularRobotInterface_ae7cae895766a12279a53d8e4cc15766f.html#ae7cae895766a12279a53d8e4cc15766f" title="Returns the distance travelled my the modular robot in meters." alt="" coords="303,59,764,88"/>
+<area shape="rect" id="node7" href="$classhormodular_1_1ModularRobotInterface_a305c20227a6c47c730e7a56fae78fe9b.html#a305c20227a6c47c730e7a56fae78fe9b" title="Resets the robot interface." alt="" coords="363,112,704,141"/>
+<area shape="rect" id="node9" href="$classhormodular_1_1ModularRobotInterface_a8e0735602f288f48de61df56cc6d540d.html#a8e0735602f288f48de61df56cc6d540d" title="Sends the joint position values to the robot." alt="" coords="323,165,744,195"/>
+</map>

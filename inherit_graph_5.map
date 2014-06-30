@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classhormodular_1_1ModularRobotInterface.html" title="Abstract class for different types of interfaces with modular robots." alt="" coords="7,32,292,61"/>
+<area shape="rect" id="node3" href="$classhormodular_1_1SerialModularRobotInterface.html" title="Interface to the modular robot via serial port." alt="" coords="355,5,688,35"/>
+<area shape="rect" id="node5" href="$classhormodular_1_1SimulatedModularRobotInterface.html" title="Interface to the simulated robot." alt="" coords="343,59,700,88"/>
+</map>
