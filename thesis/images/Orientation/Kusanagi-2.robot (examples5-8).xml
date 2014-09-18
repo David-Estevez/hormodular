@@ -1,0 +1,31 @@
+<!-- Kusanagi-2
+     Modular snake made from 2 REPY-2.0 modules -->
+
+<Robot name="Kusanagi-2">
+	<!-- Loading two modules from files -->
+    <Robot prefix="M1_" file="REPY-2.1.robot.xml"></Robot>
+    <Robot prefix="M2_" file="REPY-2.1.robot.xml">
+		<offsetfrom>M2_Body</offsetfrom>
+		<rotationaxis>0 1 0 90</rotationaxis>
+		<rotationaxis>0 0 1 90</rotationaxis>
+		<translation>-0.0413177 0 0</translation>
+		<translation>-0.0258177 0.01 0</translation>
+		<translation>-0.025 0 0</translation>
+ 	</Robot>
+
+	<!-- Redifine the second robot to add a dummy link to join both -->
+	<Robot name="M2_REPY-2.1">
+			<KinBody name="M2_REPY-2.1">
+				<Joint name="dummy1" type="hinge" enable="false">
+        			<Body>M1_Head</Body>
+       				<Body>M2_Body</Body>
+        			<axis>-1 0 0</axis>
+       				<anchor>-0.0258177 0.01065885 0</anchor>
+       				<maxtorque>0.4</maxtorque>
+        			<maxvel>4.5</maxvel>
+        			<limitsdeg>270 270</limitsdeg>
+				</Joint>
+			</KinBody>
+	</Robot>
+
+</Robot>

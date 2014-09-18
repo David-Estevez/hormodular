@@ -1,0 +1,16 @@
+Images used in the thesis:
+
+Polypod -> http://robotics.stanford.edu/users/mark/photos.html
+	State_art_PolyPod.gif -> http://robotics.stanford.edu/users/mark/segnode.gif
+	State_art_PolyPod-2.gif -> http://robotics.stanford.edu/users/mark/tpoly.gif
+	
+Y1
+	State_art_Y1_cube.jpg -> http://www.iearobotics.com/wiki/images/archive/c/c6/20080419101127!Cube-rev-cobra.jpeg
+	
+	Intro_snake_CMU.jpg -> http://biorobotics.ri.cmu.edu/projects/modsnake/images/hidef/IMG_4562.JPG
+					    -> http://biorobotics.ri.cmu.edu/projects/modsnake/pictures.html
+					    
+    Intro_mtran3.jpg -> https://unit.aist.go.jp/is/frrg/dsysd/mtran3/photo/skew4toline.jpg
+    				 -> https://unit.aist.go.jp/is/frrg/dsysd/mtran3/mtran3.htm
+    				 
+    Intro_molecubes.jpg -> http://en.wikipedia.org/wiki/File:SpaceMolecubes.JPG

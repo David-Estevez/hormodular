@@ -1,0 +1,195 @@
+\documentclass{book}
+
+
+% General imports:
+\usepackage[utf8]{inputenc}
+%\usepackage[utf8x]{inputenc} 
+\usepackage[T1]{fontenc}	% For using icelandic Thorn character
+\usepackage{amsmath}
+\usepackage{amsfonts}		% Mathematic fonts (such Real numbers set)
+\usepackage{graphicx}
+
+
+% Imports for images
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+
+% Imports for euro symbol support
+\usepackage[official]{eurosym}
+\DeclareUnicodeCharacter{20AC}{\euro{}}
+%\newcommand{\euro}{€}
+
+% Other imports:
+\usepackage{indentfirst} % Indent first paragraph
+%\usepackage[nottoc,numbib]{tocbibind} % Add bibliography to table of contents
+\usepackage{url}	% Cite URLs
+\usepackage{color}	% Color text
+\usepackage{hyperref} % Create hyperlinks within the text
+
+% Formatting margins of the pages:
+\usepackage[top=2.3cm, bottom=2.29cm, left=1.6cm, right=1.47cm]{geometry}
+
+% Import for headers
+\usepackage{fancyhdr}
+
+\lhead{}
+\chead{}
+\rhead{}
+\pagestyle{empty}
+
+
+% Definitions of important data
+\renewcommand{\author}{David Estévez Fernández}
+\renewcommand{\title}{Learning locomotion gait through hormone-based controller in modular robots}
+\newcommand{\department}{Departamento de Sistemas y Automática}
+\newcommand{\teacher}{Avinash Ranganath}
+
+%% All this is used for inserting C++ code on some parts of the thesis
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+% This is for writing algorithms on pseudocode (nicely)
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+% Each chapter will have its own header
+%\newcommand{\headchapter}[1]{\chapter{#1}\rhead{#1}}
+
+% Each section will have its own header
+%\newcommand{\headsection}[1]{\section{#1}}\rhead{#1}}
+
+% Change 'Chapter' to something more logical
+%\renewcommand{\chaptername}{}
+
+% Define a command for comments
+\newcommand{\comment}[1]{\textbf{\color{red} #1}}
+
+% Naming my robot configurations
+\newcommand{\robotSeven}{MultiDof-7-tripod }
+\newcommand{\robotNine}{MultiDof-9-quad }
+\newcommand{\robotEleven}{MultiDof-11-2 }
+
+% Define commands for setting the language to be used in listings
+\newcommand{\Cpp}{ \lstset{frame=single,
+  		language=C++,
+  		aboveskip=3mm,
+  		belowskip=3mm,
+  		showstringspaces=false,
+  		columns=flexible,
+  		basicstyle={\small\ttfamily},
+  		numbers=none,
+  		numberstyle=\tiny\color{gray},
+  		keywordstyle=\color{blue},
+  		commentstyle=\color{dkgreen},
+  		stringstyle=\color{mauve},
+  		breaklines=true,
+  		breakatwhitespace=true
+  		tabsize=3
+	}}
+
+
+\newcommand{\XML}{
+	\lstset{ language=XML, 
+		morekeywords={ModularRobot, name, simulationFile, gaitTableFolder, frequencyTable, frequencyTable,
+		 Module, Joint, Connections, front, left, right, back, connectedTo, connector, orientation, 
+		 Orientation, Roll, Pitch, Yaw, serialPort}}}
+
+\newcommand{\Bash}{
+	\lstset{language=bash, morekeywords={mkdir, ls, make, sudo, apt-get, add-apt-repository, python}}}
+
+% This is used for adding appendices:	
+\usepackage[toc,page]{appendix}
+
+% This is used for tables spanning more than one page:
+\usepackage{longtable}
+	
+% This is for units not appearing as italics
+\usepackage{siunitx}
+		
+% This is for including pdf files
+\usepackage{pdfpages}
+
+% Inhibit hyphenation
+\usepackage[none]{hyphenat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% DOCUMENT BEGINS HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%		
+\begin{document}
+
+%%%% FRONTPAGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{frontpage}
+\frontpage{\department}{{\Large \normalfont Bachelor's Thesis:}\\\title}{\author}{\teacher}
+\pagestyle{plain}
+
+
+%%%%%% Acknowledgements %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{acknowledgements}
+~
+\newpage
+\acknowledgements{\input{acknowledgements_text}}
+~
+\newpage
+
+%%%%%% Abstract %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+~
+\newpage
+\include{abstract}
+\abstract{\title}{\author}{\input{abstract_text}}
+
+%%%%%%Table of contents %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\newpage
+
+%%%%% List of figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\listoffigures
+\newpage
+
+%%%% List of tables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\listoftables
+\newpage
+
+% Adding some header text on top of the page:
+\fancyhead[LE]{\nouppercase{\leftmark}}
+\fancyhead[RO]{\nouppercase{\rightmark}}
+\fancyhead[RE]{}
+\fancyhead[LO]{}
+\pagestyle{fancy}
+
+
+%%%% Different Sections %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{introduction}
+\input{state_of_the_art}
+\input{software}
+\input{hardware}
+\input{configuration_gait}
+\input{hormones}
+\input{results}
+\input{conclusions_and_future_work}
+
+%%%% Appendices %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{appendices}
+\input{appendices/cost_estimation}
+\input{appendices/time_distribution}
+\input{appendices/plans}
+\end{appendices}
+
+%%%% Bibliography %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\bibliographystyle{plain}
+\bibliography{bibliography/PolyBot,bibliography/CONRO,bibliography/Superbot,bibliography/ATRON,bibliography/M-TRAN,bibliography/SYMBRICATOR,bibliography/Y1,bibliography/Modular_Robotics,bibliography/Misc,bibliography/Thesis}
+
+%%% Sources of figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\input{figures}
+
+\end{document}

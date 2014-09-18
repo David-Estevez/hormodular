@@ -1,0 +1,84 @@
+\newpage
+\section{Evolving Gaits}
+\label{gaits_evolution}
+
+When the number of modules in the modular robot is high, or the distribution of the modules is complex, setting the parameters of the sinusoidal oscillators by hand becomes an almost impossible task, and the gaits obtained by this method are very far from the optimal ones.\\
+
+As it is very easy to evaluate in simulation how much did a modular robot travell in a certain period of time with a given set of oscillator parameters ($A_i$, $O_i$, $\phi_i$ and T), we can try random values for those parameters and use the ones that yield better gaits. This is the approach taken by the stochastic optimization algorithms, such as simulated annealing, particle swarm optimization or genetic algorithms. Differential evolution, the algorithm used in this thesis for optimizing the oscillator parameters belongs to the later group of stochastic optimization algorithms.\\
+
+\subsection{Differential Evolution}
+\label{evolution_DE}
+Differential evolution (DE) \cite{Storn1997} is a iterative method to optimize a multidimensional real-valued function by keeping a population of candidate solutions that is improved over time using simple arithmetic operations between the individuals of the population. Since it takes few or any assumptions on the function to be optimized, and can search over a large space of candiate solutions, this method is called a metaheuristic method. As a drawback, metaheuristic methods do not ensure a optimal solution, but for many applications the solution obtained with these methods is good enough for meeting the requirements.\\
+
+Differential evolution is inspired by biology and the evolution of living beings, keeping a population of candidate solutions from which only the fittest survive and produce offspring by mixing the candidate solutions, replacing the worst individuals from the population. This way, the population is improved and the parameters to optimize (genotype) are closer to the optimal solution. In order to escape from possible local minima existing in the function to optimize, the concept of random mutation is introduced, so that after a certain number of iterations an individual can have some of its variables randomly modified, in order to create genetic variability in their offspring. The fitness value for indidual is given by the cost function to maximize, that for this thesis is the average speed of the modular robot through the evaluation time. The process finishes when a certain level of fitness is reached (the algorithm as found a ``good enough'' solution) or after a given number of iterations.\\
+
+This algorithm, as opposed to other optimization methods such as Gradient Descend, does not use the gradient of the function for locating the minima/maxima of the function, and therefore does not require the cost function to be differentiable. Furthermore, the cost function is seen as a ``black box'' by the differential evolution algorithm, that uses it to evaluate how good a candidate solution is, and to check whether or not a new candidate obtained by recombination is better than its parents in order to substitute their parents by it on the population, making this algorithm a good choice for a wide range of optimization problems with a cost function difficult to model analitically, such as the gait optimization problem.\\
+
+\subsection{Algorithm}
+\label{evolution_algorithm}
+
+Let us have a cost function $J(\theta): \mathbb{R}^n \rightarrow \mathbb{R}$ to maximize and a population of candidates to be the maximum of the function where $x_ \in \mathbb{R}^n$ denotes an individual of that population. The algorithm for Differential Evolution is as follows:\\
+
+\begin{algorithm}
+\caption{Differential Evolution algorithm}\label{DE_algorithm}
+\begin{algorithmic}[1]
+\State Random initialization of all individual x in the population
+\While {finalization criteria is not met}
+\ForAll{ $x \in \text population$}
+	\State Pick three random individuals a, b, c from population different than x
+	\State Generate random number $ R \in \{1, \cdots, n\}$, where $n$ is the genotype size
+	\State Compute the candidate to be the new position of the individual $y = [ y_1 ~ \cdots ~ y_n ]$ with this procedure:
+	\For{ i := 1 to n}
+		\State Pick uniformly distributed number $r_i \equiv U(0, 1)$
+		\If{ $r_i < CR$ or $i = R$}
+		\State $y_i \gets a_i + F \cdot (b_i-c_i)$
+		\Else
+		\State $y_i \gets x_i$ 
+		\EndIf
+	\EndFor
+	\If{$J(y) > J(x)$}
+		\State Replace x with y in the population
+	\EndIf
+\EndFor
+\EndWhile
+\State Pick the fittest individual as solution
+\end{algorithmic}
+\end{algorithm}
+
+Finalization criteria, as explained before, can be either a given number of iterations reached, or that the best individual has a fitness value above a given threshold.\\
+
+Some important parameters that control the behavior of the algorithm are $F \in [0, 2]$, called \emph{differential weight}, that controls the amplification of the differential variation (a value of 0.8 is suggested) , $CR \in [0, 1]$, called \emph{crossover probability}, the probability of a recombination ocurring (a value of 0.9 is suggested) and $NP \geq 4$ , the \emph{population size}.
+
+
+\subsection{Application to gait optimization}
+\label{evolution_gait_opt}
+
+In order to apply this algorithm to the gait optimization problem, a simple sinusoidal contoller was created for the OpenRAVE simulated modular robot. The oscillator parameters ($A_i$, $O_i$, $\phi_i$  for each oscillator, plus the frequency ($f= \frac{1}{T}$) of all of them) are encoded in the genotype of the individual. As the evolutionary optimization library used (ECF, section \ref{software_ECF}) did not support using several gentypes with different limits, the genotype was constraint to have values between $[-1, 1]$ and then later scaled to the suitables ranges for each parameter. In order to avoid collisions between limbs, the ranges for amplitude and offset where constraint to $[0º, 60º]$ for $A_i$ and $[-15º, 15º]$ for $O_i$.\\
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c||c|c|} \hline
+Symbol & Description & Constraint range \\ \hline \hline
+$A_i$ & Amplitude of the ith oscillator & [0, 60] degrees \\ \hline
+$O_i$ & Offset of ith oscillator & [-15, 15] degrees \\ \hline
+$\phi_i$ & Initial phase of ith oscillator & [0, 360] degrees \\ \hline
+$f$ & Frequency of all the oscillators $ f=\frac{1}{T}$ &  [0, 1.5] hz \\ \hline
+
+\end{tabular}
+\caption{Values used for gait optimization}
+\label{tab:osc_constraints}
+\end{table}
+
+
+For the evaluation of each individual the parameters are extracted from the genome, converted to values within the ranges provided in table \ref{tab:osc_constraints}, and set to the corresponding oscillators. Then, the simulation is run for 30s (simulation time), and the average speed is used as fitness value. Therefore, the cost function used for optimization is:
+
+\begin{equation} \label{eq:cost_function}
+J( \vec{A}, \vec{O}, \vec{\Phi}, f) = \frac{\text{Distance travelled}(m)}{\text{Evaluation time}(s)} \qquad \text{where: } 
+	\begin{cases}
+	\vec{A} = [ A_1 ~ A_2 ~ \cdots ~ A_N] \\
+	\vec{O} = [ O_1 ~ O_2 ~ \cdots ~ O_N] \\
+	\vec{\Phi} = [ \Phi_1 ~ \Phi_2 ~ \cdots ~ \Phi_N] \\
+	\end{cases}
+\end{equation}\\
+
+Once a suitable gait has been discovered for a configuration, the parameters are stored in a table for that configuration, similar to a gait table, but with the three oscillator parameters ($A_i$, $O_i$, $\phi_i$)  assigned to their corresponding module ID. The frequency is also extracted and stored in another table, shared by all the configurations, and assigned to the ID of the configuration. This process is repeated for the three configurations to be evaluated on this thesis.\\
